@@ -1,0 +1,11 @@
+selenium
+pdf2image
+Pillow
+openai
+numpy
+git+https://github.com/openai/CLIP.git
+python-magic
+libmagic
+opencv-python
+pytesseract 
+pandas

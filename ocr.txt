@@ -1,0 +1,32 @@
+\Background Information
+
+« Binary Numbers
++ 2’s Complement representation
++» Addition
++ Subtraction
+
++ Arithmetic Logic Unit
+* Contains Adders to perform addition and subtraction
+
+Background Information
+
+« Binary Numbers
+* 2’s Complement representation
++» Addition
++ Subtraction
+
++ Arithmetic Logic Unit
+* Contains Adders to perform addition and subtraction
+
+Integer Multiplication
+
+- “Paper and pencil” example
+
+Multiplicand 1000
+Multiplier x 1001
+1000
+0000
+0000 Shift after each step
++ 1000
+Product 01001000
+
