@@ -9,3 +9,4 @@ libmagic
 opencv-python
 pytesseract 
 pandas
+reportlab
