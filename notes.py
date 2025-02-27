@@ -8,10 +8,26 @@ import cv2
 import numpy as np
 import subprocess
 import pandas as pd
-from gpt_call import image_call, text_call
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Paragraph
+
+from gpt_call import image_call, text_call
+from app import get_notes, update_notes
+
+from app import app, update_notes
+from threading import Thread
+
+def run_flask():
+    app.run(debug=True, use_reloader=False)  # Starts Flask but doesn't block main.py
+
+# Start Flask in a separate thread
+flask_thread = Thread(target=run_flask)
+flask_thread.start()
+
+# Update the notes dynamically while Flask is running
+update_notes("Getting note...")
+print("Flask is running, but main.py can still execute other code.")
 
 
 def main():
@@ -148,8 +164,13 @@ def main():
     # Read the content of the notes file
     with open("notes.txt", "r") as file:
         notes = file.read()
+        notes = notes.replace("\n", "<br/>") # Replace new lines with line break element
 
-    create_pdf("notes.pdf", notes)
+    #print(f"Notes: {notes}")
+    
+    update_notes(notes)
+
+    #create_pdf("notes.pdf", notes)
 
 if __name__ == "__main__":
     main()
