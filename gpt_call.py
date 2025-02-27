@@ -9,29 +9,45 @@ openai.api_key = "sk-proj-OQmzTESf7QKFfVSMNG3ALi3Id4JWEN80DSYhqQJ0evc8qI2K5YwmVj
 # -----------------------------------------------
 
 # GPT Prompt
-prompt = """
-        Write clear and detailed notes in full sentences without bullet points. Cover each slide one at a time, fully explaining the material. Break down concepts step by step in a way that is easy to follow and understand. Use natural, straightforward language without third-person narration or unnecessary formal phrasing. The notes should be detailed and easy to study as they are, without needing to be rewritten or reorganized.    
-        """
+prompt = f"""
+“Write clear and detailed notes in full sentences without bullet points. State facts directly with no introductory framing, explanations of importance, or general overviews. Do not use phrases like ‘the content revolves around’ or ‘this topic is crucial for understanding.’ Avoid addressing an audience—do not use words like ‘we,’ ‘you,’ or ‘must.’ Use natural, straightforward language without third-person narration or formal phrasing. Stick closely to the provided content, only explaining concepts slightly further if necessary for clarity. Do not expand beyond what is mentioned. Begin writing immediately with factual information. The notes should be highly detailed yet concise, eliminating redundancy while maintaining clarity. They should be ready to study as written, without needing reorganization or further editing.”        """
 prompt1 = "Whats in this image?"
 
 def text_call(content):
 
-    # Step 1: Read the content of the file
-    with open("ocr.txt", "r") as file:
+    # Read the content of the current file
+    with open(content, "r") as file:
         file_content = file.read()
+
+    # Read the content of the covered material file
+    with open("notes.txt", "r") as file:
+        previous_content = file.read()
 
     # GPT Call
     completion = openai.chat.completions.create(
-        model="gpt-4o",
-        messages=[
-            {"role": "system", "content": prompt},
-            {"role": "user", "content": file_content}
-        ]
-    )
+    model="gpt-4o",
+    messages=[
+        {"role": "system", "content": "You are an AI that generates detailed notes while maintaining continuity across sections."},
+        {"role": "user", "content": f"""
+        Write clear and detailed notes in full sentences without bullet points. State facts directly with no introductory framing, explanations of importance, or general overviews. Do not use phrases like ‘the content revolves around’ or ‘this topic is crucial for understanding.’ Avoid addressing an audience—do not use words like ‘we,’ ‘you,’ or ‘must.’ Use natural, straightforward language without third-person narration or formal phrasing. Stick closely to the provided content, only explaining concepts slightly further if necessary for clarity. Do not expand beyond what is mentioned. Begin writing immediately with factual information.
+
+        The following text is a **summary of previous sections** already covered. Do not repeat this information but ensure new notes remain consistent with what has been stated:
+        {previous_content}
+
+        Now, process the following new content and write detailed notes while maintaining continuity with the previous sections:
+        {file_content}
+        """}
+    ]
+)
     # Process GPT Response ee
     response_content = completion.choices[0].message.content
-    with open("output.txt", "a", encoding="utf-8") as file:
-            file.write(response_content + "\n")  # Appends text to output file
+
+    # Appends all text to a text file so GPT can reference already covered material
+    with open("notes.txt", "a", encoding="utf-8") as file:
+           file.write(response_content + "\n")  # Appends text to output file
+
+
+    #print(f"NOTES: {response_content}")
 
 def image_call(file_path):
 
@@ -52,7 +68,7 @@ def image_call(file_path):
             "content": [
                 {
                     "type": "text",
-                    "text": prompt,
+                    "text": prompt1,
                 },
                 {
                     "type": "image_url",
@@ -66,10 +82,11 @@ def image_call(file_path):
     # Process GPT Response
     response_content = completion.choices[0].message.content
 
-    with open("output.txt", "a", encoding="utf-8") as file:
-            file.write(response_content + "\n")  # Appends text to output file
+
+    #with open("output.txt", "a", encoding="utf-8") as file:
+    #        file.write(response_content + "\n")  # Appends text to output file
     #print(f"{response_content}")
 
-    return    
+    return response_content
 
   

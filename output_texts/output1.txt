@@ -1,0 +1,1 @@
+Background Information Binary Numbers 2’s Complement representation Addition + Subtraction + Arithmetic Logic Unit Contains Adders to perform addition and subtraction
