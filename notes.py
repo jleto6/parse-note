@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import os
 from pdf2image import convert_from_path
 from PIL import Image
@@ -7,16 +6,18 @@ import magic
 import cv2
 import numpy as np
 import subprocess
+import time
 import pandas as pd
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 
 from gpt_call import image_call, text_call
-from app import get_notes, update_notes
+from app import get_notes, update_notes, read_notes
 
 from app import app, update_notes
 from threading import Thread
+import threading
 
 def run_flask():
     app.run(debug=True, use_reloader=False)  # Starts Flask but doesn't block main.py
@@ -25,8 +26,11 @@ def run_flask():
 flask_thread = Thread(target=run_flask)
 flask_thread.start()
 
+# Start the file watcher in a background thread
+threading.Thread(target=read_notes, daemon=True).start()
+
 # Update the notes dynamically while Flask is running
-update_notes("Getting note...")
+#update_notes("Getting note...")
 print("Flask is running, but main.py can still execute other code.")
 
 
@@ -40,7 +44,7 @@ def main():
     # Text file of all GPT outputs
     output_text = "notes.txt" 
     # Ensure the file exists by creating it if it doesnt
-    open("notes.txt", "w").close()    
+    #open("notes.txt", "w").close()    
 
     # Folder of converted pngs
     pngs_folder = "converted_pngs" 
@@ -142,12 +146,14 @@ def main():
                 file.write(response_content + "\n")
         # Else, send OCR text to GPT text
         else:
-            print()
+            None
 
     # Loop thru every txt file containing notes
     for filename in os.listdir(txt_folder):  
         file_path = os.path.join(txt_folder, filename)  # Get the full path
-        text_call(file_path) 
+        time.sleep(5)
+        #print("Calling GPT")
+        #text_call(file_path) 
 
     # Create a PDF
     def create_pdf(filename, text):
@@ -168,7 +174,7 @@ def main():
 
     #print(f"Notes: {notes}")
     
-    update_notes(notes)
+    #update_notes(notes)
 
     #create_pdf("notes.pdf", notes)
 

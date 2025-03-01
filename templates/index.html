@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <title>Notes</title>
+</head>
+
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+<script>
+    var socket = io(); // Connect to Flask-SocketIO Server
+
+    //Listen for no_notes from Flask
+    socket.on("loading_notes", function(data){
+        document.querySelector("#notes-container").innerHTML = data.notes;
+    })
+    let isFirstChunk = true;
+    //Listen for updating notes from Flask
+    socket.on("update_notes", function(data){
+        //If on the first chunk replace content with the first chunk
+        if (isFirstChunk){
+            document.querySelector("#notes-container").innerHTML = data.notes;
+            isFirstChunk = false;
+        }
+        //If not on the first chunk append incoming notes
+        else {
+            document.querySelector("#notes-container").innerHTML += data.notes;
+        }
+        console.log("Updated notes:", data.notes)
+    })
+
+    // Highlighting text
+    document.addEventListener("selectionchange", function(){ //Event listener for when selection changes
+        let selection = window.getSelection().toString(); //get the selected text
+        const box = document.querySelector("#draggable-box") // Select the draggable box
+        if (selection.length > 0) { //make sure any text is selected
+            console.log("User selected:", selection)
+            const range = window.getSelection().getRangeAt(0);  // Get the range (position and size) of the selected text
+            const rect = range.getBoundingClientRect();  // Get the position of the selected text (in pixels)
+            
+            box.style.top = `${rect.top + window.scrollY + 15}px`; //set the top position of the box below the selected text
+            box.style.left = `${rect.left + window.scrollY}px`; // set the left position of the boxt based on the selected text
+            box.style.display = "block"; // make draggable box visible when text is selected
+            box.textContent = selection; // display the selected text inside the draggable box
+
+            // Send to backend
+            fetch("/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ selection: selection }) // Wrap `selection` in an object
+            });
+        } else {
+            box.style.display = "none";  // Hide the draggable box if nothing is selected
+        }
+    })
+
+    
+</script>
+
+<div class="container mt-4">
+
+    <body>
+        <h1 class="text-center pt-3 fixed-top" style="background-color: white; width: 100%; z-index: 10;">Notes</h1>
+        <div id="notes-container" class="p-4 mx-auto" style="margin-top: 80px; height: 80vh; overflow-y: auto; width: 80%;">
+            <!-- Notes Displayed Here-->
+        </div>
+
+        <!-- Draggable text box that will appear when text is selected -->
+        <div id="draggable-box" class="border p-2 bg-dark text-white" style="display: none; position: absolute; width: 250px; cursor: move;">
+            <!-- Content of the draggable box will go here -->
+        </div>
+
+        
+    </body>
+</div>
+
+</html>
+
+

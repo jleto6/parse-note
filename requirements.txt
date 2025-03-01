@@ -11,3 +11,6 @@ pytesseract
 pandas
 reportlab
 Flask
+flask-socketio
+python-socketio
+socketio

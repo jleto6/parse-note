@@ -42,6 +42,7 @@ def text_call(content):
     # Process GPT Response ee
     response_content = completion.choices[0].message.content
 
+    
     # Appends all text to a text file so GPT can reference already covered material
     with open("notes.txt", "a", encoding="utf-8") as file:
            file.write(response_content + "\n")  # Appends text to output file
