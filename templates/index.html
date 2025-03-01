@@ -4,80 +4,202 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <title>Notes</title>
 </head>
+
+<style>
+    #close-btn {
+        position: absolute;
+        top: 6px;
+        left: 8px;
+        width: 11px;
+        height: 11px;
+        background-color: #ff5f57;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 1000; /* Ensures it's above other elements */
+    }
+    #text-box {
+        display: none;
+        position: absolute;
+        width: 250px;
+        min-height: 50px;
+        max-height: 300px;
+        background-color: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(15px);
+        border-radius: 15px;
+        padding: 0; /* Remove padding so header isn't pushed down */
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.8);
+        border: 1px solid rgba(200, 200, 200, 0.6);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden; /* Prevents elements from breaking layout */
+    }
+
+    #box-content {
+        flex-grow: 1;
+        overflow-y: auto;
+        color: white;
+        font-size: 16px;
+        line-height: 1.5;
+        padding-right: 10px;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+        cursor: text;
+        max-height: 200px; /* Ensures it can scroll within the box */
+}
+
+    #box-content::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    #box-content::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    
+    #box-content::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.3);
+        border-radius: 3px;
+    }
+    
+    #box-header {
+        height: 25px; /* Make sure the height is sufficient */
+        background: rgba(255, 255, 255, 0.1);
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        cursor: move;
+        display: flex;
+        align-items: center; /* Centers content inside the header */
+        padding-left: 10px;
+        flex-shrink: 0; /* Prevents the header from shrinking */
+        width: 100%; /* Ensures it spans the full width */
+        box-sizing: border-box; /* Prevents unexpected width calculations */
+    }
+
+    #note-input {
+        width: calc(100% - 20px);
+        padding: 5px;
+        margin-top: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 5px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-size: 14px;
+        outline: none;
+        transition: border 0.2s ease-in-out;
+        flex-shrink: 0; /* Prevents shrinking */
+    }
+
+    #note-input:focus {
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        background: rgba(255, 255, 255, 0.2);
+    }
+</style>
 
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 <script>
     var socket = io(); // Connect to Flask-SocketIO Server
 
-    //Listen for no_notes from Flask
     socket.on("loading_notes", function(data){
         document.querySelector("#notes-container").innerHTML = data.notes;
-    })
+    });
+    
     let isFirstChunk = true;
-    //Listen for updating notes from Flask
     socket.on("update_notes", function(data){
-        //If on the first chunk replace content with the first chunk
         if (isFirstChunk){
             document.querySelector("#notes-container").innerHTML = data.notes;
             isFirstChunk = false;
-        }
-        //If not on the first chunk append incoming notes
-        else {
+        } else {
             document.querySelector("#notes-container").innerHTML += data.notes;
         }
-        console.log("Updated notes:", data.notes)
-    })
+        console.log("Updated notes:", data.notes);
+    });
 
-    // Highlighting text
-    document.addEventListener("selectionchange", function(){ //Event listener for when selection changes
-        let selection = window.getSelection().toString(); //get the selected text
-        const box = document.querySelector("#draggable-box") // Select the draggable box
-        if (selection.length > 0) { //make sure any text is selected
-            console.log("User selected:", selection)
-            const range = window.getSelection().getRangeAt(0);  // Get the range (position and size) of the selected text
-            const rect = range.getBoundingClientRect();  // Get the position of the selected text (in pixels)
-            
-            box.style.top = `${rect.top + window.scrollY + 15}px`; //set the top position of the box below the selected text
-            box.style.left = `${rect.left + window.scrollY}px`; // set the left position of the boxt based on the selected text
-            box.style.display = "block"; // make draggable box visible when text is selected
-            box.textContent = selection; // display the selected text inside the draggable box
+    document.addEventListener("DOMContentLoaded", function() {
+        const textBox = document.getElementById("text-box");
+        const boxHeader = document.getElementById("box-header");
+        const closeBtn = document.getElementById("close-btn");
+        const boxContent = document.getElementById("box-content");
+        
+        // Show text box only after mouse release
+        document.addEventListener("mouseup", function(event) {
+        let selection = window.getSelection().toString().trim();
 
-            // Send to backend
+        if (selection.length > 0) {
+            console.log("User selected:", selection);
+            const range = window.getSelection().getRangeAt(0);
+            const rect = range.getBoundingClientRect();
+
+            // Position box below the selection
+            textBox.style.top = `${rect.bottom + window.scrollY + 10}px`;
+            textBox.style.left = `${rect.left + window.scrollX}px`;
+            textBox.style.display = "block";
+
+            boxContent.textContent = selection;
+
+            // Autofocus input field
+            document.getElementById("note-input").focus();
+
             fetch("/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ selection: selection }) // Wrap `selection` in an object
+                body: JSON.stringify({ selection: selection })
             });
-        } else {
-            box.style.display = "none";  // Hide the draggable box if nothing is selected
         }
-    })
+    });
+        
+        closeBtn.addEventListener("click", function() {
+            textBox.style.display = "none";
+        });
+        
+        boxContent.addEventListener("wheel", function(event) {
+            event.stopPropagation();
+        }, { passive: false });
 
-    
+        let isDragging = false;
+        let offsetX, offsetY;
+        
+        boxHeader.addEventListener("mousedown", function(e) {
+            isDragging = true;
+            offsetX = e.clientX - textBox.getBoundingClientRect().left;
+            offsetY = e.clientY - textBox.getBoundingClientRect().top;
+            e.preventDefault();
+        });
+        
+        document.addEventListener("mousemove", function(e) {
+            if (isDragging) {
+                textBox.style.left = (e.clientX - offsetX) + "px";
+                textBox.style.top = (e.clientY - offsetY) + "px";
+            }
+        });
+        
+        document.addEventListener("mouseup", function() {
+            isDragging = false;
+        });
+        
+        boxContent.addEventListener("mousedown", function(e) {
+            e.stopPropagation();
+        });
+    });
 </script>
 
 <div class="container mt-4">
-
     <body>
-        <h1 class="text-center pt-3 fixed-top" style="background-color: white; width: 100%; z-index: 10;">Notes</h1>
+        <h1 class="text-center pt-3 fixed-top" style="width: 100%; z-index: 10;">Notes</h1>
         <div id="notes-container" class="p-4 mx-auto" style="margin-top: 80px; height: 80vh; overflow-y: auto; width: 80%;">
             <!-- Notes Displayed Here-->
         </div>
 
         <!-- Draggable text box that will appear when text is selected -->
-        <div id="draggable-box" class="border p-2 bg-dark text-white" style="display: none; position: absolute; width: 250px; cursor: move;">
-            <!-- Content of the draggable box will go here -->
-        </div>
+        <div id="text-box">
+            <div id="box-header"></div>
+            <span id="close-btn"></span>
+            <div id="box-content"></div> 
+            <input type="text" id="note-input" placeholder="Type here..." />
 
-        
+        </div>
     </body>
 </div>
-
 </html>
-
-
