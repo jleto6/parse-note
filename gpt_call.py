@@ -1,8 +1,9 @@
 import base64
 from openai import OpenAI
 import openai
+import os
 
-openai.api_key = "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"
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # -----------------------------------------------
 # GPT Function
