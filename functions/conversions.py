@@ -5,9 +5,13 @@ import magic
 import subprocess
 
 import wave
+import logging
+import sys
 import json
 from vosk import Model
 from vosk import KaldiRecognizer
+from vosk import SetLogLevel
+SetLogLevel(-1)
 
 model = Model("en_model")  # Load the model
 
@@ -17,6 +21,7 @@ files = os.listdir(folder) # List of files in notes folder
 if ".DS_Store" in files:
         files.remove(".DS_Store")
 if "test_notes" in files:
+        print("hi")
         files.remove("test_notes")
 
 # Get The File Type
@@ -90,9 +95,9 @@ def handle_video(file, file_path):
     with open(txt_path, "w") as f:
         f.write(text)
     
-for file in files:
-    file_path, file_type = get_file_type(file)
-    handle_video(file, file_path)
+#for file in files:
+ #   file_path, file_type = get_file_type(file)
+  #  handle_video(file, file_path)
 
     
 

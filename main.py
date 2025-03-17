@@ -8,7 +8,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph
 
 from functions.ocr import do_ocr
 from functions.gpt_call import image_call, text_call
-from functions.conversions import handle_image, handle_pdf, get_file_type
+from functions.conversions import handle_image, handle_pdf, get_file_type, handle_video
 
 from app import get_notes, update_notes, read_notes
 from app import app, update_notes
@@ -70,8 +70,7 @@ def main():
                 handle_pdf(file, file_path)
             # For videos
             elif file_type in valid_video_types:
-                #video(file)
-                print()
+                handle_video(file, file_path)
 
         except Exception as e:
             print(f"Invalid file {e}")
@@ -84,8 +83,8 @@ def main():
     for filename in os.listdir("output_texts" ):  
         file_path = os.path.join("output_texts" , filename)  # Get the full path
         time.sleep(5)
-        print("Calling GPT")
-        #text_call(file_path) # Send to GPT to make notes on
+        print("Calling GPT (Creating Notes)")
+        text_call(file_path) # Send to GPT to make notes on
 
     # Read the content of the notes file
     with open("notes.txt", "r") as file:

@@ -86,7 +86,7 @@ def image_call(file_path):
 
 
     #with open("output.txt", "a", encoding="utf-8") as file:
-    #        file.write(response_content + "\n")  # Appends text to output file
+     #       file.write(response_content + "\n")  # Appends text to output file
     #print(f"{response_content}")
 
     return response_content

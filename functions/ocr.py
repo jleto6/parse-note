@@ -52,7 +52,7 @@ def do_ocr():
             img = img.resize((512, 512), Image.LANCZOS) # Downscale it
             img.save(file_path)
 
-            #print("Calling GPT Vision")
+            print(f"Calling GPT Vision on {file_path}")
             response_content = ""
             image_call(file_path)
             with open(txt_path, "a", encoding="utf-8") as file:

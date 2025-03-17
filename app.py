@@ -18,7 +18,6 @@ def read_notes():
         if last_notes == "":
             socketio.emit("loading_notes", {"notes" : "Loading Notes..."})
 
-        #time.sleep()
         with open("notes.txt", "r") as file:
             notes = file.read()
             if notes != last_notes:
