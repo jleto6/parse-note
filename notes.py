@@ -56,17 +56,15 @@ def main():
     files = os.listdir(folder) # List of files in notes folder 
     if ".DS_Store" in files:
         files.remove(".DS_Store")
+    if "test_notes" in files:
+        files.remove("test_notes")
 
     output_text = "notes.txt"   # Text file of all GPT note outputs
     open("notes.txt", "w").close()  # Ensure the file exists by creating it if it doesnt
 
-    # Folder of converted pngs
-    pngs_folder = "converted_pngs" 
-    os.makedirs(pngs_folder, exist_ok=True)
-
     # Work with the available files
     time.sleep(3)
-    print("Available files:")
+    print("\nAvailable files:")
     for file in files:
      
         file_path, file_type = get_file_type(file)
@@ -87,17 +85,18 @@ def main():
                 print()
 
         except Exception as e:
-            print(f"Invalid file format {e}")
+            print(f"Invalid file {e}")
 
     # Convert extracted text to OCR
-    do_ocr(pngs_folder)    
+    do_ocr()    
 
+    print("")
     # Loop thru every txt file containing extracted text and send to GPT
     for filename in os.listdir("output_texts" ):  
         file_path = os.path.join("output_texts" , filename)  # Get the full path
         time.sleep(5)
         print("Calling GPT")
-        text_call(file_path) # Send to GPT to make notes on
+        #text_call(file_path) # Send to GPT to make notes on
 
     # Read the content of the notes file
     with open("notes.txt", "r") as file:

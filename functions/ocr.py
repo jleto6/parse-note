@@ -4,8 +4,9 @@ import magic
 import pytesseract
 from functions.gpt_call import image_call, text_call
 
+pngs_folder = "conversions/converted_pngs" # Folder of converted pngs
 
-def do_ocr(pngs_folder):
+def do_ocr():
     # Folder of txt for each image
     txt_folder = "output_texts" 
     os.makedirs(txt_folder, exist_ok=True)
