@@ -4,6 +4,13 @@ from PIL import Image
 import magic
 import subprocess
 
+import wave
+import json
+from vosk import Model
+from vosk import KaldiRecognizer
+
+model = Model("en_model")  # Load the model
+
 # Uploaded Files
 folder = "notes"
 files = os.listdir(folder) # List of files in notes folder 
@@ -46,13 +53,42 @@ def handle_pdf(file, file_path):
 
 # Handle Videos
 wavs_folder = "conversions/converted_wavs" # Folder of converted wavs
+txt_folder = "output_texts"
+
 os.makedirs(wavs_folder, exist_ok=True) # Make folder if it doesnt exist
 
 def handle_video(file, file_path):
+    # Convert Video to WAV
     base_name = os.path.splitext(file)[0] + ".wav" # Create the output filename with a .wav extension
     output_file = os.path.join(wavs_folder, base_name) # Create full file path by joining 'wavs folder' and file name
     subprocess.run(["ffmpeg", "-i", file_path, "-ac", "1", "-ar", "16000", output_file, "-y"], # Convert video file to audio file and save it
                stdout=subprocess.DEVNULL, stderr=subprocess.PIPE) # Supress output other than errors
+    
+    # Convert WAV to text
+    wf = wave.open(output_file, "rb")  # Open the WAV file in read-binary mode
+    rec = KaldiRecognizer(model, wf.getframerate())  # Create recognizer
+
+    # Iterate Thru Chunks of Audio File
+    text = ""  # Initialize an empty string for transcript
+    while True:
+        data = wf.readframes(4000)  # Read next chunk
+        if len(data) == 0:
+            break  # Stop when the audio ends
+        if rec.AcceptWaveform(data):  # If Vosk processes a chunk
+            result = json.loads(rec.Result())  # Convert JSON result
+            text += result["text"] + " "  # Append text
+
+    # Create a text file
+    counter = 1
+    filename = f"output{counter}.txt"
+    while os.path.exists(os.path.join(txt_folder, filename)):   # Keep incrementing if the filename already exists in txt_folder
+        counter +=1
+        filename = f"output{counter}.txt"
+    txt_path = os.path.join(txt_folder, filename)  # Create full file path inside the folder
+
+    # Write the transcription to the txt file
+    with open(txt_path, "w") as f:
+        f.write(text)
     
 for file in files:
     file_path, file_type = get_file_type(file)

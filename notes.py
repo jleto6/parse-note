@@ -1,25 +1,16 @@
 import os
-from pdf2image import convert_from_path
-from PIL import Image
-import magic
-import cv2
-import numpy as np
-import subprocess
 import time
 import pandas as pd
+
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Paragraph
-from vosk import Model, KaldiRecognizer
-import wave
-import json
-import subprocess
 
 from functions.ocr import do_ocr
 from functions.gpt_call import image_call, text_call
-from app import get_notes, update_notes, read_notes
 from functions.conversions import handle_image, handle_pdf, get_file_type
 
+from app import get_notes, update_notes, read_notes
 from app import app, update_notes
 from threading import Thread
 import threading
@@ -47,10 +38,8 @@ def create_pdf(filename, text):
     # Create the pdf
     doc.build(story)
 
-
 # MAIN
 def main():
-
     # Uploaded Files
     folder = "notes"
     files = os.listdir(folder) # List of files in notes folder 
