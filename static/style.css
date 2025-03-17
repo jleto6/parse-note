@@ -1,0 +1,27 @@
+#text-box {
+    display: none;
+    position: absolute;
+    width: 200px;
+    min-height: 40px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 5px;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+#note-input {
+    width: 100%;
+    padding: 5px;
+    border: none;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 14px;
+    outline: none;
+}
+
+#note-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
