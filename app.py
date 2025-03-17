@@ -10,7 +10,7 @@ socketio = SocketIO(app)  # Initialize Socket.IO
 stored_notes = "No notes yet"
 
 def read_notes():
-    # Read the content of the notes file
+    # Continiously check for new notes and emit updates if they change
     last_notes = ""
 
     while True:
@@ -30,19 +30,23 @@ def read_notes():
         time.sleep(1)
 
 
-
 @app.route("/", methods=["GET", "POST"])
 def get_notes():
+    global stored_notes
 
+    # when a POST is recieved return the data
     if request.method == "POST":
         data = request.get_json()
         #print(data)
         return jsonify(data), 200
+    
+    # Read from notes.txt on every refresh
+    with open("notes.txt", "r") as file:
+        stored_notes = file.read()
+        stored_notes = stored_notes.replace("\n", "<br/>") # Replace new lines with line break element
 
     return render_template("index.html", notes=stored_notes)
     #return stored_notes
 
-def update_notes(new_text):
-    global stored_notes
-    stored_notes = new_text
+
 

@@ -1,5 +1,5 @@
-from app import get_notes, update_notes, read_notes
-from app import app, update_notes
+from app import get_notes, read_notes
+from app import app
 from threading import Thread
 import threading
 

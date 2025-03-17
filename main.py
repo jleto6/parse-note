@@ -10,8 +10,8 @@ from functions.ocr import do_ocr
 from functions.gpt_call import image_call, text_call
 from functions.conversions import handle_image, handle_pdf, get_file_type, handle_video
 
-from app import get_notes, update_notes, read_notes
-from app import app, update_notes
+from app import get_notes, read_notes
+from app import app
 from threading import Thread
 import threading
 
