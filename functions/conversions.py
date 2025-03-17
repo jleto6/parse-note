@@ -23,9 +23,8 @@ def get_file_type(file):
     return file_path, file_type
 
 # Handle Images
-def image(file):
-    file_path, _ = get_file_type(file)
-
+def handle_image(file, file_path):
+    
     img = Image.open(file_path) # Open the current image 
     img = img.convert("RGBA") # Convert to RGBA
 
@@ -36,8 +35,7 @@ def image(file):
     #print(f"Output file:{output_file}"
 
 # Handle PDFs
-def pdf(file):
-    file_path, _ = get_file_type(file)
+def handle_pdf(file, file_path):
 
     images = convert_from_path(file_path) # Convert PDF pages to a list of images
     # Save each page as a PNG in the output folder
@@ -45,10 +43,10 @@ def pdf(file):
         image.save(os.path.join(pngs_folder, f"page_{i+1}.png"), "PNG")
 
 # Handle Videos
-def video(file):
+def video(file, file_path):
     file_path, _ = get_file_type(file)
 
-for file in files:
-    video(file)
+#for file in files:
+ #   video(file)
 
     

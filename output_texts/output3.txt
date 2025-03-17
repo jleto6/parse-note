@@ -1,1 +1,2 @@
-Integer Multiplication - “Paper and pencil” example Multiplicand 1000 Multiplier x 1001 1000 0000 0000 Shift after each step + 1000 Product 01001000
+             Arithmetic & Logic Unit (ALU) Memory Unit (MU) Input Unit Output Unit        
+
