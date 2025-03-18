@@ -3,6 +3,8 @@ from flask_socketio import SocketIO
 from flask import jsonify
 import time
 
+from functions.gpt_call import question_call
+
 app = Flask(__name__)
 app.secret_key = "dev"  # Set a secret key for session
 socketio = SocketIO(app)  # Initialize Socket.IO
@@ -32,13 +34,15 @@ def read_notes():
 
 @app.route("/", methods=["GET", "POST"])
 def get_notes():
-    global stored_notes
 
-    # when a POST is recieved return the data
+    # when a POST is recieved 
     if request.method == "POST":
-        data = request.get_json()
-        #print(data)
-        return jsonify(data), 200
+        question = request.get_json()
+
+        answer = question_call(question)
+        print(answer)
+
+        return jsonify(question), 200
     
     # Read from notes.txt on every refresh
     with open("notes.txt", "r") as file:
@@ -46,7 +50,7 @@ def get_notes():
         stored_notes = stored_notes.replace("\n", "<br/>") # Replace new lines with line break element
 
     return render_template("index.html", notes=stored_notes)
-    #return stored_notes
 
+    
 
 

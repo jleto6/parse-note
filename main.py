@@ -10,7 +10,7 @@ from functions.ocr import do_ocr
 from functions.gpt_call import image_call, text_call
 from functions.conversions import handle_image, handle_pdf, get_file_type, handle_video
 
-from app import get_notes, read_notes
+from app import question, read_notes
 from app import app
 from threading import Thread
 import threading
@@ -91,8 +91,6 @@ def main():
         notes = file.read()
         notes = notes.replace("\n", "<br/>") # Replace new lines with line break element
 
-    #print(f"Notes: {notes}")
-    #update_notes(notes)
     #create_pdf("notes.pdf", notes)
 
 if __name__ == "__main__":

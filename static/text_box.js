@@ -1,3 +1,5 @@
+var socket = io(); // Connect to Flask-SocketIO Server
+
 document.addEventListener("DOMContentLoaded", function() {
     const textBox = document.getElementById("text-box");
     const button = document.getElementById("button");
@@ -6,10 +8,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
     textBox.style.display = "none"; // Hides the text box if click is outside
 
-    document.addEventListener("mouseup", function(event) {
-        selection = window.getSelection().toString().trim();
+    document.addEventListener("mouseup", function(event) { 
+        checkSelection = window.getSelection().toString().trim(); // Check the current selection
 
-        if (selection.length > 0) {
+        // If the selection has words and it didnt come from the text box set it to the selection to use
+        if (checkSelection.length > 0 && !textBox.contains(event.target)) {
+            selection = window.getSelection().toString().trim();
+            console.log(selection)
+
             const range = window.getSelection().getRangeAt(0);
             const rect = range.getBoundingClientRect();
 
@@ -27,6 +33,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (event.target === button) {
             console.log(`Button clicked sending ${selection} to GPT`)
+
+            fetch("/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ selection: selection })
+            });
         }
     });
 
