@@ -2,8 +2,8 @@ import base64
 from openai import OpenAI
 import openai
 import os
-
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
 
 # -----------------------------------------------
 # GPT Function
@@ -76,31 +76,37 @@ def image_call(file_path):
     return response_content
 
 # Text File to Store GPT Question Conversations 
-answers_txt = "answers.txt"   # Text file of all GPT answer outputs
 open("answers.txt", "w").close()  # Ensure the file exists by creating it if it doesnt
 
 def question_call(question):
+    from app import socketio
+
+    # Read the content of the covered material file
+    with open("answers.txt", "r") as file:
+        answers_txt = file.read()
+
     # GPT Call
     completion = openai.chat.completions.create(
     model="gpt-4o",
     messages=[
-        {"role": "system", "content": "You are an AI that generates brief conceptual answers to questions while maintaining continuity across sections."},
+        {"role": "system", "content": "You are an AI that generates very brief conceptual answers to questions while maintaining continuity across sections when relevant. Prior responses should be considered only if they directly relate to the new question. If the new question is unrelated, answer independently without incorporating previous answers."},
         {"role": "user", "content": f"""
-        Write brief and conceptual explenations in full sentences (conversationally) without bullet points. State facts directly with no introductory framing, explanations of importance, or general overviews Avoid addressing an audience—do not use words like ‘we,’ ‘you,’ or ‘must.’ Use natural, straightforward language without third-person narration or formal phrasing. Stick closely to the provided content, only explaining concepts slightly further if necessary for clarity. Do not expand beyond what is mentioned. Begin writing immediately with factual information.
+        Write a brief and conceptual explanation conversationally without bullet points. State facts directly with no introductory framing, explanations of importance, or general overviews. Avoid addressing an audience—do not use words like ‘we,’ ‘you,’ or ‘must.’ Use natural, straightforward language without third-person narration or formal phrasing. Stick closely to the provided content, only explaining concepts slightly further if necessary for clarity. Do not expand beyond what is mentioned. Begin writing immediately with factual information.
 
-        The following text is a **summary of previous sections** already covered. Do not repeat this information but ensure new notes remain consistent with what has been stated:
-        {question}
+        The following text contains previous answers you have given. Use them only for maintaining consistency if relevant to the new question. If the new question is unrelated, ignore prior responses:
+        {answers_txt}
 
-        Now, process the following new question and write the answer/explenation while maintaining continuity with the previous sections:
-        {question}
+        Now, process the following new question {question} on the topic {question} and write the answer/explanation
         """}
     ]
 )
     response_content = completion.choices[0].message.content     # Process GPT Response
     # Appends all text to a text file so GPT can reference already covered material
-    with open(answers_txt, "a", encoding="utf-8") as file:
+    with open("answers.txt", "a", encoding="utf-8") as file:
            file.write(response_content + "\n")  # Appends text to output file
 
+    # Emit the answers to socketio
+    socketio.emit("answers", {"answer": f"{response_content} <br/><br/>"})
 
     return response_content
 

@@ -9,10 +9,12 @@
 </head>
 <body style="background-color: rgb(33, 33, 33); color:whitesmoke;">
 
+    <!-- Socketio -->
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script>
         var socket = io(); // Connect to Flask-SocketIO Server
 
+        /* Update Notes */
         socket.on("loading_notes", function(data){
             document.querySelector("#notes-container").innerHTML = data.notes;
         });
@@ -27,7 +29,22 @@
             }
             console.log("Updated notes:", data.notes);
         });
+
+        /* Update Notes */
+        let isFirstAnswer = true;
+        socket.on("answers", function(data){
+            console.log("Updated answer:", data.answer);
+
+                if (isFirstAnswer){
+                    document.querySelector("#response-text").innerHTML = data.answer;
+                    isFirstAnswer = false;
+                } else {
+                    document.querySelector("#response-text").innerHTML += data.answer;
+                }
+        });
+
     </script>
+
 
     <div class="container mt-4">
         <h1 class="text-center pt-3 fixed-top" style="width: 100%; z-index: 10;">Notes</h1>
@@ -38,8 +55,12 @@
 
         <!-- textbox -->
         <div id="text-box">
-            <input type="text" id="note-input" placeholder="Ask a question..."/>
-            <button class="send-button" id="button"></button>
+            <div id="response-text"> ... </div>
+
+            <div id="input-container"> 
+                <input type="text" id="note-input" placeholder="Ask a question..."/>
+                <button class="send-button" id="button"></button>
+            </div>
         </div>
     </div>
 

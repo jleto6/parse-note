@@ -24,7 +24,6 @@ flask_thread.start()
 
 # Start the file watcher in a background thread
 threading.Thread(target=read_notes, daemon=True).start()
-
 print("Flask is running, but main.py can still execute other code.")
 
 # PDF maker
@@ -38,7 +37,10 @@ def create_pdf(filename, text):
     # Create the pdf
     doc.build(story)
 
-# MAIN
+# -----------------------------------------------
+#  Main
+# -----------------------------------------------
+
 def main():
     # Uploaded Files
     folder = "notes"

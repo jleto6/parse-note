@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", function() {
             selection = window.getSelection().toString().trim();
             console.log(selection)
 
+            // set the box at the location
             const range = window.getSelection().getRangeAt(0);
             const rect = range.getBoundingClientRect();
 
@@ -31,9 +32,18 @@ document.addEventListener("DOMContentLoaded", function() {
             textBox.style.display = "none"; // Hides the text box if click is outside
         }
 
+        // if clicked on button
         if (event.target === button) {
-            console.log(`Button clicked sending ${selection} to GPT`)
 
+            document.getElementById("response-text").style.display = "block"; // Show the answer field
+            document.getElementById("input-container").style.padding = "0px 10px 8px 10px"; // change input padding
+
+            // Get the question in input field
+            let inputQuestion = document.getElementById("note-input").value;
+            console.log(inputQuestion);
+
+            // Send selection to GPT
+            console.log(`Button clicked sending ${selection} to GPT`)
             fetch("/", {
                 method: "POST",
                 headers: {
