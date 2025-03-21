@@ -42,8 +42,11 @@ document.addEventListener("DOMContentLoaded", function() {
             let inputQuestion = document.getElementById("note-input").value;
             console.log(inputQuestion);
 
+            socket.emit("question", inputQuestion);
+
             // Send selection to GPT
             console.log(`Button clicked sending ${selection} to GPT`)
+
             fetch("/", {
                 method: "POST",
                 headers: {
