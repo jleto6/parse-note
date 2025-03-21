@@ -29,7 +29,7 @@ def text_call(content):
         previous_content = file.read()
 
     # GPT Call
-    completion = openai_client.chat.completions.create(
+    completion = openai_client.responses.create(
     model="gpt-4o",
     messages=[
         {"role": "system", "content": "You are an AI that generates detailed notes while maintaining continuity across sections."},
@@ -41,8 +41,9 @@ def text_call(content):
 
         Now, process the following new content and write detailed notes while maintaining continuity with the previous sections:
         {file_content}
-        """}
-    ]
+        """},
+    ],
+    stream=True
 )
     response_content = completion.choices[0].message.content     # Process GPT Response
     # Appends all text to a text file so GPT can reference already covered material
@@ -126,6 +127,7 @@ def question_call(question, selection):
 
             if content:
                 socketio.emit("answers", {"answer": content})
+                open("answers.txt", "a").write(content)
                 yield content
 
         except Exception as e:
@@ -134,8 +136,6 @@ def question_call(question, selection):
             print(f"Chunk content: {chunk}")
 
     socketio.emit("answers", {"answer" : "<br/><br/>"})
-
-    #response_content = completion.choices[0].message.content     # Process GPT Response
 
 
   

@@ -26,6 +26,16 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
+    /* resize function */
+    padding = 0;
+    function moveBox(timestamp){
+        if (padding < 20){
+            padding += .75;
+            responseBox.style.padding = padding + "px";
+            requestAnimationFrame(moveBox);
+        }
+      }
+
     document.addEventListener("mousedown", function(event) {
 
         if (!textBox.contains(event.target)) {
@@ -35,7 +45,15 @@ document.addEventListener("DOMContentLoaded", function() {
         // if clicked on button
         if (event.target === button) {
 
-            document.getElementById("response-text").style.display = "block"; // Show the answer field
+            responseBox = document.getElementById("response-text")
+
+            requestAnimationFrame(moveBox); // increase padding
+
+            responseBox.style.display = "block"; // Show the answer field
+
+            
+
+
             document.getElementById("input-container").style.padding = "0px 10px 8px 10px"; // change input padding
 
             // Get the question in input field
