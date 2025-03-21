@@ -42,9 +42,8 @@ document.addEventListener("DOMContentLoaded", function() {
             let inputQuestion = document.getElementById("note-input").value;
             console.log(inputQuestion);
 
-            socket.emit("question", inputQuestion);
-
-            // Send selection to GPT
+            // Send question and selection to backend
+       
             console.log(`Button clicked sending ${selection} to GPT`)
 
             fetch("/", {
@@ -52,7 +51,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ selection: selection })
+                body: JSON.stringify({
+                    inputQuestion: inputQuestion,
+                    selection: selection
+                })
             });
         }
     });

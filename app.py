@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template
 from flask_socketio import SocketIO
-from flask import jsonify
+from flask import jsonify, Response
 import time
 
 from functions.gpt_call import question_call
@@ -36,13 +36,18 @@ def read_notes():
 def get_notes():
 
     # when a POST is recieved 
+
     if request.method == "POST":
-        question = request.get_json()
 
-        answer = question_call(question)
-        print(answer)
+        data = request.get_json()
+        question = data.get("inputQuestion")
+        selection = data.get("selection")
 
-        return jsonify(question), 200
+        for chunk in question_call(question, selection):
+            print(chunk, end="", flush=True)  # Stream to terminal
+        print("")
+
+        return "", 204  # Respond with "No Content" since everything happens via socket    
     
     # Read from notes.txt on every refresh
     with open("notes.txt", "r") as file:

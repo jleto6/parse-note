@@ -7,10 +7,9 @@ from flask_socketio import SocketIO
 import json
 
 # Use Deepseek
-#client = OpenAI(api_key=os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com/v1"  )
+deepseek_client = OpenAI(api_key=os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com/v1"  )
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
-client = OpenAI()
+openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # -----------------------------------------------
 # GPT Function
@@ -30,7 +29,7 @@ def text_call(content):
         previous_content = file.read()
 
     # GPT Call
-    completion = openai.chat.completions.create(
+    completion = openai_client.chat.completions.create(
     model="gpt-4o",
     messages=[
         {"role": "system", "content": "You are an AI that generates detailed notes while maintaining continuity across sections."},
@@ -60,7 +59,7 @@ def image_call(file_path):
     base64_image = encode_image(file_path)
 
     # GPT Call
-    completion = openai.chat.completions.create(
+    completion = openai_client.chat.completions.create(
         model="gpt-4o",
         messages=[
         {
@@ -85,7 +84,7 @@ def image_call(file_path):
 # Text File to Store GPT Question Conversations 
 open("answers.txt", "w").close()  # Ensure the file exists by creating it if it doesnt
 
-def question_call(question):
+def question_call(question, selection):
     from app import socketio
 
     # Read the content of the covered material file
@@ -93,9 +92,9 @@ def question_call(question):
         answers_txt = file.read()
 
     # GPT Call
-    completion = openai.chat.completions.create(
+    completion = openai_client.responses.create(
     model="gpt-4o",
-    messages=[
+    input=[
         {"role": "system", "content": "You are an AI that generates very brief conceptual answers to questions while maintaining continuity across sections when relevant. Prior responses should be considered only if they directly relate to the new question. If the new question is unrelated, answer independently without incorporating previous answers."},
         {"role": "user", "content": f"""
         Write a brief and conceptual explanation conversationally without bullet points. State facts directly with no introductory framing, explanations of importance, or general overviews. Avoid addressing an audience—do not use words like ‘we,’ ‘you,’ or ‘must.’ Use natural, straightforward language without third-person narration or formal phrasing. Stick closely to the provided content, only explaining concepts slightly further if necessary for clarity. Do not expand beyond what is mentioned. Begin writing immediately with factual information.
@@ -103,20 +102,40 @@ def question_call(question):
         The following text contains previous answers you have given. Use them only for maintaining consistency if relevant to the new question. If the new question is unrelated, ignore prior responses:
         {answers_txt}
 
-        Now, process the following new question {question} on the topic {question} and write the answer/explanation
-        """}
-    ]
+        Now, process the following new question {question} on the topic {selection} and write the answer/explanation
+        """},
+    ],
+    stream=True
 )
-    response_content = completion.choices[0].message.content     # Process GPT Response
-    # Appends all text to a text file so GPT can reference already covered material
-    with open("answers.txt", "a", encoding="utf-8") as file:
-           file.write(response_content + "\n")  # Appends text to output file
+    
+    for chunk in completion:
+        # Handle different possible chunk formats
+        try:
+            content = None
 
-    # Emit the answers to socketio
-    socketio.emit("answers", {"answer": f"{response_content} <br/><br/>"})
+            if isinstance(chunk, str):
+                content = chunk
+            elif hasattr(chunk, "content") and chunk.content:
+                content = chunk.content
+            elif hasattr(chunk, "delta"):
+                delta = chunk.delta
+                if isinstance(delta, str):
+                    content = delta
+                elif hasattr(delta, "content") and delta.content:
+                    content = delta.content
 
-    return response_content
+            if content:
+                socketio.emit("answers", {"answer": content})
+                yield content
 
+        except Exception as e:
+            print(f"\nError processing chunk: {e}")
+            print(f"Chunk type: {type(chunk)}")
+            print(f"Chunk content: {chunk}")
+
+    socketio.emit("answers", {"answer" : "<br/><br/>"})
+
+    #response_content = completion.choices[0].message.content     # Process GPT Response
 
 
   
