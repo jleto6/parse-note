@@ -10,7 +10,6 @@ from functions.ocr import do_ocr
 from functions.gpt_call import image_call, text_call
 from functions.conversions import handle_image, handle_pdf, get_file_type, handle_video
 
-from app import read_notes
 from app import app
 from threading import Thread
 import threading
@@ -23,7 +22,6 @@ flask_thread = Thread(target=run_flask)
 flask_thread.start()
 
 # Start the file watcher in a background thread
-threading.Thread(target=read_notes, daemon=True).start()
 print("Flask is running, but main.py can still execute other code.")
 
 # PDF maker
@@ -84,7 +82,6 @@ def main():
     # Loop thru every txt file containing extracted text and send to GPT
     for filename in os.listdir("output_texts" ):  
         file_path = os.path.join("output_texts" , filename)  # Get the full path
-        time.sleep(5)
         print("Calling GPT (Creating Notes)")
         text_call(file_path) # Send to GPT to make notes on
 

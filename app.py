@@ -1,7 +1,10 @@
 from flask import Flask, request, render_template
 from flask_socketio import SocketIO
 from flask import jsonify, Response
-import time
+from flask_wtf import FlaskForm
+from wtforms import FileField, SubmitField
+from werkzeug.utils import secure_filename
+import os
 
 from functions.gpt_call import question_call
 
@@ -9,43 +12,32 @@ app = Flask(__name__)
 app.secret_key = "dev"  # Set a secret key for session
 socketio = SocketIO(app)  # Initialize Socket.IO
 
-stored_notes = "No notes yet"
+app.config['UPLOAD_FOLDER'] = 'static/files'
 
-def read_notes():
-    # Continiously check for new notes and emit updates if they change
-    last_notes = ""
-
-    while True:
-        time.sleep(3)
-        if last_notes == "":
-            socketio.emit("loading_notes", {"notes" : "Loading Notes..."})
-
-        with open("notes.txt", "r") as file:
-            notes = file.read()
-            if notes != last_notes:
-                new_part = notes.replace(last_notes, "")
-                last_notes = notes
-                new_part = notes.replace("\n", "<br/>") # Replace new lines with line break element
-                #print()
-                #print(f"Read notes function: {new_part}")
-                socketio.emit("update_notes", {"notes" : new_part})
-        time.sleep(1)
-
+class UploadFileForm(FlaskForm):
+    file = FileField("File")
+    submit = SubmitField("Upload File")
 
 @app.route("/", methods=["GET", "POST"])
 def get_notes():
+    form = UploadFileForm()
 
     # when a POST is recieved 
-
     if request.method == "POST":
+        # File Uploads
+        if request.content_type.startswith("multipart/form-data"):
+            if form.validate_on_submit():
+                file = form.file.data # Grab the file
+                file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Then save the file
+        # JSON Requests
+        elif request.content_type == "application/json":
+            data = request.get_json()
+            question = data.get("inputQuestion")
+            selection = data.get("selection")
 
-        data = request.get_json()
-        question = data.get("inputQuestion")
-        selection = data.get("selection")
-
-        for chunk in question_call(question, selection):
-            print(chunk, end="", flush=True)  # Stream to terminal
-        print("")
+            for chunk in question_call(question, selection):
+                print(chunk, end="", flush=True)  # Stream to terminal
+            print("")
 
         return "", 204  # Respond with "No Content" since everything happens via socket    
     
@@ -54,7 +46,7 @@ def get_notes():
         stored_notes = file.read()
         stored_notes = stored_notes.replace("\n", "<br/>") # Replace new lines with line break element
 
-    return render_template("index.html", notes=stored_notes)
+    return render_template("index.html", form=form)
 
     
 

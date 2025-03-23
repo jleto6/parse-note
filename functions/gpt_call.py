@@ -21,6 +21,9 @@ prompt = f"""
 prompt1 = "Whats in this image?"
 
 def text_call(content):
+    from app import socketio
+
+
     # Read the content of the current file
     with open(content, "r") as file:
         file_content = file.read()
@@ -31,7 +34,7 @@ def text_call(content):
     # GPT Call
     completion = openai_client.responses.create(
     model="gpt-4o",
-    messages=[
+    input=[
         {"role": "system", "content": "You are an AI that generates detailed notes while maintaining continuity across sections."},
         {"role": "user", "content": f"""
         Write clear and detailed notes in full sentences without bullet points. State facts directly with no introductory framing, explanations of importance, or general overviews. Do not use phrases like ‘the content revolves around’ or ‘this topic is crucial for understanding.’ Avoid addressing an audience—do not use words like ‘we,’ ‘you,’ or ‘must.’ Use natural, straightforward language without third-person narration or formal phrasing. Stick closely to the provided content, only explaining concepts slightly further if necessary for clarity. Do not expand beyond what is mentioned. Begin writing immediately with factual information.
@@ -45,11 +48,38 @@ def text_call(content):
     ],
     stream=True
 )
-    response_content = completion.choices[0].message.content     # Process GPT Response
-    # Appends all text to a text file so GPT can reference already covered material
-    with open("notes.txt", "a", encoding="utf-8") as file:
-           file.write(response_content + "\n")  # Appends text to output file
-    #print(f"NOTES: {response_content}")
+    for chunk in completion:
+        #print(chunk)
+        # Handle different possible chunk formats
+        try:
+            content = None
+
+            if isinstance(chunk, str):
+                content = chunk
+            elif hasattr(chunk, "content") and chunk.content:
+                content = chunk.content
+            elif hasattr(chunk, "delta"):
+                delta = chunk.delta
+                if isinstance(delta, str):
+                    content = delta
+                elif hasattr(delta, "content") and delta.content:
+                    content = delta.content
+
+            if content:
+                #print(content, end="", flush=True)  # Stream to terminal
+
+                socketio.emit("update_notes", {"notes" : content})
+
+                with open("notes.txt", "a", encoding="utf-8") as f:
+                    f.write(content)
+                    f.flush()  # Ensures content is written immediately to the file
+
+        except Exception as e:
+            print(f"\nError processing chunk: {e}")
+            print(f"Chunk type: {type(chunk)}")
+            print(f"Chunk content: {chunk}")
+
+    socketio.emit("update_notes", {"notes" : "<br/><br/>"})
 
 def image_call(file_path):
     # Get the Base64 string of the file

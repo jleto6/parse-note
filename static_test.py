@@ -1,4 +1,4 @@
-from app import get_notes, read_notes
+from app import get_notes
 from app import app
 from threading import Thread
 import threading
@@ -9,8 +9,5 @@ def run_flask():
 # Start Flask in a separate thread
 flask_thread = Thread(target=run_flask)
 flask_thread.start()
-
-# Start the file watcher in a background thread
-threading.Thread(target=read_notes, daemon=True).start()
 
 print("Flask is running, but main.py can still execute other code.")
