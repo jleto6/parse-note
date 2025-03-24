@@ -42,6 +42,21 @@
     box-sizing: border-box; /* Keeps width & height consistent */
 }
 
+#response-text::-webkit-scrollbar {
+    width: 8px; /* How thick the scrollbar is */
+}
+
+#response-text::-webkit-scrollbar-track {
+    background: #403c3c; /* Matches your background color */
+    border-radius: 4px;
+}
+
+#response-text::-webkit-scrollbar-thumb {
+    background-color: #888; /* The color of the scrollbar "thumb" */
+    border-radius: 4px;
+    border: 2px solid #403c3c; /* Matches the track color for a "groove" effect */
+}
+
 /* Input field */
 
 #input-container {

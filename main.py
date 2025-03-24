@@ -1,6 +1,8 @@
 import os
 import time
 import pandas as pd
+import glob
+import re
 
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet
@@ -35,25 +37,43 @@ def create_pdf(filename, text):
     # Create the pdf
     doc.build(story)
 
+# File deleter
+def clear_output(folder_path):
+    for item in os.listdir(folder_path):
+        item_path = os.path.join(folder_path, item)
+        if os.path.isfile(item_path):
+            os.remove(item_path)
 # -----------------------------------------------
 #  Main
 # -----------------------------------------------
 
 def main():
-    # Uploaded Files
-    folder = "notes"
-    files = os.listdir(folder) # List of files in notes folder 
-    if ".DS_Store" in files:
-        files.remove(".DS_Store")
-    if "test_notes" in files:
-        files.remove("test_notes")
+
+    # Clear previous outputs on run
+    clear_output("conversions")
+    clear_output("output_texts")
+    clear_output("static/files")
 
     output_text = "notes.txt"   # Text file of all GPT note outputs
     open("notes.txt", "w").close()  # Ensure the file exists by creating it if it doesnt
 
+    # Uploaded Files
+    folder = "notes"
+    files = os.listdir(folder) # List of files in notes folder 
+
+    if ".DS_Store" in files:
+        files.remove(".DS_Store")
+
+    if not files:
+        print("No available files in the folder.")
+        while not files:
+            #print("Waiting for files.")
+            files = os.listdir(folder) # List of files in notes folder 
+    else:
+        print("Files found:", files)
+
     # Work with the available files
     time.sleep(3)
-    print("\nAvailable files:")
     for file in files:
      
         file_path, file_type = get_file_type(file)
@@ -79,9 +99,13 @@ def main():
     do_ocr()    
 
     print("")
+
+    outputs = "output_texts" # Folder of converted pngs
+    files = sorted(os.listdir(outputs), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
+
     # Loop thru every txt file containing extracted text and send to GPT
-    for filename in os.listdir("output_texts" ):  
-        file_path = os.path.join("output_texts" , filename)  # Get the full path
+    for filename in files:  
+        file_path = os.path.join(outputs , filename)  # Get the full path
         print("Calling GPT (Creating Notes)")
         text_call(file_path) # Send to GPT to make notes on
 

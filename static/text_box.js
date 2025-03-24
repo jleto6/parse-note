@@ -30,13 +30,16 @@ document.addEventListener("DOMContentLoaded", function() {
     padding = 0;
     function moveBox(timestamp){
         if (padding < 20){
-            padding += .75;
+            padding += 1;
             responseBox.style.padding = padding + "px";
             requestAnimationFrame(moveBox);
         }
       }
 
     document.addEventListener("mousedown", function(event) {
+
+        document.getElementById("file-upload").style.marginTop = "25px"; // move upload box
+
 
         if (!textBox.contains(event.target)) {
             textBox.style.display = "none"; // Hides the text box if click is outside
@@ -51,9 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             responseBox.style.display = "block"; // Show the answer field
 
-            
-
-
+        
             document.getElementById("input-container").style.padding = "0px 10px 8px 10px"; // change input padding
 
             // Get the question in input field

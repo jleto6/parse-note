@@ -2,18 +2,25 @@ import os
 from PIL import Image
 import magic
 import pytesseract
+import re
+
 from functions.gpt_call import image_call, text_call
 
-pngs_folder = "conversions/converted_pngs" # Folder of converted pngs
+
 
 def do_ocr():
+
+    pngs_folder = "conversions" # Folder of converted pngs
+    files = sorted(os.listdir(pngs_folder), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)    
+    
     # Folder of txt for each image
     txt_folder = "output_texts" 
     os.makedirs(txt_folder, exist_ok=True)
 
     # Loop thru every image
     counter = 1
-    for file in os.listdir(pngs_folder):
+    internalctr = 0
+    for file in files:
 
         # Convert to OCR data
         file_path = os.path.join(pngs_folder, file)
@@ -31,9 +38,14 @@ def do_ocr():
         txt_path = os.path.join(txt_folder, filename)  # Create full file path inside the folder
 
         # Try to open the file in write mode 
-        with open(txt_path, "w", encoding="utf-8") as file:
-            file.write(extracted_text + "\n")
-            counter +=1
+        #print(f"writing to file {filename} from {file}")
+        with open(txt_path, "a", encoding="utf-8") as file:
+            file.write(extracted_text + "\n\n")
+
+            internalctr +=1
+            if internalctr == 10:
+                internalctr = 0
+                counter +=1
 
         # Get word count
         word_count = extracted_text.split() # Split text on spaces into a list

@@ -5,6 +5,7 @@ from flask_wtf import FlaskForm
 from wtforms import FileField, SubmitField
 from werkzeug.utils import secure_filename
 import os
+import markdown
 
 from functions.gpt_call import question_call
 
@@ -41,12 +42,15 @@ def get_notes():
 
         return "", 204  # Respond with "No Content" since everything happens via socket    
     
-    # Read from notes.txt on every refresh
+    return render_template("index.html", form=form)
+
+# Read from notes.txt on every refresh
+@socketio.on('connect')
+def handle_connect():
     with open("notes.txt", "r") as file:
         stored_notes = file.read()
-        stored_notes = stored_notes.replace("\n", "<br/>") # Replace new lines with line break element
-
-    return render_template("index.html", form=form)
+        stored_notes = markdown.markdown(stored_notes) # Convert to HTML
+    socketio.emit("update_notes", {"notes": stored_notes, "refresh": True})
 
     
 

@@ -21,7 +21,6 @@ files = os.listdir(folder) # List of files in notes folder
 if ".DS_Store" in files:
         files.remove(".DS_Store")
 if "test_notes" in files:
-        print("hi")
         files.remove("test_notes")
 
 # Get The File Type
@@ -35,7 +34,7 @@ def get_file_type(file):
     return file_path, file_type
 
 # Handle Images
-pngs_folder = "conversions/converted_pngs" # Folder of converted pngs
+pngs_folder = "conversions" # Folder of converted pngs
 os.makedirs(pngs_folder, exist_ok=True) # Make folder if it doesnt exist
 
 def handle_image(file, file_path):
@@ -57,7 +56,7 @@ def handle_pdf(file, file_path):
         image.save(os.path.join(pngs_folder, f"page_{i+1}.png"), "PNG")
 
 # Handle Videos
-wavs_folder = "conversions/converted_wavs" # Folder of converted wavs
+wavs_folder = "conversions" # Folder of converted wavs
 txt_folder = "output_texts"
 
 os.makedirs(wavs_folder, exist_ok=True) # Make folder if it doesnt exist

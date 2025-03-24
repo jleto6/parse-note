@@ -21,7 +21,8 @@
 
         let isFirstChunk = true;
         socket.on("update_notes", function(data){
-            if (isFirstChunk){
+              
+            if (isFirstChunk || data.refresh){
                 document.querySelector("#notes-container").innerHTML = data.notes;
                 isFirstChunk = false;
             } else {
@@ -42,19 +43,21 @@
                     document.querySelector("#response-text").innerHTML += data.answer;
                 }
         });
-ç
+
     </script>
 
     <div class="container mt-4">
 
         <h1 class="text-center pt-3 fixed-top" style="width: 100%; z-index: 10;">Notes</h1>
 
-        <div id="notes-container" class="p-4 mx-auto" style="margin-top: 80px; height: 80vh; overflow-y: auto; width: 80%;">
+        
+
+        <div contenteditable="true" id="notes-container" class="p-4 mx-auto" style="margin-top: 80px; height: 80vh; overflow-y: auto; width: 80%;">
             <!-- Notes Displayed Here-->
             {{ notes | safe }}
         </div>
 
-        <div style="display: flex; flex-direction: column; align-items: center; margin-top: -400px;">
+        <div id="file-upload" style="display: flex; flex-direction: column; align-items: center; margin-top: -400px;">
             <form method='POST' enctype='multipart/form-data'>
                 {{form.hidden_tag()}}
                 {{form.file()}}
