@@ -4,9 +4,7 @@ import magic
 import pytesseract
 import re
 
-from functions.gpt_call import image_call, text_call
-
-
+from functions.gpt_call import image_call
 
 def do_ocr():
 
@@ -43,7 +41,7 @@ def do_ocr():
             file.write(extracted_text + "\n\n")
 
             internalctr +=1
-            if internalctr == 10:
+            if internalctr == 15:
                 internalctr = 0
                 counter +=1
 

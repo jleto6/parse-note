@@ -1,5 +1,6 @@
 /* entire box */
 #text-box {
+
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -19,14 +20,17 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
     gap: 10px;
     white-space: nowrap;
+
+
 }
+
+
 
 #response-text {
     display: none; /* Hide by default */
 
     background-color: rgba(0, 0, 0, 0.4); 
     border-bottom: .2px solid rgba(255, 255, 255, 0.5); /* Light bottom border */
-
     
     width: 100%; /* Make it expand to fill the entire box */
     height: 100%; /* Fill the parent box */
@@ -47,7 +51,7 @@
 }
 
 #response-text::-webkit-scrollbar-track {
-    background: #403c3c; /* Matches your background color */
+    background: transparent; /* Matches your background color */
     border-radius: 4px;
 }
 
@@ -118,3 +122,43 @@
     font-size: 16px;
     font-weight: bold;
 }
+
+/* explain button */
+.explain-button {
+    margin-top: auto; /* Pushes button to the bottom */
+
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    flex-shrink: 0; /* Prevents button from resizing */
+}
+
+/* Button hover effect */
+.explain-button:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* Arrow icon */
+.explain-button::after {
+    content: "ⓘ";
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#notes-container {
+    overflow-y: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE 10+ */
+  }
+  
+  #notes-container::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari, Opera */
+  }

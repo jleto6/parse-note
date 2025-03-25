@@ -9,22 +9,18 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 
 from functions.ocr import do_ocr
-from functions.gpt_call import image_call, text_call
+from functions.gpt_call import notes_creation
 from functions.conversions import handle_image, handle_pdf, get_file_type, handle_video
 
-from app import app
+from app import app, socketio
 from threading import Thread
 import threading
 
 def run_flask():
     app.run(debug=True, use_reloader=False)  # Starts Flask but doesn't block main.py
-
 # Start Flask in a separate thread
 flask_thread = Thread(target=run_flask)
 flask_thread.start()
-
-# Start the file watcher in a background thread
-print("Flask is running, but main.py can still execute other code.")
 
 # PDF maker
 def create_pdf(filename, text):
@@ -43,6 +39,20 @@ def clear_output(folder_path):
         item_path = os.path.join(folder_path, item)
         if os.path.isfile(item_path):
             os.remove(item_path)
+
+# Time to run program
+stop_timer = threading.Event() # Stop event
+def timer():
+    start_time = time.time()
+    while not stop_timer.is_set():
+        elapsed = time.time() - start_time
+        print(f"\rElapsed time: {elapsed:.2f} seconds", end="")
+        socketio.emit("timer", {"time" : elapsed})
+        time.sleep(1)
+# Start the timer thread
+timer_thread = threading.Thread(target=timer)
+timer_thread.start()
+
 # -----------------------------------------------
 #  Main
 # -----------------------------------------------
@@ -59,7 +69,7 @@ def main():
 
     # Uploaded Files
     folder = "notes"
-    files = os.listdir(folder) # List of files in notes folder 
+    files = sorted(os.listdir(folder), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
 
     if ".DS_Store" in files:
         files.remove(".DS_Store")
@@ -68,7 +78,8 @@ def main():
         print("No available files in the folder.")
         while not files:
             #print("Waiting for files.")
-            files = os.listdir(folder) # List of files in notes folder 
+            files = sorted(os.listdir(folder), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
+
     else:
         print("Files found:", files)
 
@@ -107,7 +118,13 @@ def main():
     for filename in files:  
         file_path = os.path.join(outputs , filename)  # Get the full path
         print("Calling GPT (Creating Notes)")
-        text_call(file_path) # Send to GPT to make notes on
+
+        # Signal the timer thread to stop
+        stop_timer.set()
+        # Wait for the timer thread to finish
+        timer_thread.join()
+
+        notes_creation(file_path) # Send to GPT to make notes on
 
     # Read the content of the notes file
     with open("notes.txt", "r") as file:

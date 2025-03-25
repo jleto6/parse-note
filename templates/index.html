@@ -12,6 +12,9 @@
     <!-- Socketio -->
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script>
+
+        window.myGlobalVariable = false;
+
         var socket = io(); // Connect to Flask-SocketIO Server
 
         /* Update Notes */
@@ -25,8 +28,12 @@
             if (isFirstChunk || data.refresh){
                 document.querySelector("#notes-container").innerHTML = data.notes;
                 isFirstChunk = false;
+
+                document.querySelector("#notes-container").scrollTop = document.querySelector("#notes-container").scrollHeight
             } else {
                 document.querySelector("#notes-container").innerHTML += data.notes;
+
+                document.querySelector("#notes-container").scrollTop = document.querySelector("#notes-container").scrollHeight
             }
             console.log("Updated notes:", data.notes);
         });
@@ -34,13 +41,18 @@
         /* Update Answers */
         let isFirstAnswer = true;
         socket.on("answers", function(data){
+
             console.log("Updated answer:", data.answer);
 
-                if (isFirstAnswer){
+                if (isFirstAnswer || data.refresh){
                     document.querySelector("#response-text").innerHTML = data.answer;
                     isFirstAnswer = false;
+
+
                 } else {
                     document.querySelector("#response-text").innerHTML += data.answer;
+
+
                 }
         });
 
@@ -57,7 +69,7 @@
             {{ notes | safe }}
         </div>
 
-        <div id="file-upload" style="display: flex; flex-direction: column; align-items: center; margin-top: -400px;">
+        <div id="file-upload" style="display: flex; flex-direction: column; align-items: center; margin-top: 25;"> <!-- -400 for in middle-->
             <form method='POST' enctype='multipart/form-data'>
                 {{form.hidden_tag()}}
                 {{form.file()}}
@@ -70,8 +82,9 @@
             <div id="response-text">  </div>
 
             <div id="input-container"> 
-                <input type="text" id="note-input" placeholder="Ask a question..."/>
-                <button class="send-button" id="button"></button>
+                <input type="text" id="note-input" placeholder="Edit or explain..."/>
+                <button class="send-button" id="send-button"></button>
+                <button class="explain-button" id="explain-button"></button>
             </div>
         </div>
     </div>

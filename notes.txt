@@ -1,52 +1,29 @@
-<h2>Integer Multiplication</h2>
+<p style="color:whitesmoke;"><strong>Processor Datapath:</strong> The MIPS ISA includes three <strong>instruction types</strong>: R-type, I-type, and J-type. The datapath and control unit have a simplified pipeline encompassing key operations: <strong>memory reference</strong> (lw, sw), <strong>arithmetic/logical</strong> (addi, sub, and, or, slt), and <strong>control transfer</strong> (beq, j).<!-- END_SECTION --></p>
 
-<h3>"Paper and Pencil" Example</h3>
+<p style="color:whitesmoke;">The <strong>instruction format</strong> review covers three types: <strong>R-type</strong>, <strong>J-type</strong>.</p>
 
-<p>The multiplication example demonstrates multiplying two integers using a basic step-by-step method.</p><!-- END_SECTION -->
+<ul style="color:whitesmoke;">
+    <li><strong>R-type format:</strong> Fields are organized from bit 31 to 0: <strong>op</strong>, <strong>rs</strong>, <strong>rt</strong>, <strong>rd</strong>, <strong>shamt</strong>, <strong>funct</strong>.</li>
+    <li><strong>J-type format:</strong> Structure is <strong>op</strong> and <strong>target address</strong>.</li>
+    <li>Fields shared: <strong>op:</strong> operation code, <strong>rs, rt, rd:</strong> source/destination registers, <strong>shamt:</strong> shift amount, <strong>funct:</strong> operation variant, <strong>address/immediate:</strong> address offset or immediate value, <strong>target address:</strong> jump instruction address.</li>
+<!-- END_SECTION --></ul>
 
-<ul>
-    <li><strong>Multiplicand:</strong> 1000</li>
-    <li><strong>Multiplier:</strong> 1001</li>
-</ul><!-- END_SECTION -->
+<p style="color:whitesmoke;">MIPS subset includes instructions like <strong>Add</strong>, <strong>Subtract</strong>, <strong>AND</strong>, <strong>OR</strong>, <strong>SLT</strong>. Examples include:</p>
 
-<h3>Step-by-Step Calculation</h3>
+<ul style="color:whitesmoke;">
+    <li><strong>ADD</strong> (e.g., add rd, rs, rt) involves bits: <strong>op</strong>, <strong>rs</strong>, <strong>rt</strong>, <strong>rd</strong>, <strong>shamt</strong>, <strong>funct</strong>.</li>
+    <li><strong>ADDI:</strong> addi rt, rs, imm16 has fields like <strong>op</strong>, <strong>rs</strong>, <strong>rt</strong>, <strong>immediate</strong>.</li>
+    <li><strong>Load/Store:</strong> lw, sw with fields <strong>op</strong>, <strong>rs</strong>, <strong>rt</strong>, <strong>immediate</strong>.</li>
+    <li><strong>Branch:</strong> beq rs, rt, imm16 and <strong>J-type</strong> jump with fields like <strong>op</strong> and <strong>target</strong>.</li>
+<!-- END_SECTION --></ul>
 
-<ol>
-    <li>
-        Multiply 1000 by the least significant digit (rightmost) of the multiplier (1):
-        <ul>
-            <li>Result: 1000</li>
-        </ul>
-    </li>
-    <li>
-        Shift left, multiply 1000 by the next digit of the multiplier (0):
-        <ul>
-            <li>Result: 0000</li>
-        </ul>
-    </li>
-    <li>
-        Shift again, multiply 1000 by the third digit of the multiplier (0):
-        <ul>
-            <li>Result: 0000</li>
-        </ul>
-    </li>
-    <li>
-        Shift once more, multiply 1000 by the most significant digit (leftmost) of the multiplier (1):
-        <ul>
-            <li>Result: 1000</li>
-        </ul>
-    </li>
-</ol><!-- END_SECTION -->
+<ol style="color:whitesmoke;">
+    <li>Each instruction execution begins by sending the <strong>program counter</strong> (PC) to memory to fetch the code instruction.<!-- END_SECTION --></li>
+    <li>Read registers using instruction fields for selection. Load word (<strong>lw</strong>) requires one register, while others might require two.<!-- END_SECTION --></li>
+    <li><strong>Fetch:</strong> Obtain the next instruction stored at the PC.<!-- END_SECTION --></li>
+    <li><strong>Decode:</strong> Opcode determines the instruction type: arithmetic/logical, memory logical, branch.<!-- END_SECTION --></li>
+    <li><strong>Update PC:</strong> Calculate new PC based on branch condition (<strong>PC &lt; target address</strong> or <strong>PC + 4</strong>).<strong> Branch instructions</strong> need target address calculation; others use <strong>PC + 4</strong>.<!-- END_SECTION --></li>
+    <li>The <strong>ALU</strong> executes instruction classes to compute arithmetic results or <strong>memory address</strong> for load/store operations or branch targets.<!-- END_SECTION --></li>
+</ol>
 
-<h3>Final Product</h3>
-
-<p>The calculation yields the following intermediate results added together:</p>
-
-<ul>
-    <li>1000</li>
-    <li>0000</li>
-    <li>0000</li>
-    <li>+ 1000</li>
-</ul>
-
-<p><strong>Final Product:</strong> 01001000</p><!-- END_SECTION -->
+<p style="color:whitesmoke;">Register file operations involve reading and writing, particularly for <strong>R-type</strong> instructions, which involve reading two registers and writing one, whereas <strong>memory-reference instructions</strong> access one register and data memory.</p><!-- END_SECTION -->

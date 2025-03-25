@@ -1,2 +1,23 @@
-Integer Multiplication - “Paper and pencil” example Multiplicand 1000 Multiplier x 1001 1000 0000 0000 Shift after each step + 1000 Product 01001000
+PROCESSOR DATAPATH  
+
+
+Introduction MIPS ISA 3 Instruction Types R-type, I-type, J-type Datapath and Control Unit Simplified Pipelined Simple subset Memory reference: lw, sw Arithmetic/logical: addi, sub, and, or, slt Control transfer: beq, j
+
+Instruction Format Review Three instruction formats R-type J-type 31 26 21 16 1 6 0 | op rs mt | 6bits H5bits H5bits H5bits 6 bits 31 26 21 16 0 | op rs {| | immediate | 31 6bits Sbits 5 bits 16 bits 26 0 | op | target address 6 bits 26 bits Fields: * op: operation of the instruction rs, rt, rd: source/destination register specifiers shamt: shift amount funct: selects variant of the operation in the “op” field address/immediate: address offset or immediate value target address: target address of the jump instruction
+
+MIPS Subset Add, Subtract, AND, OR, SLT add rd, rs, rt 31 26 21 16 11 6 0 sub rd, rs, rt rd. 6 bits 5 bits 5 bits 5 bits 5 bits 6 bits orrd, rs, rt rs, rt ADD Immediate addi rt, rs, imm16 31 26 21 16 0 - Load, Store | op | rs | rt | immediate | rs, imm16 6 bits 5 bits 5 bits 16 bits swrt, rs, imm16 BRANCH beq rs, rt, imm16 31 0 j target 6 bits 26 bits
+
+Instruction Execution For every instruction: 1. Send the program counter (PC) to the memory that contains the code and fetch the instruction from that memory. 1. Read one or two registers, using fields of the instruction to select the registers to read. For the load word instruction, we need to read only one register, but most other instructions require that we read two registers.
+
+Instruction Execution               0 1 fetch ins at pc decode update pc execute Memory 00110100000000010000000000001111 pe 00100100001000010000000000000111     DP units         Fetch: Get the next instruction: stored at PC
+
+Instruction Execution                   0 1 fetch ins at pc decode update pc execute Memory 00110100000000010000000000001111 pe 00100100001000010000000000000111     DP units         Decode: Opcode determines if the instruction is arithmetic/logical, memory logical, or branch.
+
+Instruction Execution        fetch ins at pc decode 3 update pc 'N execute Memory pc function units           - Update PC: PC < target address or PC + 4 - If the instruction is a branch, we have to calculate the target address If the instruction is not a branch, the new PC will be PC + 4
+
+Instruction Execution                     0 1 DE fetch ins at pc e decode update pc execute Memory 00110100000000010000000000001111 00100100001000010000000000000111 pe    e e units     - Update PC: PC < target address or PC + 4 - If the instruction is a branch, we have to calculate the target address If the instruction is not a branch, the new PC will be PC + 4
+
+Instruction Execution Execute: Depending on instruction class, we use the ALU to calculate: Arithmetic result Memory address for load/store Branch target address
+
+Instruction Execution To read and write registers, we need a register file » R-types read two registers and write one register » Memory-reference instructions read one register Also access data memory
 

@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 import os
 import markdown
 
-from functions.gpt_call import question_call
+from functions.gpt_call import question_call, explanation
 
 app = Flask(__name__)
 app.secret_key = "dev"  # Set a secret key for session
@@ -33,20 +33,27 @@ def get_notes():
         # JSON Requests
         elif request.content_type == "application/json":
             data = request.get_json()
-            question = data.get("inputQuestion")
-            selection = data.get("selection")
+            action_type = data.get("type")
 
-            for chunk in question_call(question, selection):
-                print(chunk, end="", flush=True)  # Stream to terminal
-            print("")
+            if action_type == "question":
+                question = data.get("inputQuestion")
+                selection = data.get("selection")
+                for chunk in question_call(question, selection):
+                    print(chunk, end="", flush=True)  # Stream to terminal
+                print("")
 
-        return "", 204  # Respond with "No Content" since everything happens via socket    
+            if action_type == "explanation":
+                selection = data.get("selection")
+                explanation(selection)
+
+            return "", 204  # Respond with "No Content" since everything happens via socket    
     
     return render_template("index.html", form=form)
 
 # Read from notes.txt on every refresh
 @socketio.on('connect')
 def handle_connect():
+
     with open("notes.txt", "r") as file:
         stored_notes = file.read()
         stored_notes = markdown.markdown(stored_notes) # Convert to HTML
