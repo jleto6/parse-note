@@ -48,38 +48,52 @@ def notes_creation(content):
         previous_content += file_content # Store all read files in memory so GPT knows whats covered
 
     # GPT Call
+    # GPT Call
     completion = openai_client.responses.create(
         model="gpt-4o",
         input=[
             {
                 "role": "system",
                 "content": (
-                    "You are an AI that generates extremely detailed, visually appealing, sentence-based notes while maintaining "
-                    "continuity across sections. Do not introduce any information that goes beyond the scope of the provided content."
+                    "You are an AI that extracts and reconstructs complete, highly structured, deeply detailed technical or academic documentation from source material. "
+                    "This is not summarization or simplification. Your task is to capture all relevant information, including causal logic, conceptual dependencies, "
+                    "step-by-step processes, and contextual relationships. Do not omit or gloss over complexity under any circumstance. "
+                    "It is extremely important that you stay *very* close to the original provided text. Maintain fidelity to wording, structure, and phrasing unless clarity or formatting demands a minimal adjustment."
                 )
             },
             {
                 "role": "user",
                 "content": f"""
-    Write clear, detailed notes in valid HTML to be inserted into a Jinja template. Output valid HTML without triple backticks, code fences, or extra symbols like >>>. Do not use any Markdown syntax (such as ** ** or __ __) for bold text; only use HTML <strong> tags. Use headings (such as <h2> or <h3>) occasionally only on MAJOR new sections, but primarily use paragraphs (<p>) with inline styling. All text should default to a 'whitesmoke' color (for example, use style="color:whitesmoke;"). Bold all important terms and words of interest by wrapping them in <strong> tags (for example, <strong>important term</strong>).
+    Write clear, detailed documentation in valid HTML to be inserted into a Jinja template. Output valid HTML without triple backticks, code fences, or extra symbols like >>>. Do not use any Markdown syntax (such as ** ** or __ __) for bold text; only use HTML <strong> tags for emphasis. Use headings (such as <h2> or <h3>) occasionally only on MAJOR new sections, but primarily use paragraphs (<p>) with inline styling. All text should default to a 'whitesmoke' color (for example, use style="color:whitesmoke;"). Bold all important terms and keywords by wrapping them in <strong> tags (for example, <strong>important term</strong>).
 
-    For any actual code references or code snippets—identified by context or explicit formatting instructions—wrap them in a <code> tag styled with a cold tech blue color and a monospaced font (for example, <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">exampleCode</code>).
+    For any actual code references or code snippets—identified by context or formatting—wrap them in a <code> tag styled with a cold tech blue color and a monospaced font (for example, <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">exampleCode</code>).
 
-    <strong>Detect and enforce structure strictly:</strong> Use an <strong>ordered list (<ol>)</strong> whenever the content describes a clear step-by-step process, sequence of operations, or execution stages—<strong>always</strong>. If the text describes types, categories, examples, or grouped concepts without a required order, use an <strong>unordered list (<ul>)</strong> instead of paragraphs sparringly, only if truly seen fit. Do not collapse clearly structured sequences or groupings into plain text. If a process or grouping is implied but not explicitly stated as a list, <strong>still format it as a list</strong> if the structure is logically clear.
+    <strong>Enforce structure strictly:</strong> Use an <strong>ordered list (<ol>)</strong> whenever the content describes a clear step-by-step process, sequence of operations, or historical developments—<strong>always</strong>. If the text describes types, categories, examples, or grouped concepts without a required order, use an <strong>unordered list (<ul>)</strong> instead of paragraphs sparingly, only if clearly warranted. Do not collapse clearly structured sequences or groupings into plain text. If a process or grouping is implied but not explicitly stated as a list, <strong>still format it as a list</strong> if the structure is logically clear.
 
     Avoid excessive or unnecessary lists. Only use <ul> or <ol> when the content strongly implies grouping or order. Otherwise, favor paragraphs (<p>).
 
     At the end of each and every single element of HTML, insert '<!-- END_SECTION -->'.
 
-    Present facts directly without introductory framing, explanations of importance, or general overviews. Avoid addressing an audience or using terms like 'we,' 'you,' or 'must.' Use natural, straightforward language without formal phrasing. Stick closely to the provided content and clarify only when absolutely necessary; do not add extra explanations or extrapolate beyond the provided information.
+    <strong>Subtle Contextual Insight Rule:</strong> When necessary, include <strong>short, direct context-building remarks</strong> to explain:
+    1. <strong>Why a concept matters</strong> in the current topic.
+    2. <strong>What role the concept plays</strong> in the overall subject area or system.
+    3. <strong>How it connects to the previous content</strong>.
 
-    The following text is a **summary of previous sections** already covered. Do not repeat this information but ensure new notes remain consistent with what has been stated:
+    These remarks must be integrated seamlessly, expressed in one or two sentences max, and <strong>strictly tied to the topic at hand</strong>—not general summaries or extrapolations. If no context is needed, skip it.
+
+    <strong>Concept Clarity Rule (NEW):</strong> When a new concept, event, term, process, or component is introduced, <strong>briefly define what it is</strong> and <strong>explain how it fits into the subject matter or relates to earlier material</strong>. This should be concise and embedded naturally into the explanation, ensuring the learner can follow the logic and purpose of the term without needing outside references.
+
+    <strong>Example Handling Rule:</strong> If the provided content includes an <strong>example, scenario, or source excerpt</strong> meant to illustrate a concept, <strong>always include it</strong> in the output. When an example is used, it may substitute for a longer explanation if the concept becomes clear through it. Prefer slightly more concise, conceptual phrasing in these cases—but only if the example fully supports the understanding.
+
+    Do not introduce the output with framing or general statements. Do not address an audience or use phrases like 'you should' or 'we now see.' Stick strictly to factual, structured, and academic exposition.
+
+    The following is a summary of previously covered material. Do not repeat this information, but use it to build continuity and contextual understanding if helpful:
     {previous_content}
 
-    Now focus **primarily and thoroughly** on the following new content. Generate detailed notes that closely adhere to the text, without going beyond it:
+    Now focus primarily and thoroughly on the following new content. Generate deeply detailed, structured documentation that closely adheres to the text, with structure and insight as described:
     {file_content}
     """
-            }
+            },
         ],
         stream=True
     )

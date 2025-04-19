@@ -1,29 +1,20 @@
-<p style="color:whitesmoke;"><strong>Processor Datapath:</strong> The MIPS ISA includes three <strong>instruction types</strong>: R-type, I-type, and J-type. The datapath and control unit have a simplified pipeline encompassing key operations: <strong>memory reference</strong> (lw, sw), <strong>arithmetic/logical</strong> (addi, sub, and, or, slt), and <strong>control transfer</strong> (beq, j).<!-- END_SECTION --></p>
+<h2 style="color:whitesmoke;">Binary Numbers in Computer Systems</h2>
+<p style="color:whitesmoke;">Binary numbers are the foundation of data representation in computers. This <strong>base-2 numeral system</strong> consists of only two digits: 0 and 1. Computers use this binary system to perform operations and represent all types of data. The importance of binary numbers lies in their role as the fundamental language computers use to process and store information efficiently.<!-- END_SECTION --></p>
 
-<p style="color:whitesmoke;">The <strong>instruction format</strong> review covers three types: <strong>R-type</strong>, <strong>J-type</strong>.</p>
+<h2 style="color:whitesmoke;">2's Complement Representation</h2>
+<p style="color:whitesmoke;">The <strong>2’s complement</strong> is a method used for representing signed integers in binary. It simplifies arithmetic operations by allowing consistent representation of both positive and negative numbers. This consistency facilitates straightforward addition and subtraction. To find the 2’s complement of a binary number, <strong>invert</strong> all the digits (changing 0s to 1s and vice versa) and then add one to the <strong>least significant bit (LSB)</strong>. This technique effectively simplifies binary subtraction by treating it as an addition operation, enhancing computational efficiency.<!-- END_SECTION --></p>
 
-<ul style="color:whitesmoke;">
-    <li><strong>R-type format:</strong> Fields are organized from bit 31 to 0: <strong>op</strong>, <strong>rs</strong>, <strong>rt</strong>, <strong>rd</strong>, <strong>shamt</strong>, <strong>funct</strong>.</li>
-    <li><strong>J-type format:</strong> Structure is <strong>op</strong> and <strong>target address</strong>.</li>
-    <li>Fields shared: <strong>op:</strong> operation code, <strong>rs, rt, rd:</strong> source/destination registers, <strong>shamt:</strong> shift amount, <strong>funct:</strong> operation variant, <strong>address/immediate:</strong> address offset or immediate value, <strong>target address:</strong> jump instruction address.</li>
-<!-- END_SECTION --></ul>
+<h2 style="color:whitesmoke;">Role of the Arithmetic Logic Unit (ALU)</h2>
+<p style="color:whitesmoke;">The <strong>Arithmetic Logic Unit (ALU)</strong> is a critical component of a computer's <strong>central processing unit (CPU)</strong> responsible for performing arithmetic and logical operations. It contains <strong>adders</strong>, specialized circuits designed to execute addition. By utilizing the 2’s complement representation, these adders can <strong>seamlessly perform both addition and subtraction</strong>. Subtraction is achieved by adding the complement of a number, illustrating how the ALU efficiently handles signed integer operations.<!-- END_SECTION --></p>
 
-<p style="color:whitesmoke;">MIPS subset includes instructions like <strong>Add</strong>, <strong>Subtract</strong>, <strong>AND</strong>, <strong>OR</strong>, <strong>SLT</strong>. Examples include:</p>
-
-<ul style="color:whitesmoke;">
-    <li><strong>ADD</strong> (e.g., add rd, rs, rt) involves bits: <strong>op</strong>, <strong>rs</strong>, <strong>rt</strong>, <strong>rd</strong>, <strong>shamt</strong>, <strong>funct</strong>.</li>
-    <li><strong>ADDI:</strong> addi rt, rs, imm16 has fields like <strong>op</strong>, <strong>rs</strong>, <strong>rt</strong>, <strong>immediate</strong>.</li>
-    <li><strong>Load/Store:</strong> lw, sw with fields <strong>op</strong>, <strong>rs</strong>, <strong>rt</strong>, <strong>immediate</strong>.</li>
-    <li><strong>Branch:</strong> beq rs, rt, imm16 and <strong>J-type</strong> jump with fields like <strong>op</strong> and <strong>target</strong>.</li>
-<!-- END_SECTION --></ul>
+<h2 style="color:whitesmoke;">Binary Multiplication Process</h2>
+<p style="color:whitesmoke;">Integer multiplication in binary is analogous to the process of multiplication using paper and pencil in the decimal system. This involves <strong>bit-by-bit multiplication</strong> of numbers.<br>To illustrate, consider multiplying the binary numbers <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1000</code> (decimal 8) by <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1001</code> (decimal 9):<!-- END_SECTION --></p>
 
 <ol style="color:whitesmoke;">
-    <li>Each instruction execution begins by sending the <strong>program counter</strong> (PC) to memory to fetch the code instruction.<!-- END_SECTION --></li>
-    <li>Read registers using instruction fields for selection. Load word (<strong>lw</strong>) requires one register, while others might require two.<!-- END_SECTION --></li>
-    <li><strong>Fetch:</strong> Obtain the next instruction stored at the PC.<!-- END_SECTION --></li>
-    <li><strong>Decode:</strong> Opcode determines the instruction type: arithmetic/logical, memory logical, branch.<!-- END_SECTION --></li>
-    <li><strong>Update PC:</strong> Calculate new PC based on branch condition (<strong>PC &lt; target address</strong> or <strong>PC + 4</strong>).<strong> Branch instructions</strong> need target address calculation; others use <strong>PC + 4</strong>.<!-- END_SECTION --></li>
-    <li>The <strong>ALU</strong> executes instruction classes to compute arithmetic results or <strong>memory address</strong> for load/store operations or branch targets.<!-- END_SECTION --></li>
+    <li>The first bit from the right of the multiplier <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1001</code> is 1, so write down the multiplicand <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1000</code> as the first sum beneath the line.<!-- END_SECTION --></li>
+    <li>Shift the multiplicand to the left. The next bit of the multiplier is 0, so write down <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">0000</code> for this step.<!-- END_SECTION --></li>
+    <li>Shift the multiplicand again to the left. The next multiplier bit is also 0, resulting in another set of zeros, <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">0000</code>.<!-- END_SECTION --></li>
+    <li>For the final bit of the multiplier, which is 1, shift the multiplicand and write down the shifted result, <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1000</code>.<!-- END_SECTION --></li>
 </ol>
 
-<p style="color:whitesmoke;">Register file operations involve reading and writing, particularly for <strong>R-type</strong> instructions, which involve reading two registers and writing one, whereas <strong>memory-reference instructions</strong> access one register and data memory.</p><!-- END_SECTION -->
+<p style="color:whitesmoke;">After executing all these steps, add together all the binary numbers derived from multiplication. The sum is the final binary product <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">01001000</code>, equivalent to decimal 72. This example illustrates the importance of <strong>sequential shifting</strong> and <strong>conditional addition</strong> in the binary number system, mirroring how a computer efficiently conducts these operations within the ALU. This process can be effectively implemented in hardware, enabling computers to perform multiplication with speed and accuracy.<!-- END_SECTION --></p>

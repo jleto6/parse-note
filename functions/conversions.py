@@ -4,14 +4,18 @@ from PIL import Image
 import magic
 import subprocess
 
+import io
 import wave
 import logging
 import sys
+import fitz
 import json
 from vosk import Model
 from vosk import KaldiRecognizer
 from vosk import SetLogLevel
 SetLogLevel(-1)
+
+from functions.ocr import do_ocr
 
 model = Model("en_model")  # Load the model
 
@@ -33,44 +37,47 @@ def get_file_type(file):
     
     return file_path, file_type
 
-# Handle Images
-pngs_folder = "conversions" # Folder of converted pngs
-os.makedirs(pngs_folder, exist_ok=True) # Make folder if it doesnt exist
-
 def handle_image(file, file_path):
 
     img = Image.open(file_path) # Open the current image 
     img = img.convert("RGBA") # Convert to RGBA
 
-    base_name = os.path.splitext(file)[0] + ".png"  # Create the output filename with a .png extention
-    output_file = os.path.join(pngs_folder, base_name) # Create full file path by joining 'pngs folder' and the file name
-    img.save(output_file, "PNG")
-    #print(f"Output file:{output_file}"
+    do_ocr(img)    
 
 # Handle PDFs
 def handle_pdf(file, file_path):
 
-    images = convert_from_path(file_path) # Convert PDF pages to a list of images
-    # Save each page as a PNG in the output folder
-    for i, image in enumerate(images):
-        image.save(os.path.join(pngs_folder, f"page_{i+1}.png"), "PNG")
+    doc = fitz.open(file_path) # Open the PDF file
+
+    # Open the txt output file in append 
+    with open ("text.txt", "a", encoding="utf-8") as file:
+
+        # go through pages of PDF one by one
+        for page in doc:
+            text = page.get_text().strip() # text extraction
+            # If the page text is short try OCR
+            if len(text) < 50:
+                pix = page.get_pixmap()         # Render page as image
+                img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)  # Convert to PIL Image
+                do_ocr(img)
+            # If extraction fine
+            else:
+                # append extracted text
+                file.write(text + "\n\n")
+                 
 
 # Handle Videos
-wavs_folder = "conversions" # Folder of converted wavs
-txt_folder = "output_texts"
-
-os.makedirs(wavs_folder, exist_ok=True) # Make folder if it doesnt exist
-
 def handle_video(file, file_path):
-    # Convert Video to WAV
-    base_name = os.path.splitext(file)[0] + ".wav" # Create the output filename with a .wav extension
-    output_file = os.path.join(wavs_folder, base_name) # Create full file path by joining 'wavs folder' and file name
-    subprocess.run(["ffmpeg", "-i", file_path, "-ac", "1", "-ar", "16000", output_file, "-y"], # Convert video file to audio file and save it
-               stdout=subprocess.DEVNULL, stderr=subprocess.PIPE) # Supress output other than errors
-    
-    # Convert WAV to text
-    wf = wave.open(output_file, "rb")  # Open the WAV file in read-binary mode
-    rec = KaldiRecognizer(model, wf.getframerate())  # Create recognizer
+
+    # Convert file to wav
+    process = subprocess.run(
+    ["ffmpeg", "-i", file_path, "-f", "wav", "-ac", "1", "-ar", "16000", "pipe:1"],
+    stdout=subprocess.PIPE,
+    stderr=subprocess.PIPE
+    )
+    audio_bytes = process.stdout
+    wf = wave.open(io.BytesIO(audio_bytes), "rb")
+    rec = KaldiRecognizer(model, wf.getframerate())
 
     # Iterate Thru Chunks of Audio File
     text = ""  # Initialize an empty string for transcript
@@ -82,22 +89,10 @@ def handle_video(file, file_path):
             result = json.loads(rec.Result())  # Convert JSON result
             text += result["text"] + " "  # Append text
 
-    # Create a text file
-    counter = 1
-    filename = f"output{counter}.txt"
-    while os.path.exists(os.path.join(txt_folder, filename)):   # Keep incrementing if the filename already exists in txt_folder
-        counter +=1
-        filename = f"output{counter}.txt"
-    txt_path = os.path.join(txt_folder, filename)  # Create full file path inside the folder
-
     # Write the transcription to the txt file
-    with open(txt_path, "w") as f:
+    with open("text.txt", "a") as f:
         f.write(text)
     
-#for file in files:
- #   file_path, file_type = get_file_type(file)
-  #  handle_video(file, file_path)
-
     
 
     
