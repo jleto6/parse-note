@@ -55,8 +55,8 @@ def handle_pdf(file, file_path):
         # go through pages of PDF one by one
         for page in doc:
             text = page.get_text().strip() # text extraction
-            # If the page text is short try OCR
-            if len(text) < 50:
+            # # If the page text is short try OCR
+            if len(text) < 10:
                 pix = page.get_pixmap()         # Render page as image
                 img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)  # Convert to PIL Image
                 do_ocr(img)
@@ -64,7 +64,7 @@ def handle_pdf(file, file_path):
             else:
                 # append extracted text
                 file.write(text + "\n\n")
-                 
+                
 
 # Handle Videos
 def handle_video(file, file_path):

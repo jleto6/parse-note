@@ -1,0 +1,17 @@
+bit to the left represents a number twice as large in base 2, shifting the bits left has the same effect as multiplying by a power of 2. • Almost every compiler will perform the strength reduction optimization of substituting a left shift for a multiply by a power of
+
+---
+
+2. Multiplying by a Constant • Some compilers replace multiplies by short constants with a series of shifts and adds. Because one bit to the left represents a number twice as large in base 2, shifting the bits left has the same effect as multiplying by a power of 2.
+
+---
+
+• Almost every compiler will perform the strength reduction optimization of substituting a left shift for a multiply by a power of 2. • 4 * 2 = 8 • 0100 * 0010 = 1000 • 0100 << 1 = 1000 Multiplying by a Constant • Some compilers replace multiplies
+
+---
+
+by short constants with a series of shifts and adds. Because one bit to the left represents a number twice as large in base 2, shifting the bits left has the same effect as multiplying by a power of 2. • Almost every compiler will perform the strength reduction optimization
+
+---
+
+of substituting a left shift for a multiply by a power of 2. • 2 * 4 = 8 • 0010 * 0100 = 1000 • 0010 << 2 = 1000 Signed Multiplication • So far, we have multiplied unsigned numbers • What about signed multiplication? • one solution: make

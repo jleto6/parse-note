@@ -1,0 +1,9 @@
+Algorithm 1. Compute exponents • Multiplication: Exp = Exp (X) + Exp (Y) – bias; • Division: Exp = Exp (X) – Exp(Y) + bias; 2. Multiply/Divide significands • Multiplication: Sig = Sig (X) x Sig (Y); • Division: Sig = Sig(X) / Sig(Y); 3. Normalize the product • Shift
+
+---
+
+Multiplication Example .5 * -.4375, 4-bit mantissa 1.0000two * 2–1 * – 1.1100two * 2–2 1. Compute exponents -1 + (-2) = -3 With Bias: 126 + 125 – 127 = 124 2. Multiply/Divide significands 0111000000 3. Normalize the product 1.11000000 * 2–3 4. Round 1.1100 * 2–3 5. Set
+
+---
+
+sign -1.1100 * 2–3 because original signs differ Multiplication Example .5 * -.4375, 4-bit mantissa 1.0000two * 2–1 * – 1.1100two * 2–2 1. Compute exponents -1 + (-2) = -3 2. Multiply/Divide significands 0111000000 3. Normalize the product 1.11000000 * 2–3 4. Round 1.1100 * 2–3 5. Set sign

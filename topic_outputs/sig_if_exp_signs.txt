@@ -1,0 +1,9 @@
+both positive • leave out the sign bit, run for 31 steps • set sign bit negative if signs of inputs differ Booth’s Algorithm • multiply two’s complement signed numbers • uses same hardware as before • can also be used to reduce the number of steps Insight for Booth’s
+
+---
+
+Sig = Sig (x) + Sig (Y) 3. Normalize the sum • Shift Sig right/left until leading bit is 1; decrementing or incrementing Exp. • Check for overflow in Exp • Round (needs more bits, as we will see) • repeat step 3 if not still normalized Basic Addition Algorithm
+
+---
+
+Sig right until leading bit is 1; incrementing Exp. • Check for overflow in Exp • repeat step 3 if not still normalized 4. Round • Any bits that do not fit must be discarded 5. Set sign • positive if signs same; negative if signs differ Basic Multiplication Algorithm

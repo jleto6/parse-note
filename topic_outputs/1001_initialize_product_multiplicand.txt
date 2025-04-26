@@ -1,0 +1,9 @@
+Initialize Test the LSB of multiplier 1 indicates Add Multiplication Example (11x9) Iter. Step Product Multiplicand Multiplier Action 0 0 00000000 1011 1001 Initialize 1001 Add Add the left half of the product to the multiplicand. Store in left half of product. Multiplication Example (11x9) Iter. Step Product Multiplicand Multiplier
+
+---
+
+Action 0 0 00000000 1011 1001 Initialize 1 1a. 10110000 1011 1001 Add Add the left half of the product to the multiplicand. Store in left half of product. Multiplication Example (11x9) Iter. Step Product Multiplicand Multiplier Action 0 0 00000000 1011 1001 Initialize 1 1a. 10110000 1011 1001 Add
+
+---
+
+shift the Product register right (arithmetic shift) 1 bit. Booth’s Example (-5 x -6) • Multiplicand = –6 = 1010; –Multiplicand = 6 = 0110 • Multiplier = –5 = 1011 Iter. Step Product Last Action 0 0 0000 101(1 0) 0 Initialize 1 1.10 0110 101(1 0) 0 Start

@@ -1,0 +1,13 @@
+Multiplicand 1000 Multiplier x 1001 1000 0000 0000 Shift after each step + 1000 Product 01001000 Observations • Number of bits in the product is larger than the number in either the multiplicand or the multiplier. • m bits x n bits = m+n bit product • Overflow is a
+
+---
+
+32 bits Figure 3.3 from text Multiplication Algorithm Version 1 Done Done 1. Test Multiplier0 1a. Add multiplicand to product and place the result in Product register 2. Shift the Multiplicand register left 1 bit 3. Shift the Multiplier register right 1 bit 32nd repetition? Start Multiplier0 = 0 Multiplier0
+
+---
+
+Shifts 4 1a. 11000110 1011 0001 Add 4 2,3 01100011 1011 0000 Shifts Multiplication Algorithm Version 2 Observation Product register wastes space (lower half = 0) Exactly equal to the size of multiplier left We can combine Multiplier register and Product register Done Yes: 32 repetitions Done 1. Test Multiplier0
+
+---
+
+a string of 1s, so add the multiplicand to the left half of the product. 10: Beginning of a string of 1s, so subtract the multiplicand from the left half of the product. 11: Middle of a string of 1s, so no arithmetic operation. 2. As in the previous algorithm,

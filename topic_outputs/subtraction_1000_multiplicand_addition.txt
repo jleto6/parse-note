@@ -1,0 +1,5 @@
+COMPUTER ARITHMETIC Background Information • Binary Numbers • 2’s Complement representation • Addition • Subtraction • Arithmetic Logic Unit • Contains Adders to perform addition and subtraction Integer Multiplication • “Paper and pencil” example Multiplicand 1000 Multiplier x 1001 1000 0000 0000 Shift after each step + 1000 Product 01001000
+
+---
+
+possible issue • Binary rules – “choices” 0 => place 0 ( 0 x multiplicand) 1 => place a copy ( 1 x multiplicand) • 3 versions of unsigned multiplication hardware • successive refinement Multiplication • Insight from paper and pencil algorithm • Shift the multiplicand left one digit each

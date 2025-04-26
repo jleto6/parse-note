@@ -8,22 +8,8 @@ from functions.gpt_call import image_call
 
 def do_ocr(image):
 
-    # pngs_folder = "conversions" # Folder of converted pngs
-    # files = sorted(os.listdir(pngs_folder), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)    
-    
     # Path of txt for outputting
     txt_path = "text.txt"
-
-    print("Created")
-
-    # # Loop thru every image
-    # counter = 1
-    # internalctr = 0
-    # for file in files:
-
-    #     # Convert to OCR data
-    #     file_path = os.path.join(pngs_folder, file)
-    #     image = Image.open(file_path) # Open image
 
     ocr_data = pytesseract.image_to_data(image, output_type=pytesseract.Output.DATAFRAME) # Run OCR with detailed output
     #print(ocr_data)
@@ -33,18 +19,9 @@ def do_ocr(image):
     extracted_text = " ".join(important_text["text"]) # Extract the text as a list or single string
     #print(f"Extracted text: {extracted_text}")
 
-    # # Create a text file
-    # filename = f"output{counter}.txt"
-    # txt_path = os.path.join(txt_folder, filename)  # Create full file path inside the folder
-
     # Try to open the file in write mode 
     with open(txt_path, "a", encoding="utf-8") as file:
         file.write(extracted_text + "\n\n")
-
-    #     internalctr +=1
-    #     if internalctr == 15:
-    #         internalctr = 0
-    #         counter +=1
 
     # Get word count
     word_count = extracted_text.split() # Split text on spaces into a list

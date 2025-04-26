@@ -1,0 +1,33 @@
+supports real numbers is called floating point arithmetic Exponential Notation • The following are equivalent representations of 1,234 The representations differ in that the decimal place – the “point” -- “floats” to the left or right (with the appropriate adjustment in the exponent). 123,400.0 x 10-2 12,340.0 x 10-1 1,234.0
+
+---
+
+has no leading 0s is called a normalized number. • 1.0ten * 10–9 is in normalized scientific notation • 0.1ten * 10–8 is not normalized • 10.0ten * 10–10 is not in scientific notation Floating Point: Scientific Notation • Number represented as • Mantissa • Radix (base) • Exponent In
+
+---
+
+a binary number, the radix (or base) is 2 instead of 10. The general form could be written as 1.xxxxxx * 2yyyyy. 6.02 x 10 23 exponent radix (base) Mantissa decimal point Sign magnitude Sign magnitude Floating Point: Normalized Scientific Notation • The mantissa must be normalized: 1.xxxxxx * 2yyyyy
+
+---
+
+significand with hidden bit (1): 1.M E M Normalization • General form for floating-point numbers: (–1)S * (1+M) * 2E • How do we represent zero? • E = 0 • M = 0 Excess Notation • To include positive (+ve) and negative (–ve) exponents, “excess” notation is used •
+
+---
+
+Also called biased notation • Represents the most negative exponent as 0...0two and the most positive exponent as 1…1two. Single Precision (8-bit Exponent): 00000000 – 11111111 (0-255) 00000000 = -127 11111111 = 128 01111111 = 0 Excess Notation • The value of the exponent stored is larger than the actual
+
+---
+
+exponent • Single precision: excess 127 • Double precision: excess 1023 • Each real number is (–1)S * (1 + Fraction) * 2(Exponent – Bias) • E.g., excess 127, • Exponent  • Represents… 10000111 135 – 127 = 8 Example • Single precision 0 10000010 11000000000000000000000 1.112 130 –
+
+---
+
+is +/-0) • E=0, M≠0 is a denormalised number (+/-0.Mx2-126) (smaller than the smallest normalised number) • E=255, M=0 represents +/- infinity • E=255, M ≠ 0 represents NaN (not a number, e.g., returned for 0/0 or sqrt(-1)) Exponent Significand Value 0 0 0 0 nonzero denormalized number 1..emax-1 anything
+
+---
+
+normal floating point number emax 0 infinity emax nonzero Not a Number (NaN) Floating Point Operations • Arithmetic: • multiplication, division: • multiply/divide mantissa • add/subtract exponent • example: 5.6x1011 x 6.7x1012 = 5.6 x 6.7 x 1023 • Addition, subtraction • convert operands to have the same exponent value
+
+---
+
+-1.1100 * 2–3 because original signs differ 11100 x 10000 00000 00000 00000 00000 11100 111000000 Accuracy and Rounding • Floating-point numbers are approximations for a number they can’t really represent. • Infinite possible real numbers between 0 and 1 • We can only represent 253 of them • Approximate

@@ -8,9 +8,9 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 
-from functions.ocr import do_ocr
-from functions.gpt_call import notes_creation
+from functions.gpt_call import notes_creation, order_files
 from functions.conversions import handle_image, handle_pdf, get_file_type, handle_video
+from functions.nlp import nlp
 
 from app import app, socketio
 from threading import Thread
@@ -106,17 +106,32 @@ def main():
         except Exception as e:
             print(f"Invalid file {e}")
 
-    # Loop thru every txt file containing extracted text and send to GPT
-    # for filename in files:  
-    #     file_path = os.path.join(outputs , filename)  # Get the full path
-    #     print("Calling GPT (Creating Notes)")
+    time.sleep(3)
+
+    # Do NLP
+    nlp()
+
+    # Topic Files
+    topics_folder = "topic_outputs"
+    topic_files = sorted(os.listdir(topics_folder), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
 
     # Signal the timer thread to stop
     stop_timer.set()
     # Wait for the timer thread to finish
     timer_thread.join()
 
-    notes_creation("text.txt") # Send to GPT to make notes on
+    # # Loop thru every txt file containing extracted text and send to GPT
+    files = os.listdir('topic_outputs')
+    print(files)
+    ordered_files = order_files(files)
+    print(ordered_files)
+
+    time.sleep(100)
+
+    for file in topic_files:
+        print(file)
+        print("Calling GPT (Creating Notes)")
+        notes_creation(f"{topics_folder}/{file}") # Send to GPT to make notes on
 
     # Read the content of the notes file
     with open("notes.txt", "r") as file:

@@ -1,0 +1,25 @@
+127 = 3 0 = positive mantissa +1.112 x 23 = 1110.02 = 14.010 Converting from Floating Point • What decimal value is represented by the following 32-bit floating point number? 1100 0001 0111 1011 0000 0000 0000 00002 Converting from Floating Point •Step 1: find S, E, and M
+
+---
+
+1 10000010 111101100000000000000002 S E M 1 = negative 0 = positive Converting from Floating Point •Step 2: Find “real” exponent, n • n = E – 127 = 100000102 – 127 = 130 – 127 = 3 Converting from Floating Point • Step 3: Put S, M, and n
+
+---
+
+together to form binary result • Don’t forget the implied “1.” on the left of the mantissa. -1.11110112 x 2n = -1.11110112 x 23 = -1111.10112 Converting from Floating Point •Step 4: Express result in decimal -1111.10112 -15 2-1 = 0.5 2-3 = 0.125 2-4 = 0.0625 0.6875 Answer: -15.6875
+
+---
+
+Converting to Floating Point •Express 36.562510 as a 32-bit floating point number Converting to Floating Point •Step 1: Express original value in binary 36.562510 = 100100.10012 36 = 2 * 18 + 0 18 = 2 * 9 + 0 9 = 2 * 4 + 1 4 = 2
+
+---
+
+* 2 + 0 2 = 2 * 1 + 0 1 = 2 * 0 + 1 .5625 * 2 = 1.125 .125 * 2 = 0.25 .25 * 2 = 0.5 .5 * 2 = 1.0 .0 * 2 = 0.0 .0 * 2 = 0.0 .0 *
+
+---
+
+2 = 0.0 Converting to Floating Point •Step 2: Normalize 100100.10012 = 1.0010010012 x 25 Converting to Floating Point •Step 3: Determine S, E, and M +1.0010010012 x 25 S = 0 (because the value is positive) M S n E = n + 127 = 5 + 127 =
+
+---
+
+132 = 100001002 Converting to Floating Point •Step 4: Put S, E, and M together to form 32-bit binary result 0 10000100 001001001000000000000002 S E M Special Values • Single Precision: Exponents of 0 and 255 have special meaning • E=0, M=0 represents 0 (sign bit still used so there

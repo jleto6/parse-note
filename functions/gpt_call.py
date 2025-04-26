@@ -166,6 +166,46 @@ def image_call(file_path):
     response_content = completion.choices[0].message.content
     return response_content
 
+def order_files(files):
+    # Format the list into a readable string for GPT
+    file_list_text = "\n".join(f"- {f}" for f in files)
+
+    print(file_list_text)
+
+    content = f"""Here is a list of filenames:\n{file_list_text}
+
+    Ignore any numbers, prefixes, or similarities in filename style. Focus only on the topic meaning.
+
+    First, infer the general subject these files relate to.
+
+    Then, imagine you are designing a learning guide for someone starting with no prior knowledge:
+    - Group files into clusters of related topics.
+    - Within each group, arrange from most basic to most advanced ideas.
+    - Order the groups themselves in a way that builds up understanding naturally from simple foundations to more complex concepts.
+
+    Think carefully about learning dependencies — what someone must understand first before moving to the next idea.
+
+    Return only the reordered list of original filenames, without adding numbering, summaries, or extra text.
+    """
+
+
+    # Ask GPT to reorder the list conceptually
+    response = openai_client.chat.completions.create(
+        model="o4-mini",
+        messages=[
+            {
+                "role": "user",
+                "content": content
+            }
+        ]
+    )
+
+    # Extract and return the response text (assuming it's just a list)
+    ordered_text = response.choices[0].message.content
+    ordered_files = [line.strip("- ").strip() for line in ordered_text.splitlines() if line.startswith("-")]
+
+    return ordered_text
+
 # Text File to Store GPT Question Conversations 
 open("answers.txt", "w").close()  # Ensure the file exists by creating it if it doesnt
 
