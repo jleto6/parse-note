@@ -3,20 +3,15 @@ from pdf2image import convert_from_path
 from PIL import Image
 import magic
 import subprocess
-
 import io
 import wave
-import logging
-import sys
 import fitz
 import json
 from vosk import Model
 from vosk import KaldiRecognizer
 from vosk import SetLogLevel
 SetLogLevel(-1)
-
 from functions.ocr import do_ocr
-
 model = Model("en_model")  # Load the model
 
 # Uploaded Files
@@ -27,6 +22,7 @@ if ".DS_Store" in files:
 if "test_notes" in files:
         files.remove("test_notes")
 
+
 # Get The File Type
 def get_file_type(file):
     file_path = os.path.join(folder, file)  # Get full file path
@@ -34,24 +30,21 @@ def get_file_type(file):
     file_type = file_type.split("/")[-1]
     file_type = file_type.upper()
     print(f"{file_path} | {file_type}")
-    
     return file_path, file_type
 
-def handle_image(file, file_path):
 
+# Handle Images
+def handle_image(file, file_path):
     img = Image.open(file_path) # Open the current image 
     img = img.convert("RGBA") # Convert to RGBA
-
     do_ocr(img)    
+
 
 # Handle PDFs
 def handle_pdf(file, file_path):
-
     doc = fitz.open(file_path) # Open the PDF file
-
     # Open the txt output file in append 
     with open ("text.txt", "a", encoding="utf-8") as file:
-
         # go through pages of PDF one by one
         for page in doc:
             text = page.get_text().strip() # text extraction
@@ -68,7 +61,6 @@ def handle_pdf(file, file_path):
 
 # Handle Videos
 def handle_video(file, file_path):
-
     # Convert file to wav
     process = subprocess.run(
     ["ffmpeg", "-i", file_path, "-f", "wav", "-ac", "1", "-ar", "16000", "pipe:1"],
