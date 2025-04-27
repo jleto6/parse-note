@@ -1,0 +1,13 @@
+Review • Three instruction formats • R-type • I-type • J-type • Fields: • op: operation of the instruction • rs, rt, rd: source/destination register specifiers • shamt: shift amount • funct: selects variant of the operation in the “op” field • address/immediate: address offset or immediate value • target
+
+---
+
+address: target address of the jump instruction op target address 0 26 31 6 bits 26 bits op rs rt rd shamt funct 0 6 11 16 21 26 31 6 bits 6 bits 5 bits 5 bits 5 bits 5 bits op rs rt immediate 0 16 21 26
+
+---
+
+op rs rt immediate 0 16 21 26 31 6 bits 16 bits 5 bits 5 bits op target address 0 26 31 6 bits 26 bits Instruction Execution • For every instruction: 1. Send the program counter (PC) to the memory that contains the code and fetch the instruction
+
+---
+
+are used for different instructions

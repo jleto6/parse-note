@@ -1,0 +1,21 @@
+Introduction MIPS ISA 3 Instruction Types R-type, I-type, J-type » Datapath and Control Unit Simplified Pipelined Simple subset » Memory reference: Iw, sw Arithmetic/logical: add, addi, sub, and, or, slit Control transfer: j Instruction Format Review Three instruction formats 6 6 Retype [ rs [ rt funct_| 48 5 bits,
+
+---
+
+5 Sbits Sbits 6 » Sbits 16 bits J-type 4 re 6 bits 26 bits » Fields: op: operation of the instruction » rs, rt, rd: source/destination register specifiers shamt: shift amount » funct: selects variant of the operation in the “op” field address/immediate: address offset or immediate value target
+
+---
+
+address: target address of the jump instruction MIPS Subset Add, Subtract, AND, OR, SLT » add rd, rs, rt rt 31 26 21 16 1 6 0 and rs rt rd 6bits Sbits 6 bits orrd, rs, rt sitrd, rs, rt ADD Immediate addi rt, rs, imm16 31 26 21
+
+---
+
+16 0 + Load, Store T rs [ rt | immediate rs, imm16 6bits 16 bits swrt, rs, imm16 » BRANCH » beqrs, rt, imm16 31 26 0 JUMP: op target address target 6 bits 26 bits Datapath Ad Read register 1 n ALU operation sn ata 1 8 |
+
+---
+
+31 6 bits 16 bits 5 bits 5 bits MIPS Subset • Add, Subtract, AND, OR, SLT • add rd, rs, rt • sub rd, rs, rt • and rd, rs, rt • or rd, rs, rt • slt rd, rs, rt • ADD Immediate • addi rt, rs, imm16
+
+---
+
+• Load, Store • lw rt, rs, imm16 • sw rt, rs, imm16 • BRANCH • beq rs, rt, imm16 • JUMP: • j target op rs rt rd shamt funct 0 6 11 16 21 26 31 6 bits 6 bits 5 bits 5 bits 5 bits 5 bits

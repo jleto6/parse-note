@@ -20,7 +20,7 @@ from functions.ocr import do_ocr
 model = Model("en_model")  # Load the model
 
 # Uploaded Files
-folder = "notes"
+folder = "note_inputs"
 files = os.listdir(folder) # List of files in notes folder 
 if ".DS_Store" in files:
         files.remove(".DS_Store")

@@ -1,9 +1,0 @@
-hardware to include extra bits for the calculation. • Specifically, we keep 2 extra bits on the right • Guard bit • Round bit Guard Bit • The first bit to the right: an additional digit (bit) used in intermediate calculations to prevent loss of accuracy. Example for Guard Bit
-
----
-
-22 Now our normalized value is accurate 1.0011 x 22 = 4.75 Round Bit • Bit to the right of guard bit needed for accurate rounding. Example for Round Bit • Example: 1.0000 x 20 - 1.0001 x 2–2 • guard and round bits shown 1.0000 x 20 - 0.010001
-
----
-
-guard and round bits • S=1 if any bits are off to the right, otherwise S=0 Example for Sticky Bit • 1.0000 x 20 + 1.0001 x 2–5 • guard, round, and sticky bits shown 1.0000 x 20 + 0.000010 x 20 1 1.000010 x 20 1 Result 1.0001 x

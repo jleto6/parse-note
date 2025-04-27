@@ -11,6 +11,10 @@ import os
 import shutil
 import re
 from nltk.tokenize import sent_tokenize
+import warnings
+
+warnings.filterwarnings("ignore")
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 nltk.download('punkt', quiet=True)
 
@@ -22,20 +26,20 @@ def nlp():
         text = f.read()
 
     char_count = len(text)
-    print(f"Character count: {char_count}")
+    # print(f"Character count: {char_count}")
 
     # Split text into small chunks
     words = text.split()
     chunk_size = 50  # adjust this to control how fine each doc is
     docs = [' '.join(words[i:i+chunk_size]) for i in range(0, len(words), chunk_size)]
 
-    print(f"Total docs after chunking: {len(docs)}")
+    # print(f"Total docs after chunking: {len(docs)}")
 
     # ================================================
     # Create and Fit BERTopic with KMeans
     # ================================================
     n_clusters = max(2, len(docs) // 5)  # Roughly 5 docs per cluster
-    print(f"Target number of clusters: {n_clusters}")
+    # print(f"Target number of clusters: {n_clusters}")
 
     kmeans_model = KMeans(n_clusters=n_clusters)
 

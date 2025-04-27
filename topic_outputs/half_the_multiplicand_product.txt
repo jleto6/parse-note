@@ -1,9 +1,0 @@
-step • With 32 steps in a 32-bit number, we move 32 bits to the left • Requires a 64-bit register • Place 32 zeroes in the left half (unoccupied half) • Unsigned numbers do not require sign extension • Multiplicand will be added to the sum in the product
-
----
-
-Half the bits of the multiplicand are always 0 • 64-bit adder is wasted • 0’s inserted in right of multiplicand as shifted • LSBs of product never changed once formed • Instead of shifting the multiplicand to the left we can shift the product to the right • Perform
-
----
-
-1a. Add multiplicand to the left half of the product and place the result in the left half of the Product register 2. Shift the Product register right 1 bit 3. Shift the Multiplier register right 1 bit 32nd repetition? Start Multiplier0 = 0 Multiplier0 = 1 No: < 32

@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 import os
 import markdown
 
-from functions.gpt_call import question_call, explanation
+from functions.qna import question_call, explanation
 
 app = Flask(__name__)
 app.secret_key = "dev"  # Set a secret key for session

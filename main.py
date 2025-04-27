@@ -8,7 +8,8 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 
-from functions.gpt_call import notes_creation, order_files
+from functions.gpt_calls import order_files
+from functions.note_creation import notes_creation
 from functions.conversions import handle_image, handle_pdf, get_file_type, handle_video
 from functions.nlp import nlp
 
@@ -16,40 +17,60 @@ from app import app, socketio
 from threading import Thread
 import threading
 
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
+
+# Run App
 def run_flask():
-    app.run(debug=True, use_reloader=False)  # Starts Flask but doesn't block main.py
+    app.run(debug=False, use_reloader=False)  # Starts Flask but doesn't block main.py
 # Start Flask in a separate thread
 flask_thread = Thread(target=run_flask)
 flask_thread.start()
 
-# PDF maker
-def create_pdf(filename, text):
-    doc = SimpleDocTemplate(filename, pagesize=letter)
-    styles = getSampleStyleSheet()
-    story = []
-    # Split text into paragraphs (preserving newlines)
-    for paragraph in text.split("\n\n"):  # Splits at paragraphs (double newlines for paragraphs)
-        story.append(Paragraph(paragraph.replace("\n", "<br/>"), styles["Normal"]))
-    # Create the pdf
-    doc.build(story)
+# Text Splitter
+def split_text(filename, split_size):
+    text = open(filename, 'r', encoding='utf-8').read()
 
-# # File deleter
-# def clear_output(folder_path):
-#     for item in os.listdir(folder_path):
-#         item_path = os.path.join(folder_path, item)
-#         if os.path.isfile(item_path):
-#             os.remove(item_path)
+    space_ctr = 0
+    file_ctr = 0
+    chunk = ""
+    for char in text:
+        chunk += char
+        if char == " ":
+            space_ctr += 1
+        if space_ctr >= split_size:
+            with open(f"topic_outputs/chunk_{file_ctr}.txt", 'w', encoding='utf-8') as f:
+                f.write(chunk)
+            file_ctr += 1
+            chunk = ''
+            space_ctr = 0
+    # Write the last chunk if anything is left
+    if chunk:
+        if file_ctr == 0:
+            # No full chunks were made, so create first file
+            with open(f"topic_outputs/chunk_0.txt", 'w', encoding='utf-8') as f:
+                f.write(chunk)
+        else:
+            with open(f"topic_outputs/chunk_{file_ctr-1}.txt", 'a', encoding='utf-8') as f:
+                    f.write(chunk)
 
-# Time to run program
+# File deleter
+def clear_output(folder_path):
+    for item in os.listdir(folder_path):
+        item_path = os.path.join(folder_path, item)
+        if os.path.isfile(item_path):
+            os.remove(item_path)
+
+# Timer
 stop_timer = threading.Event() # Stop event
 def timer():
     start_time = time.time()
     while not stop_timer.is_set():
         elapsed = time.time() - start_time
-        print(f"\rElapsed time: {elapsed:.2f} seconds", end="")
+        print(f"\rElapsed time: {elapsed:.2f} seconds")
         socketio.emit("timer", {"time" : elapsed})
         time.sleep(1)
-        
 # Start the timer thread
 timer_thread = threading.Thread(target=timer)
 timer_thread.start()
@@ -60,17 +81,16 @@ timer_thread.start()
 
 def main():
 
-    # Clear previous outputs on run
+    clear_output("topic_outputs")
 
-
-    output_text = "text.txt"   # Text file of all raw text
     open("text.txt", "w").close()  # Ensure the file exists by creating it if it doesnt
+    output_text = "text.txt"   # Text file of all raw text
 
     output_notes = "notes.txt"   # Text file of all GPT note outputs
     open("notes.txt", "w").close()  # Ensure the file exists by creating it if it doesnt
 
     # Uploaded Files
-    folder = "notes"
+    folder = "note_inputs"
     files = sorted(os.listdir(folder), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
 
     if ".DS_Store" in files:
@@ -82,6 +102,7 @@ def main():
             files = sorted(os.listdir(folder), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
     else:
         print("Files found:", files)
+    print("")
 
     # Work with the available files
     time.sleep(3)
@@ -108,37 +129,41 @@ def main():
 
     time.sleep(3)
 
-    # Do NLP
-    nlp()
-
-    # Topic Files
-    topics_folder = "topic_outputs"
-    topic_files = sorted(os.listdir(topics_folder), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
-
-    # Signal the timer thread to stop
+    # Signal the timer thread to stop (processing done)
     stop_timer.set()
     # Wait for the timer thread to finish
     timer_thread.join()
 
-    # # Loop thru every txt file containing extracted text and send to GPT
-    files = os.listdir('topic_outputs')
-    print(files)
-    ordered_files = order_files(files)
-    print(ordered_files)
+    # Try NLP
+    try:
+        # Topic Modeling For Large Input
+        nlp()
+        files = os.listdir('topic_outputs') # Loop through topic text files
+        ordered_files = order_files(files) # Order the topics in a logical order with GPT
+        print(ordered_files)
+    # If Too Small For Topic Modelling
+    except TypeError as e:
+        print(e)
+        split_text("text.txt", 500)
+        ordered_files = sorted(os.listdir('topic_outputs'), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
+        # print("-------------")
+        # print(ordered_files)
+        # time.sleep(500)
 
-    time.sleep(100)
+    print("---------------------")
+    print("Creating Notes")
+    print("---------------------")
 
-    for file in topic_files:
-        print(file)
-        print("Calling GPT (Creating Notes)")
-        notes_creation(f"{topics_folder}/{file}") # Send to GPT to make notes on
+    # Create notes on files
+    for file in ordered_files:
+        notes_creation(f"topic_outputs/{file}") # Send topics GPT to make notes on
+    # else:
+    #     notes_creation("text.txt")
 
     # Read the content of the notes file
     with open("notes.txt", "r") as file:
         notes = file.read()
         notes = notes.replace("\n", "<br/>") # Replace new lines with line break element
-
-    #create_pdf("notes.pdf", notes)
 
 if __name__ == "__main__":
     main()

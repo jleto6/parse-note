@@ -4,7 +4,7 @@ import magic
 import pytesseract
 import re
 
-from functions.gpt_call import image_call
+from functions.gpt_calls import image_call
 
 def do_ocr(image):
 
