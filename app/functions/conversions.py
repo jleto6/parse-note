@@ -7,10 +7,12 @@ import io
 import wave
 import fitz
 import json
+
 from vosk import Model
 from vosk import KaldiRecognizer
 from vosk import SetLogLevel
 SetLogLevel(-1)
+
 from config import NOTE_INPUTS_DIR, RAW_TEXT
 from functions.ocr import do_ocr
 model = Model("en_model")  # Load the model
