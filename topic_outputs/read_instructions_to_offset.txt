@@ -1,3 +1,7 @@
+from that memory. 1. Read one or two registers, using fields of the instruction to select the registers to read. For the load word instruction, we need to read only one register, but most other instructions require that we read two registers. Instruction Execution • Fetch: • Get the next
+
+---
+
 be PC + 4 Instruction Execution • Execute: • Depending on instruction class, we use the ALU to calculate: • Arithmetic result • Memory address for load/store • Branch target address Instruction Execution • To read and write registers, we need a register file • R-types read two registers and
 
 ---
@@ -19,3 +23,7 @@ offset($t2) • Compute memory address: $t2 + offset • Since offset is 16 bits
 ---
 
 unit Datapath: Load Instruction Datapath: Store Instruction Branch Instructions beq $t1, $t2, offset • Read register operands • Compare operands • Use ALU, subtract and check Zero output • Calculate target address • Sign-extend displacement • Shift left 2 places (word displacement) • Add to PC + 4 • Already
+
+---
+
+beq $t1, $t2, offset • Branch is taken • When $t1 - $t2 = 0, the zero signal from the ALU • PC = PC + 4 + 4*offset • Branch is not taken • PC = PC + 4 Datapath: Branch Jump Instructions • PC = PC[31-28] : Offset

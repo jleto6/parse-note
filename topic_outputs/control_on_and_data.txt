@@ -1,3 +1,7 @@
+Introduction MIPS ISA 3 Instruction Types R-type, I-type, J-type » Datapath and Control Unit Simplified Pipelined Simple subset » Memory reference: Iw, sw Arithmetic/logical: add, addi, sub, and, or, slit Control transfer: j Instruction Format Review Three instruction formats 6 6 Retype [ rs [ rt funct_| 48 5 bits,
+
+---
+
 sign- | 22 MemRead PROCESSOR DATAPATH Introduction • MIPS ISA • 3 Instruction Types • R-type, I-type, J-type • Datapath and Control Unit • Simplified • Pipelined • Simple subset • Memory reference: lw, sw • Arithmetic/logical: add, addi, sub, and, or, slt • Control transfer: beq, j Instruction Format
 
 ---

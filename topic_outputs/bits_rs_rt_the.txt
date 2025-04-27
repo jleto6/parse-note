@@ -1,0 +1,45 @@
+5 Sbits Sbits 6 » Sbits 16 bits J-type 4 re 6 bits 26 bits » Fields: op: operation of the instruction » rs, rt, rd: source/destination register specifiers shamt: shift amount » funct: selects variant of the operation in the “op” field address/immediate: address offset or immediate value target
+
+---
+
+address: target address of the jump instruction MIPS Subset Add, Subtract, AND, OR, SLT » add rd, rs, rt rt 31 26 21 16 1 6 0 and rs rt rd 6bits Sbits 6 bits orrd, rs, rt sitrd, rs, rt ADD Immediate addi rt, rs, imm16 31 26 21
+
+---
+
+16 0 + Load, Store T rs [ rt | immediate rs, imm16 6bits 16 bits swrt, rs, imm16 » BRANCH » beqrs, rt, imm16 31 26 0 JUMP: op target address target 6 bits 26 bits Datapath Ad Read register 1 n ALU operation sn ata 1 8 |
+
+---
+
+Review • Three instruction formats • R-type • I-type • J-type • Fields: • op: operation of the instruction • rs, rt, rd: source/destination register specifiers • shamt: shift amount • funct: selects variant of the operation in the “op” field • address/immediate: address offset or immediate value • target
+
+---
+
+address: target address of the jump instruction op target address 0 26 31 6 bits 26 bits op rs rt rd shamt funct 0 6 11 16 21 26 31 6 bits 6 bits 5 bits 5 bits 5 bits 5 bits op rs rt immediate 0 16 21 26
+
+---
+
+31 6 bits 16 bits 5 bits 5 bits MIPS Subset • Add, Subtract, AND, OR, SLT • add rd, rs, rt • sub rd, rs, rt • and rd, rs, rt • or rd, rs, rt • slt rd, rs, rt • ADD Immediate • addi rt, rs, imm16
+
+---
+
+• Load, Store • lw rt, rs, imm16 • sw rt, rs, imm16 • BRANCH • beq rs, rt, imm16 • JUMP: • j target op rs rt rd shamt funct 0 6 11 16 21 26 31 6 bits 6 bits 5 bits 5 bits 5 bits 5 bits
+
+---
+
+op rs rt immediate 0 16 21 26 31 6 bits 16 bits 5 bits 5 bits op target address 0 26 31 6 bits 26 bits Instruction Execution • For every instruction: 1. Send the program counter (PC) to the memory that contains the code and fetch the instruction
+
+---
+
+instruction: stored at PC Instruction Execution • Decode: • Opcode determines if the instruction is arithmetic/logical, memory logical, or branch. Instruction Execution • Update PC: PC target address or PC + 4 • If the instruction is a branch, we have to calculate the target address • If the instruction
+
+---
+
+is not a branch, the new PC will be PC + 4 Instruction Execution • Update PC: PC target address or PC + 4 • If the instruction is a branch, we have to calculate the target address • If the instruction is not a branch, the new PC will
+
+---
+
+calculated by instruction fetch Target Address Details • The base for the branch address calculation is the address of the instruction following the branch. • PC+4 • Memory is byte addressed • The offset field must be shifted left 2 bits Branch Instructions Just re-routes wires Sign-bit wire replicated Branching
+
+---
+
+are used for different instructions

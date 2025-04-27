@@ -38,7 +38,7 @@ def nlp():
     # ================================================
     # Create and Fit BERTopic with KMeans
     # ================================================
-    n_clusters = max(2, len(docs) // 5)  # Roughly 5 docs per cluster
+    n_clusters = max(2, len(docs) // 8)  # Topic groups to create per documents
     # print(f"Target number of clusters: {n_clusters}")
 
     kmeans_model = KMeans(n_clusters=n_clusters)
