@@ -31,7 +31,6 @@ flask_thread.start()
 # Text Splitter
 def split_text(filename, split_size):
     text = open(filename, 'r', encoding='utf-8').read()
-
     space_ctr = 0
     file_ctr = 0
     chunk = ""
@@ -102,6 +101,9 @@ def main():
             files = sorted(os.listdir(folder), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
     else:
         print("Files found:", files)
+        file_flag = False
+        if len(files) == 1:
+            file_flag = True
     print("")
 
     # Work with the available files
@@ -134,21 +136,28 @@ def main():
     # Wait for the timer thread to finish
     timer_thread.join()
 
-    # Try NLP
-    try:
-        # Topic Modeling For Large Input
-        nlp()
-        files = os.listdir('topic_outputs') # Loop through topic text files
-        ordered_files = order_files(files) # Order the topics in a logical order with GPT
-        print(ordered_files)
-    # If Too Small For Topic Modelling
-    except TypeError as e:
-        print(e)
+    # If only one file, no topic modelling needed
+    if file_flag:
         split_text("text.txt", 500)
         ordered_files = sorted(os.listdir('topic_outputs'), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
-        # print("-------------")
-        # print(ordered_files)
-        # time.sleep(500)
+    else:
+
+        # Try NLP if more than one file
+        print("Topic Modelling")
+        try:
+            # Topic Modeling For Large Input
+            nlp()
+            files = os.listdir('topic_outputs') # Loop through topic text files
+            ordered_files = order_files(files) # Order the topics in a logical order with GPT
+            print(ordered_files)
+        # If Too Small For Topic Modelling
+        except TypeError as e:
+            print(e)
+            split_text("text.txt", 500)
+            ordered_files = sorted(os.listdir('topic_outputs'), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
+            # print("-------------")
+            # print(ordered_files)
+            # time.sleep(500)
 
     print("---------------------")
     print("Creating Notes")
