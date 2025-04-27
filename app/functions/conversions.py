@@ -11,11 +11,12 @@ from vosk import Model
 from vosk import KaldiRecognizer
 from vosk import SetLogLevel
 SetLogLevel(-1)
+from config import NOTE_INPUTS_DIR, RAW_TEXT
 from functions.ocr import do_ocr
 model = Model("en_model")  # Load the model
 
 # Uploaded Files
-folder = "note_inputs"
+folder = NOTE_INPUTS_DIR
 files = os.listdir(folder) # List of files in notes folder 
 if ".DS_Store" in files:
         files.remove(".DS_Store")
@@ -44,7 +45,7 @@ def handle_image(file, file_path):
 def handle_pdf(file, file_path):
     doc = fitz.open(file_path) # Open the PDF file
     # Open the txt output file in append 
-    with open ("text.txt", "a", encoding="utf-8") as file:
+    with open (RAW_TEXT, "a", encoding="utf-8") as file:
         # go through pages of PDF one by one
         for page in doc:
             text = page.get_text().strip() # text extraction
@@ -82,7 +83,7 @@ def handle_video(file, file_path):
             text += result["text"] + " "  # Append text
 
     # Write the transcription to the txt file
-    with open("text.txt", "a") as f:
+    with open(RAW_TEXT, "a") as f:
         f.write(text)
     
     

@@ -5,11 +5,9 @@ import pytesseract
 import re
 
 from functions.gpt_calls import image_call
+from config import RAW_TEXT
 
 def do_ocr(image):
-
-    # Path of txt for outputting
-    txt_path = "text.txt"
 
     ocr_data = pytesseract.image_to_data(image, output_type=pytesseract.Output.DATAFRAME) # Run OCR with detailed output
     #print(ocr_data)
@@ -20,7 +18,7 @@ def do_ocr(image):
     #print(f"Extracted text: {extracted_text}")
 
     # Try to open the file in write mode 
-    with open(txt_path, "a", encoding="utf-8") as file:
+    with open(RAW_TEXT, "a", encoding="utf-8") as file:
         file.write(extracted_text + "\n\n")
 
     # Get word count
@@ -42,5 +40,5 @@ def do_ocr(image):
         print(f"Calling GPT Vision on {image}")
         response_content = ""
         image_call(image)
-        with open(txt_path, "a", encoding="utf-8") as file:
+        with open(RAW_TEXT, "a", encoding="utf-8") as file:
             file.write(response_content + "\n")

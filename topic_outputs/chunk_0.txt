@@ -1,2 +1,0 @@
-Introduction MIPS ISA 3 Instruction Types R-type, I-type, J-type » Datapath and Control Unit Simplified Pipelined Simple subset » Memory reference: Iw, sw Arithmetic/logical: add, addi, sub, and, or, slit Control transfer: j
-

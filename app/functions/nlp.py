@@ -13,6 +13,8 @@ import re
 from nltk.tokenize import sent_tokenize
 import warnings
 
+from config import TOPIC_OUTPUTS_DIR, RAW_TEXT
+
 warnings.filterwarnings("ignore")
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
@@ -22,7 +24,7 @@ def nlp():
     # ================================================
     # Load and Split Text
     # ================================================
-    with open("text.txt", "r", encoding="utf-8") as f:
+    with open(RAW_TEXT, "r", encoding="utf-8") as f:
         text = f.read()
 
     char_count = len(text)
@@ -57,9 +59,9 @@ def nlp():
     topic_info = topic_model.get_topic_info()
     print(topic_info)
 
-    if os.path.exists("topic_outputs"):
-        shutil.rmtree("topic_outputs")
-    os.makedirs("topic_outputs", exist_ok=True)
+    if os.path.exists(TOPIC_OUTPUTS_DIR):
+        shutil.rmtree(TOPIC_OUTPUTS_DIR)
+    os.makedirs(TOPIC_OUTPUTS_DIR, exist_ok=True)
 
     # Clean topic names and map them to topic IDs
     topic_names = {}
@@ -79,7 +81,7 @@ def nlp():
         topic_docs = [doc for i, doc in enumerate(docs) if topics[i] == topic_id]
         topic_name = topic_names.get(topic_id, f"topic_{topic_id}")
         safe_name = topic_name.replace(" ", "_").replace("/", "_")[:50]
-        filename = f"topic_outputs/{safe_name}.txt"
+        filename = f"{TOPIC_OUTPUTS_DIR}/{safe_name}.txt"
 
         with open(filename, "w", encoding="utf-8") as f:
             f.write("\n\n---\n\n".join(topic_docs))

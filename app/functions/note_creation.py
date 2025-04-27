@@ -8,6 +8,8 @@ from flask_socketio import SocketIO
 import json
 from functions.gpt_calls import end_answer, end_section
 
+from config import COMPLETED_NOTES
+
 deepseek_client = OpenAI(api_key=os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com/v1"  ) # Use Deepseek
 openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) # Use OpenAI
 
@@ -101,7 +103,7 @@ def notes_creation(content):
 
                 #print(content, end="", flush=True)  # Stream to terminal
                 socketio.emit("update_notes", {"notes" : content})
-                with open("notes.txt", "a", encoding="utf-8") as f:
+                with open(COMPLETED_NOTES, "a", encoding="utf-8") as f:
                     f.write(content)
                     f.flush()  # Ensures content is written immediately to the file
                 

@@ -6,7 +6,7 @@ from wtforms import FileField, SubmitField
 from werkzeug.utils import secure_filename
 import os
 import markdown
-
+from config import COMPLETED_NOTES
 from functions.qna import question_call, explanation
 
 app = Flask(__name__)
@@ -54,7 +54,7 @@ def get_notes():
 @socketio.on('connect')
 def handle_connect():
 
-    with open("notes.txt", "r") as file:
+    with open(COMPLETED_NOTES, "r") as file:
         stored_notes = file.read()
         stored_notes = markdown.markdown(stored_notes) # Convert to HTML
     socketio.emit("update_notes", {"notes": stored_notes, "refresh": True})

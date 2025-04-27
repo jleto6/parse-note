@@ -1,0 +1,132 @@
+<h2 style="color:whitesmoke;">MIPS ISA Instruction Types</h2>
+<p style="color:whitesmoke;">The <strong>MIPS ISA (Instruction Set Architecture)</strong> is a style of computer architecture that allows for efficient and streamlined processing. Within this architecture, there are three primary types of instructions: <strong>R-type</strong>, <strong>I-type</strong>, and <strong>J-type</strong>. Each type of instruction serves distinct purposes and operates with unique formats to handle specific tasks. Understanding these distinctions is crucial for efficient program development and hardware implementation. <!-- END_SECTION --></p>
+
+<h3 style="color:whitesmoke;">R-type Instructions</h3>
+<p style="color:whitesmoke;"><strong>R-type instructions</strong> are used for arithmetic and logical operations. They utilize <strong>three register operands</strong>, accommodating complex computations directly within the CPU's registers. The format includes fields specifying the operation, along with source and destination registers. These fields enable high-speed operations without memory access delays. <!-- END_SECTION --></p>
+
+<h3 style="color:whitesmoke;">I-type Instructions</h3>
+<p style="color:whitesmoke;"><strong>I-type instructions</strong> allow for operations involving <strong>immediate values</strong> or memory addresses, facilitating tasks such as constant arithmetic or data loading directly from memory. They are instrumental because they support operations requiring access to data outside the CPU. The structure includes fields for the operation, source register, destination register, and an immediate value or address. This format supports swift interactions between the processor and memory. <!-- END_SECTION --></p>
+
+<h3 style="color:whitesmoke;">J-type Instructions</h3>
+<p style="color:whitesmoke;"><strong>J-type instructions</strong> are designed for control transfers, like jumping to a specified instruction location. This type supports conditional changes in program flow, pivotal for loops and branching. It consists of fields that capture an operation code and a target address. By encapsulating direct instruction jumps, J-type instructions help manage program execution efficiently. <!-- END_SECTION --></p>
+
+<h2 style="color:whitesmoke;">Datapath and Control Unit</h2>
+<p style="color:whitesmoke;">In MIPS architecture, the <strong>datapath and control unit</strong> are essential for executing instructions effectively. The <strong>datapath</strong> refers to the circuitry that performs operations on data, like arithmetic calculations and data storage/retrieval, while the <strong>control unit</strong> directs the datapath by generating control signals. Together, they enable a seamless flow and transformation of data as the <strong>CPU</strong> processes instructions. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">A <strong>simplified pipelined</strong> design in MIPS enhances performance by allowing the overlapping execution of instructions. This pipeline enables multiple instruction phases to occur simultaneously, significantly boosting efficiency and throughput for the processor. <!-- END_SECTION --></p>
+
+<h3 style="color:whitesmoke;">Instruction Types and Operations</h3>
+<p style="color:whitesmoke;">The architecture supports various <strong>instruction types</strong> that stand as the foundation for the operations the CPU performs. These instructions are executed over the pipeline, leveraging the <strong>datapath and control unit</strong> to handle different computing tasks, including memory access, arithmetic operations, and controlled instruction flow. <!-- END_SECTION --></p>
+
+<ul style="color:whitesmoke;">
+  <li><strong>Memory Reference:</strong> Instructions like <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">lw</code> (load word) and <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">sw</code> (store word) manage data exchange between the processor and memory, an integral aspect of using external data efficiently. <!-- END_SECTION --></li>
+  <li><strong>Arithmetic/Logical Operations:</strong> Utilizing instructions such as <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">add</code>, <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">addi</code> (add immediate), <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">sub</code>, <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">and</code>, <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">or</code>, and <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">slit</code>, these operations are crucial for performing calculations and logical assessments within the CPU. <!-- END_SECTION --></li>
+  <li><strong>Control Transfer:</strong> The <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">j</code> (jump) command manages the instruction flow by altering the execution sequence, enabling loops and conditional operations within programs. <!-- END_SECTION --></li>
+</ul><p style="color:whitesmoke;">The <strong>MIPS ISA</strong> introduces a simplified yet efficient instruction set architecture with three distinct instruction types: <strong>R-type</strong>, <strong>I-type</strong>, and <strong>J-type</strong>. This architecture enables a streamlined datapath and control unit execution, crucial for performance-oriented application processing. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">The <strong>datapath</strong> of the MIPS architecture is designed to handle a mix of operations that include <strong>memory references</strong> such as <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">lw</code> (load word) and <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">sw</code> (store word), <strong>arithmetic/logical operations</strong> like <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">add</code>, <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">sub</code>, and <strong>control transfers</strong> such as <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">j</code> (jump). Each operation type utilizes specific data paths to execute efficiently within the processor. <!-- END_SECTION --></p>
+
+<h2 style="color:whitesmoke;">Instruction Format Review</h2>
+<p style="color:whitesmoke;">MIPS instructions are categorized into three formats, each with specific fields that define its execution. These formats are: <!-- END_SECTION --></p>
+
+<ul style="color:whitesmoke;">
+    <li><strong>R-type</strong>: These instructions focus on register-to-register operations. They utilize the ALU for various arithmetic and logical operations. <!-- END_SECTION --></li>
+    <li><strong>I-type</strong>: Immediate format instructions that include operations involving constants, requiring sign extension to match the ALU’s 32-bit input expectations. <!-- END_SECTION --></li>
+    <li><strong>J-type</strong>: Used for jump operations, these instructions update the <strong>program counter</strong> with a new address. <!-- END_SECTION --></li>
+</ul>
+
+<h3 style="color:whitesmoke;">Datapath Execution Process</h3>
+<p style="color:whitesmoke;">The execution process within the MIPS architecture follows a rigorous order to ensure instructions are processed correctly. <!-- END_SECTION --></p>
+
+<ol style="color:whitesmoke;">
+    <li><strong>Instruction Fetch</strong>: The next instruction is obtained from memory based on the current value of the <strong>Program Counter (PC)</strong>. <!-- END_SECTION --></li>
+    <li><strong>Instruction Decode</strong>: The fetched instruction is decoded to determine the type of operation. This step involves determining the appropriate action, whether arithmetic/logical, memory access, or branch. <!-- END_SECTION --></li>
+    <li><strong>Instruction Execution</strong>: Depending on the instruction type, operations are carried out:
+        <ul>
+            <li><strong>R-type</strong>: Two registers are read, and the ALU executes the specified operation. <!-- END_SECTION --></li>
+            <li><strong>I-type</strong>: Involves operations with immediate values, requiring one register read and sign extension processes. <!-- END_SECTION --></li>
+            <li><strong>J-type</strong>: Instruction that alters the <strong>program counter</strong> for jumping to a new address location. <!-- END_SECTION --></li>
+        </ul>
+    </li>
+    <li><strong>Memory Access</strong>: For load and store operations, data memory is accessed accordingly to either fetch or store data. <!-- END_SECTION --></li>
+    <li><strong>Write Back</strong>: Results from arithmetic operations or fetched data are written back to the appropriate register. <!-- END_SECTION --></li>
+</ol>
+
+<p style="color:whitesmoke;">The above steps highlight the organized structure of the MIPS processor, underscoring the importance of each phase in achieving optimal instruction processing and execution effectiveness. This structured approach allows for simultaneous pipeline enhancements, promoting both efficiency and speed. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">By employing essential components such as multiplexers and control signals, the MIPS architecture seamlessly maneuvers data flow and operation execution within the processor. The role of <strong>control signals</strong> becomes critical in steering the operation path based on the binary-encoded instruction information. <!-- END_SECTION --></p><h2 style="color:whitesmoke;">MIPS Instruction Format Details</h2>
+<p style="color:whitesmoke;">MIPS instructions are encoded using specific formats that dictate how fields are arranged and interpreted. This structure allows efficient operation and instruction handling in the MIPS architecture.</p>
+<!-- END_SECTION -->
+
+<h3 style="color:whitesmoke;">Register Specifiers and Instruction Components</h3>
+<ul style="color:whitesmoke;">
+    <li><strong>rt</strong>, <strong>rd</strong>: These are the source or destination register specifiers, determining which registers are used for storing data or results.</li>
+    <!-- END_SECTION -->
+    <li><strong>shamt</strong>: The shift amount, indicating how much to shift in shift operations.</li>
+    <!-- END_SECTION -->
+    <li><strong>funct</strong>: Specifies the variant of the operation defined in the <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">op</code> field, crucial for extending the opcode functionality.</li>
+    <!-- END_SECTION -->
+</ul>
+<!-- END_SECTION -->
+
+<h3 style="color:whitesmoke;">Instruction Formats</h3>
+<p style="color:whitesmoke;">The layout of MIPS instructions ensures that each part has a fixed purpose and size, enabling quick decoding and execution by the processor.</p>
+<!-- END_SECTION -->
+
+<ol style="color:whitesmoke;">
+    <li><strong>Fields</strong> for <strong>R-type Instructions</strong> are organized as follows:
+        <ul style="color:whitesmoke;">
+            <li><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">op</code>: Operation code determining the instruction type.</li>
+            <!-- END_SECTION -->
+            <li>Register specifiers for <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">rs</code>, <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">rt</code>, <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">rd</code>.</li>
+            <!-- END_SECTION -->
+            <li><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">shamt</code> and <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">funct</code> are unique fields in R-type instructions.</li>
+            <!-- END_SECTION -->
+        </ul>
+    </li>
+    <!-- END_SECTION -->
+    <li><strong>Fields</strong> for <strong>I-type Instructions</strong> include:
+        <ul style="color:whitesmoke;">
+            <li><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">immediate</code>: Used for constants or memory addresses in operations.</li>
+            <!-- END_SECTION -->
+            <li>Maintains the <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">op</code>, <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">rs</code>, and <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">rt</code> structure of fields.</li>
+            <!-- END_SECTION -->
+        </ul>
+    </li>
+    <!-- END_SECTION -->
+    <li><strong>Fields</strong> for <strong>J-type Instructions</strong> utilize:
+        <ul style="color:whitesmoke;">
+            <li><strong>Target address</strong>: An extensive field enabling larger jump distances.</li>
+            <!-- END_SECTION -->
+        </ul>
+    </li>
+    <!-- END_SECTION -->
+</ol>
+<!-- END_SECTION -->
+
+<h3 style="color:whitesmoke;">Examples of MIPS Instructions</h3>
+<ul style="color:whitesmoke;">
+    <li><strong>Arithmetic Operations</strong>: 
+        <ul style="color:whitesmoke;">
+            <li><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">add rd, rs, rt</code>, <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">sub rd, rs, rt</code>: Perform addition or subtraction by taking two registers and storing the result in a third.</li>
+            <!-- END_SECTION -->
+        </ul>
+    </li>
+    <!-- END_SECTION -->
+    <li><strong>Logical Operations</strong>: 
+        <ul style="color:whitesmoke;">
+            <li><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">and rd, rs, rt</code>, <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">or rd, rs, rt</code>: Execute logical AND or OR operations on two registers to produce a result.</li>
+            <!-- END_SECTION -->
+        </ul>
+    </li>
+    <!-- END_SECTION -->
+    <li><strong>Immediate Operations</strong>: 
+        <ul style="color:whitesmoke;">
+            <li><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">addi rt, rs, imm16</code>: Adds an immediate value to a register, storing the result in another register.</li>
+            <!-- END_SECTION -->
+        </ul>
+    </li>
+    <!-- END_SECTION -->
+    <li><strong>Memory Operations</strong>:
+        <ul style="color:whitesmoke;">
+            <li><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">lw rt, rs, imm16</code>, <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">sw rt, rs, imm

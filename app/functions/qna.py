@@ -8,6 +8,8 @@ from flask_socketio import SocketIO
 import json
 from functions.gpt_calls import end_answer, end_section
 
+from config import ANSWERS
+
 deepseek_client = OpenAI(api_key=os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com/v1"  ) # Use Deepseek
 openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) # Use OpenAI
 
@@ -17,7 +19,7 @@ answer_buffer = ""
 
 
 # Text File to Store GPT Question Conversations 
-open("answers.txt", "w").close()  # Ensure the file exists by creating it if it doesnt
+open(ANSWERS, "w").close()  # Ensure the file exists by creating it if it doesnt
 
 # QUESTION CALL
 def question_call(question, selection):
@@ -30,7 +32,7 @@ def question_call(question, selection):
         previous_content += file_content # Store all read files in memory so GPT knows whats covered
 
     # Read the content of the covered material file
-    with open("answers.txt", "r") as file:
+    with open(ANSWERS, "r") as file:
         answers_txt = file.read()
 
     # GPT Call
@@ -74,7 +76,7 @@ def question_call(question, selection):
 
             if content:
                 socketio.emit("answers", {"answer": content})
-                open("answers.txt", "a").write(content)
+                open(ANSWERS, "a").write(content)
 
                 answer_buffer += content
                 end_answer(answer_buffer) # Check if a section was completed
@@ -90,7 +92,7 @@ def question_call(question, selection):
 
 # EXPLAIN
 def explanation(selection):
-    from app import socketio
+    from app.app import socketio
 
     content = openai_client.responses.create(
         model="gpt-4o",

@@ -13,9 +13,11 @@ from functions.note_creation import notes_creation
 from functions.conversions import handle_image, handle_pdf, get_file_type, handle_video
 from functions.nlp import nlp
 
-from app import app, socketio
+from app import socketio, app   
 from threading import Thread
 import threading
+
+from config import TOPIC_OUTPUTS_DIR, NOTE_INPUTS_DIR, RAW_TEXT, COMPLETED_NOTES
 
 import logging
 log = logging.getLogger('werkzeug')
@@ -23,6 +25,7 @@ log.setLevel(logging.ERROR)
 
 # Run App
 def run_flask():
+    print("Flask server starting on http://127.0.0.1:5000")
     app.run(debug=False, use_reloader=False)  # Starts Flask but doesn't block main.py
 # Start Flask in a separate thread
 flask_thread = Thread(target=run_flask)
@@ -39,7 +42,7 @@ def split_text(filename, split_size):
         if char == " ":
             space_ctr += 1
         if space_ctr >= split_size:
-            with open(f"topic_outputs/chunk_{file_ctr}.txt", 'w', encoding='utf-8') as f:
+            with open(f"{TOPIC_OUTPUTS_DIR}/chunk_{file_ctr}.txt", 'w', encoding='utf-8') as f:
                 f.write(chunk)
             file_ctr += 1
             chunk = ''
@@ -48,10 +51,10 @@ def split_text(filename, split_size):
     if chunk:
         if file_ctr == 0:
             # No full chunks were made, so create first file
-            with open(f"topic_outputs/chunk_0.txt", 'w', encoding='utf-8') as f:
+            with open(f"{TOPIC_OUTPUTS_DIR}/chunk_0.txt", 'w', encoding='utf-8') as f:
                 f.write(chunk)
         else:
-            with open(f"topic_outputs/chunk_{file_ctr-1}.txt", 'a', encoding='utf-8') as f:
+            with open(f"{TOPIC_OUTPUTS_DIR}/chunk_{file_ctr-1}.txt", 'a', encoding='utf-8') as f:
                     f.write(chunk)
 
 # File deleter
@@ -80,16 +83,16 @@ timer_thread.start()
 
 def main():
 
-    clear_output("topic_outputs")
+    clear_output(TOPIC_OUTPUTS_DIR)
 
-    open("text.txt", "w").close()  # Ensure the file exists by creating it if it doesnt
-    output_text = "text.txt"   # Text file of all raw text
+    # open("text.txt", "w").close()  # Ensure the file exists by creating it if it doesnt
+    # output_text = "text.txt"   # Text file of all raw text
 
-    output_notes = "notes.txt"   # Text file of all GPT note outputs
-    open("notes.txt", "w").close()  # Ensure the file exists by creating it if it doesnt
+    # output_notes = "notes.txt"   # Text file of all GPT note outputs
+    # open("notes.txt", "w").close()  # Ensure the file exists by creating it if it doesnt
 
     # Uploaded Files
-    folder = "note_inputs"
+    folder = NOTE_INPUTS_DIR
     files = sorted(os.listdir(folder), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
 
     if ".DS_Store" in files:
@@ -138,8 +141,8 @@ def main():
 
     # If only one file, no topic modelling needed
     if file_flag:
-        split_text("text.txt", 500)
-        ordered_files = sorted(os.listdir('topic_outputs'), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
+        split_text(RAW_TEXT, 500)
+        ordered_files = sorted(os.listdir(TOPIC_OUTPUTS_DIR), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
     else:
 
         # Try NLP if more than one file
@@ -147,14 +150,14 @@ def main():
         try:
             # Topic Modeling For Large Input
             nlp()
-            files = os.listdir('topic_outputs') # Loop through topic text files
+            files = os.listdir(TOPIC_OUTPUTS_DIR) # Loop through topic text files
             ordered_files = order_files(files) # Order the topics in a logical order with GPT
             print(ordered_files)
-        # If Too Small For Topic Modelling
+        # If Too Small For Topic Modelling, Just Split
         except TypeError as e:
             print(e)
-            split_text("text.txt", 500)
-            ordered_files = sorted(os.listdir('topic_outputs'), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
+            split_text(RAW_TEXT, 500)
+            ordered_files = sorted(os.listdir(TOPIC_OUTPUTS_DIR), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
             # print("-------------")
             # print(ordered_files)
             # time.sleep(500)
@@ -165,12 +168,12 @@ def main():
 
     # Create notes on files
     for file in ordered_files:
-        notes_creation(f"topic_outputs/{file}") # Send topics GPT to make notes on
+        notes_creation(f"{TOPIC_OUTPUTS_DIR}/{file}") # Send topics GPT to make notes on
     # else:
     #     notes_creation("text.txt")
 
     # Read the content of the notes file
-    with open("notes.txt", "r") as file:
+    with open(COMPLETED_NOTES, "r") as file:
         notes = file.read()
         notes = notes.replace("\n", "<br/>") # Replace new lines with line break element
 
