@@ -10,7 +10,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph
 
 from functions.gpt_calls import order_files
 from functions.note_creation import notes_creation
-from functions.conversions import handle_image, handle_pdf, get_file_type, handle_video
+from functions.file_handler import handle_image, handle_pdf, get_file_type, handle_video
 from functions.nlp import nlp
 
 from app import socketio, app   
@@ -84,12 +84,6 @@ timer_thread.start()
 def main():
 
     clear_output(TOPIC_OUTPUTS_DIR)
-
-    # open("text.txt", "w").close()  # Ensure the file exists by creating it if it doesnt
-    # output_text = "text.txt"   # Text file of all raw text
-
-    # output_notes = "notes.txt"   # Text file of all GPT note outputs
-    # open("notes.txt", "w").close()  # Ensure the file exists by creating it if it doesnt
 
     # Uploaded Files
     folder = NOTE_INPUTS_DIR
