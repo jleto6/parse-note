@@ -12,6 +12,7 @@ from functions.gpt_functions import order_files
 from functions.note_creation import note_creation
 from functions.file_handler import handle_image, handle_pdf, get_file_type, handle_video
 from functions.topic_modelling import nlp
+from functions.question_manager import embed_corpus
 
 from app import socketio, app   
 from threading import Thread
@@ -132,6 +133,9 @@ def main():
             print(f"Invalid file {e}")
 
     time.sleep(3)
+
+    # Embed the extracted RAW TEXT
+    embed_corpus(RAW_TEXT)
 
     # Signal the timer thread to stop (processing done)
     stop_timer.set()
