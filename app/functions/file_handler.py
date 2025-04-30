@@ -15,7 +15,6 @@ SetLogLevel(-1)
 
 from config import NOTE_INPUTS_DIR, RAW_TEXT
 from functions.ocr import do_ocr
-model = Model("en_model")  # Load the model
 
 # Uploaded Files
 folder = NOTE_INPUTS_DIR
@@ -63,6 +62,7 @@ def handle_pdf(file, file_path):
                 
 
 # Handle Videos
+model = Model("data/en_model")  # Load the model
 def handle_video(file, file_path):
     # Convert file to wav
     process = subprocess.run(

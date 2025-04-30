@@ -5,7 +5,7 @@ import pytesseract
 import re
 from io import BytesIO
 
-from functions.gpt_calls import image_call
+from functions.gpt_functions import image_call
 from config import RAW_TEXT
 
 def do_ocr(image):

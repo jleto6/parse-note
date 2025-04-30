@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 import os
 import markdown
 from config import COMPLETED_NOTES
-from functions.qna import question_call, explanation
+from functions.question_manager import question_call, explanation
 
 app = Flask(__name__)
 app.secret_key = "dev"  # Set a secret key for session

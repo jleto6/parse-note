@@ -8,10 +8,10 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 
-from functions.gpt_calls import order_files
-from functions.note_creation import notes_creation
+from functions.gpt_functions import order_files
+from functions.note_creation import note_creation
 from functions.file_handler import handle_image, handle_pdf, get_file_type, handle_video
-from functions.nlp import nlp
+from functions.topic_modelling import nlp
 
 from app import socketio, app   
 from threading import Thread
@@ -59,10 +59,13 @@ def split_text(filename, split_size):
 
 # File deleter
 def clear_output(folder_path):
-    for item in os.listdir(folder_path):
-        item_path = os.path.join(folder_path, item)
-        if os.path.isfile(item_path):
-            os.remove(item_path)
+    try:
+        for item in os.listdir(folder_path):
+            item_path = os.path.join(folder_path, item)
+            if os.path.isfile(item_path):
+                os.remove(item_path)
+    except:
+        os.remove(folder_path)
 
 # Timer
 stop_timer = threading.Event() # Stop event
@@ -83,7 +86,9 @@ timer_thread.start()
 
 def main():
 
+    # Clear old outputs
     clear_output(TOPIC_OUTPUTS_DIR)
+    clear_output(RAW_TEXT)
 
     # Uploaded Files
     folder = NOTE_INPUTS_DIR
@@ -156,15 +161,13 @@ def main():
             # print(ordered_files)
             # time.sleep(500)
 
-    print("---------------------")
+    print("--------------")
     print("Creating Notes")
-    print("---------------------")
+    print("--------------")
 
     # Create notes on files
     for file in ordered_files:
-        notes_creation(f"{TOPIC_OUTPUTS_DIR}/{file}") # Send topics GPT to make notes on
-    # else:
-    #     notes_creation("text.txt")
+        note_creation(f"{TOPIC_OUTPUTS_DIR}/{file}") # Send topics GPT to make notes on
 
     # Read the content of the notes file
     with open(COMPLETED_NOTES, "r") as file:

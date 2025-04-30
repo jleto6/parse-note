@@ -5,7 +5,7 @@ import os
 import markdown
 from flask_socketio import SocketIO
 import json
-from functions.gpt_calls import end_answer, end_section
+from functions.gpt_functions import end_answer, end_section
 
 from config import ANSWERS
 

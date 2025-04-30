@@ -1,11 +1,10 @@
 import base64
 from openai import OpenAI
-import openai
 import os
 import markdown
 from flask_socketio import SocketIO
 import json
-from functions.gpt_calls import end_answer, end_section
+from functions.gpt_functions import end_answer, end_section
 
 from config import COMPLETED_NOTES
 
@@ -16,8 +15,12 @@ previous_content = ""
 string_buffer = ""
 answer_buffer = ""
 
-def notes_creation(content):
+def note_creation(content):
     print("Calling GPT (Creating Notes)")
+
+    # Ensure completed_notes.txt exists and is empty (fresh file)
+    with open(COMPLETED_NOTES, 'w') as f:
+        pass
 
     from app import socketio
 
@@ -28,10 +31,10 @@ def notes_creation(content):
         previous_content += file_content # Store all read files in memory so GPT knows whats covered
 
     # GPT Call
-    # GPT Call
-    completion = openai_client.responses.create(
+    completion = openai_client.chat.completions.create(
+
         model="gpt-4o",
-        input=[
+        messages=[
             {
                 "role": "system",
                 "content": (
@@ -80,34 +83,17 @@ def notes_creation(content):
 
     global string_buffer
     for chunk in completion:
-        #print(chunk)
-        # Handle different possible chunk formats
         try:
-            content = None
-
-            if isinstance(chunk, str):
-                content = chunk
-            elif hasattr(chunk, "content") and chunk.content:
-                content = chunk.content
-            elif hasattr(chunk, "delta"):
-                delta = chunk.delta
-                if isinstance(delta, str):
-                    content = delta
-                elif hasattr(delta, "content") and delta.content:
-                    content = delta.content
+            delta = chunk.choices[0].delta
+            content = delta.content if delta and hasattr(delta, "content") else None
 
             if content:
-
                 string_buffer += content
-
-                #print(content, end="", flush=True)  # Stream to terminal
-                socketio.emit("update_notes", {"notes" : content})
+                socketio.emit("update_notes", {"notes": content})
                 with open(COMPLETED_NOTES, "a", encoding="utf-8") as f:
                     f.write(content)
-                    f.flush()  # Ensures content is written immediately to the file
-                
-                end_section(string_buffer) # Check if a section was completed
-
+                    f.flush()
+                end_section(string_buffer)
         except Exception as e:
             print(f"\nError processing chunk: {e}")
             print(f"Chunk type: {type(chunk)}")
