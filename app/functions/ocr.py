@@ -3,6 +3,7 @@ from PIL import Image
 import magic
 import pytesseract
 import re
+from io import BytesIO
 
 from functions.gpt_calls import image_call
 from config import RAW_TEXT
@@ -33,9 +34,15 @@ def do_ocr(image):
 
     # If low OCR data, call GPT Vision
     if word_count < 20 or average_confidence < 50:
-        img = Image.open(image) # Open the current image 
-        img = img.resize((512, 512), Image.LANCZOS) # Downscale it
-        img.save(image)
+        # img = Image.open(image) # Open the current image 
+        image = image.resize((512, 512), Image.LANCZOS) # Downscale it
+        # image.save(image)
+
+        # Convert PIL Image to in-memory PNG for GPT Vision
+        image_io = BytesIO()
+        image.save(image_io, format="PNG")
+        image_io.seek(0)
+        image = image_io  # overwrite the original variable
 
         print(f"Calling GPT Vision on {image}")
         response_content = ""

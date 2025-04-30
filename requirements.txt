@@ -16,3 +16,4 @@ Pillow
 PyMuPDF
 vosk
 markdown
+pdf2image

@@ -4,364 +4,346 @@ Introduction MIPS ISA 3 Instruction Types R-type, I-type, J-type » Datapath and
 
 Datapath   Ad       Read                           register 1 n           ALU operation                 sn ata 1 8 | sign- | 22 MemRead      
 
-PROCESSOR 
-DATAPATH
+Ta the we use decimal, or bate 10, to We con represent numbers wing ony b, bv a petitive greeter | Baz, (0 we 965, cm be a: 6-10'+54]0 Bos. Let b be a thon |. Tha ws it com be in te form,“ aK less thon this of is called He bue b of con fe by Coy do th 2) Ta expansions, He of dyls ued ose What is oF He Hot hos ase = Ige “27 Bow To b of the integer a, by te a ond O4 eb 00, is He it the b of 1 “No, by to Os a, The 0, is from in the base b of 'n by He quotients by b, bare b “as The proce He quotient is 0.
 
-Introduction
-• MIPS ISA
-• 3 Instruction Types
-• R-type, I-type, J-type
-• Datapath and Control Unit
-• Simplified
-• Pipelined
-• Simple subset
-• Memory reference: lw, sw
-• Arithmetic/logical: 
-add, addi, sub, and, or, slt
-• Control transfer: 
-beq, j
+Cache Cache on hit ond mss A is” quick» bt miss con chs For exanpe, if the cache miss cote is ord the data cache mas rate is 47, wilh base CPI of 2 ond a mis of (00 we cam the mss as Glows = mar 0.02 +100=2 = D-cache mss Cth 36% oF loads and 6.0¢ = Total 346 Ths in 0 CPT of 5.44 2+ wis Tn an ideal with a cache (no mises), He CPU cn al the CPT of 2. the CPL ths He CPU veld be 2.72 fe te menny Tf we CPL by halt, the CPL beams 4.44. Menory remain a of the overall CPI, shoving how the CPL aloe
 
-Instruction Format Review
-• Three  instruction formats
-• R-type
-• I-type
-• J-type
-• Fields:
-• op: operation of the instruction
-• rs, rt, rd: source/destination register specifiers
-• shamt: shift amount
-• funct: selects variant of the operation in the “op” field
-• address/immediate: address offset or immediate value
-• target address: target address of the jump instruction 
-op
-target address
-0
-26
-31
-6 bits
-26 bits
-op
-rs
-rt
-rd
-shamt
-funct
-0
-6
-11
-16
-21
-26
-31
-6 bits
-6 bits
-5 bits
-5 bits
-5 bits
-5 bits
-op
-rs
-rt
-immediate
-0
-16
-21
-26
-31
-6 bits
-16 bits
-5 bits
-5 bits
+Tn on seal Here be val acer, a. He of of fast memory by di of gel od 8203 the fol Thee main               The cache sens ond to = the be ame - = ond       From SD ar de) to. (DRAM), then (SHAM) he CPU. ees ace lip sa
 
-MIPS Subset
-• Add, Subtract, AND, OR, SLT
-• add rd, rs, rt
-• sub rd, rs, rt
-• and rd, rs, rt
-• or rd, rs, rt
-• slt rd, rs, rt
-• ADD Immediate
-• addi  rt, rs, imm16
-• Load, Store
-• lw rt, rs, imm16
-• sw rt, rs, imm16
-• BRANCH
-• beq rs, rt, imm16
-• JUMP:
-• j  target
-op
-rs
-rt
-rd
-shamt
-funct
-0
-6
-11
-16
-21
-26
-31
-6 bits
-6 bits
-5 bits
-5 bits
-5 bits
-5 bits
-op
-rs
-rt
-immediate
-0
-16
-21
-26
-31
-6 bits
-16 bits
-5 bits
-5 bits
-op
-target address
-0
-26
-31
-6 bits
-26 bits
 
-Instruction Execution
-• For every instruction:
-1.
-Send the program counter (PC) to the memory that contains the 
-code and fetch the instruction from that memory.
-1.
-Read one or two registers, using fields of the instruction to select 
-the registers to read. For the load word instruction, we need to 
-read only one register, but most other instructions require that we 
-read two registers.
 
-Instruction Execution
-• Fetch:
-• Get the next instruction: stored at PC
+Control Signals
 
-Instruction Execution
-• Decode:
-• Opcode determines if the instruction is arithmetic/logical, memory 
-logical, or branch.
+Datapath with Control 
+Examples
 
-Instruction Execution
-• Update PC:  PC target address or PC + 4
-• If the instruction is a branch, we have to calculate the target 
-address
-• If the instruction is not a branch, the new PC will be PC + 4
+Control Signal Overview
 
-Instruction Execution
-• Update PC:  PC target address or PC + 4
-• If the instruction is a branch, we have to calculate the target 
-address
-• If the instruction is not a branch, the new PC will be PC + 4
+Karnough Maps ore used to wh logic wth in the Mags (K-Maps) ave used — drivel Each cal in to 0 rou in He Yooh ond oe sizes be goes of 2 (I, 2, #, 8) + alle), of He con be utd fo ager
 
-Instruction Execution
-• Execute:
-• Depending on instruction class, we use the ALU to calculate:
-• Arithmetic result
-• Memory address for load/store
-• Branch target address
+and such as ord altering Pos. occur valhin CPU, or overflow, rie from 1/0 For on mh} cd on when a dela, promping the CPU b sul to 0 wailing Th by the pr ‘he Bagi in He The reading fhe cause, the ard el, EPC fo ke form oF Fer cong, dey taken hye awd a The bel “oll lnc oe Ye
 
-Instruction Execution
-• To read and write registers, we need a register file
-• R-types read two registers and write one register
-• Memory-reference instructions read one register
-• Also access data memory
+Th 0 20 men go fo bk 20. Te 20 to on index is 4 MIDs multiples by 2) fo get the ble ade. ony sere ‘Dy bs To wrk tis, 2 bits (giving 26 bits), Hen Fills te upper 4 bis using te PCS top Ths ill 32-b gles So for 20 $0, Hen Hab wih The bs
 
-Processor Overview
-Data “flows” through 
-memory and 
-functional units
+Block Diagram
+1 scan
+Combinatinal vs Sequential
+1 scan
+Block Diagram
+1 scan
+Combinatinal vs Sequential
+1 scan
 
-Processor Overview
-Can’t just join 
-wires together
-Use multiplexers
+Logic Gates
+3 scans
+Adder
+4 scans
+Logic Gates
+3 scans
+Adder
+4 scans
 
-Processor Overview
-Multiplexers require 
-selection signals 
-Control Signals
+forms 07 express Bookan Te 2 ob Product of (Pos), o a 0 SOP bail fom he the oop is I, POS ore bill frm bch (00s hee is 0. Sam of SOP uses minterms = Look af ous where ig He | ores (18°C) OR AND For of Fel af Bel, He is of Sis POS Lok ab FO in Yo 4k = Each on term = AND all for © ab the
 
-Signals
-• Information encoded in binary
-• Low voltage = 0, High voltage = 1
-• One wire per bit
-• Multi-bit data encoded on multi-wire buses
+CPU A hh 0 of CPV dig wh basic con ot. Thy CPL Jar od He evn of Clock Period: Te of om Chak Hou gd cca per CPU Time = amount of CPU chek X Chk Gob Tie amount of CPU cock fale Time is Further defined cant, He fold under af execute, ond Per (CPI) The CPL ord, whch He CPUs design, ond is affected by the mix of diffeen of The compulaton oF CPU the CPU Ge Ths varas of lo bow cn of of eee by he = Clock 05 it in the CPU ~ Per (CPE): An ren oF er Ths oo ye beng CPT in deli! te where each CPI Example          
 
-Logic Design Review
-• Combinational Circuits
-• Output depends only on current input
-• Operate on data
-• Example: ALU
-• Given the same input a combinational
-circuit will always produce the same 
-output
+oe Jab pratt ped He pe fom aries when 0 Far the ue of 0 aie dela We for Dek occur iden af depends on the of dala For i the $10,411 by sb $12,950,993, He later wal for tel ag sel fe sy   on 0 lad by rev Ty con alwys be by ond sib $12, 4.0, 93 te x wh Code to He use of a lad in ral om Branch: Ty mihgate yet 15 the is on but it si He of br to felch or Pl 1) cok by ch fied bakers ae as 05 ret
 
-Logic Design Review
-• Sequential Circuits
-• Have “state”
-• Output depends on current input and previous outputs
-• Example: Register File
-• Output depends on the contents
-of the registers in the file
+uses set with 3 Rhye, Tra are in   Fah 0 depending on used Fr ued fields op, (8,4, ond 14, ond restr is the The ood of on Tye bb a destination ow as (su, bet) For The MIDs of feb 2 of for base ond la = ads ae Sr gg par sch ot) esl for He flow of  
 
-MIPS Register File
-• 32 32-bit registers
-• One write bus
-• Two read buses
-• Selection Inputs
-• RegWrite (write enable signal) 
-• Reg. Source A
-• Reg. Source B
-• Reg. Destination
+Thy sels of as Lo os 05° = become tems one fr nl pd He in imide The ond for enna, all to lod preening cove oe idle ond
 
-Write Control Signals
-Every Clock Cycle
-• We do not show a write control 
-signal when a state element is 
-written on every active clock 
-edge.
-• Program Counter
-When Necessary
-• If a state element is not 
-updated on every clock, then 
-an explicit write control signal is 
-required.
-• Register File
+writing how dla Ths ces veer coche x or dely 0. we, ow coset, 2 2 3343 3.2 gue THE
 
-Datapath Elements
-• Most elements have 32-bit wide inputs and outputs 
-• Buses labeled with their width
+Direct Caching
 
-Datapath Elements - Combinational
-I0
-I1
-Y
-M
-u
-x
-S
-Multiplexer
-Y = S ? I1 : I0
-A
-B
-Y
-+
-A
-B
-Y
-ALU
-F
-Adder
-Y = A + B
-Arithmetic/Logic Unit
-Y = F(A, B)
+Associativity
 
-Datapath Elements - Sequential
+Floating Pick Beal in is te TEEE which improves accuracy ued by using He of TEEE using 754 Standard 3 a bit, am exponent, Ty    TEEE 754 farm, He fst the decimal is 2°) shay pe, 754 does store + (His is called the hidden bit). Tistead, part allowing Jo more bits   Ths From standard scientific whee tte digit is x 10? in decimal). By formalization ta using a hidden bt, TEEE efficent storage cand accuracy” in point pret A 754 Standard of + Sige a. Sign bik (S) determines he is postive (0) or 6 is, contigo. ~ haw much to itt te (steed a biased format) sts digts of the umber (with an assumed 1)
 
-Fetch Elements
-• Memory Unit
-• Program Counter
-• Adder
+Ta the we use decimal, or bate 10, to We con represent numbers wing ony b, bv a petitive greeter | Baz, (0 we 965, cm be a: 6-10'+54]0 Bos. Let b be a thon |. Tha ws it com be in te form,“ aK less thon this of is called He bue b of con fe by Coy do th 2) Ta expansions, He of dyls ued ose What is oF He Hot hos ase = Ige “27 Bow To b of the integer a, by te a ond O4 eb 00, is He it the b of 1 “No, by to Os a, The 0, is from in the base b of 'n by He quotients by b, bare b “as The proce He quotient is 0.
 
-R-Type Instructions
-• Read two register operands
-• Perform arithmetic/logical operation
-• Write register result
+Cache Cache on hit ond mss A is” quick» bt miss con chs For exanpe, if the cache miss cote is ord the data cache mas rate is 47, wilh base CPI of 2 ond a mis of (00 we cam the mss as Glows = mar 0.02 +100=2 = D-cache mss Cth 36% oF loads and 6.0¢ = Total 346 Ths in 0 CPT of 5.44 2+ wis Tn an ideal with a cache (no mises), He CPU cn al the CPT of 2. the CPL ths He CPU veld be 2.72 fe te menny Tf we CPL by halt, the CPL beams 4.44. Menory remain a of the overall CPI, shoving how the CPL aloe
 
-R-Type Instructions
-add $t1, $t2, $t3
-• RW = 9
-• RA = 10
-• RB = 11
-• ALUop = “add”
+Tn on seal Here be val acer, a. He of of fast memory by di of gel od 8203 the fol Thee main               The cache sens ond to = the be ame - = ond       From SD ar de) to. (DRAM), then (SHAM) he CPU. ees ace lip sa
 
-Datapath: R-Type Instructions
 
-I-Type Instructions
-• Replace one read register, shamt, and funct with 16 bit 
-constant
-• ALU requires 32-bit inputs
-• Sign-extend the 16 bit immediate
-• Fill with 0s if the constant is positive
-• Fill with 1s if the constant is negative
-• Choose between the second read registers 
-and the sign extended constant.
 
-Datapath: I-Type Instructions
+Control Signals
 
-Load/Store Instructions
-• lw 
-$t1, offset($t2)
-• sw 
-$t1, offset($t2)
-• Compute memory address: $t2 + offset
-• Since offset is 16 bits, it needs to be extended to 32 bits
+Datapath with Control 
+Examples
 
-Load/Store Instructions
-• Load: Read memory and update register
-• Store: Write register value to memory
-• Elements: 
-• Register file
-• Sign extension unit
-• Data memory unit
+Control Signal Overview
 
-Datapath: Load Instruction
+Karnough Maps ore used to wh logic wth in the Mags (K-Maps) ave used — drivel Each cal in to 0 rou in He Yooh ond oe sizes be goes of 2 (I, 2, #, 8) + alle), of He con be utd fo ager
 
-Datapath: Store Instruction
+and such as ord altering Pos. occur valhin CPU, or overflow, rie from 1/0 For on mh} cd on when a dela, promping the CPU b sul to 0 wailing Th by the pr ‘he Bagi in He The reading fhe cause, the ard el, EPC fo ke form oF Fer cong, dey taken hye awd a The bel “oll lnc oe Ye
 
-Branch Instructions
-beq
-$t1, $t2, offset
-• Read register operands
-• Compare operands
-• Use ALU, subtract and check Zero output
-• Calculate target address
-• Sign-extend displacement
-• Shift left 2 places (word displacement)
-• Add to PC + 4
-• Already calculated by instruction fetch
+Th 0 20 men go fo bk 20. Te 20 to on index is 4 MIDs multiples by 2) fo get the ble ade. ony sere ‘Dy bs To wrk tis, 2 bits (giving 26 bits), Hen Fills te upper 4 bis using te PCS top Ths ill 32-b gles So for 20 $0, Hen Hab wih The bs
 
-Target Address Details
-• The base for the branch address calculation is the 
-address of the instruction following the branch. 
-• PC+4
-• Memory is byte addressed 
-• The offset field must be shifted left 2 bits
+Block Diagram
+1 scan
+Combinatinal vs Sequential
+1 scan
+Block Diagram
+1 scan
+Combinatinal vs Sequential
+1 scan
 
-Branch Instructions
-Just
-re-routes 
-wires
-Sign-bit wire 
-replicated
+Logic Gates
+3 scans
+Adder
+4 scans
+Logic Gates
+3 scans
+Adder
+4 scans
 
-Branching
-beq
-$t1, $t2, offset
-• Branch is taken
-• When $t1 - $t2 = 0, the zero signal from the ALU
-• PC = PC + 4 + 4*offset
-• Branch is not taken
-• PC = PC + 4
+forms 07 express Bookan Te 2 ob Product of (Pos), o a 0 SOP bail fom he the oop is I, POS ore bill frm bch (00s hee is 0. Sam of SOP uses minterms = Look af ous where ig He | ores (18°C) OR AND For of Fel af Bel, He is of Sis POS Lok ab FO in Yo 4k = Each on term = AND all for © ab the
 
-Datapath: Branch
+CPU A hh 0 of CPV dig wh basic con ot. Thy CPL Jar od He evn of Clock Period: Te of om Chak Hou gd cca per CPU Time = amount of CPU chek X Chk Gob Tie amount of CPU cock fale Time is Further defined cant, He fold under af execute, ond Per (CPI) The CPL ord, whch He CPUs design, ond is affected by the mix of diffeen of The compulaton oF CPU the CPU Ge Ths varas of lo bow cn of of eee by he = Clock 05 it in the CPU ~ Per (CPE): An ren oF er Ths oo ye beng CPT in deli! te where each CPI Example          
 
-Jump Instructions
-• PC = PC[31-28] : Offset << 2
+oe Jab pratt ped He pe fom aries when 0 Far the ue of 0 aie dela We for Dek occur iden af depends on the of dala For i the $10,411 by sb $12,950,993, He later wal for tel ag sel fe sy   on 0 lad by rev Ty con alwys be by ond sib $12, 4.0, 93 te x wh Code to He use of a lad in ral om Branch: Ty mihgate yet 15 the is on but it si He of br to felch or Pl 1) cok by ch fied bakers ae as 05 ret
 
-Single Datapath
-• All instructions executed in one clock cycle
-• Each datapath element can only do one function at a time
-• Any element needed more than once must be duplicated
-• Hence, we need separate instruction and data memories
-• Use multiplexers where alternate data sources are used 
-for different instructions
+uses set with 3 Rhye, Tra are in   Fah 0 depending on used Fr ued fields op, (8,4, ond 14, ond restr is the The ood of on Tye bb a destination ow as (su, bet) For The MIDs of feb 2 of for base ond la = ads ae Sr gg par sch ot) esl for He flow of  
+
+Thy sels of as Lo os 05° = become tems one fr nl pd He in imide The ond for enna, all to lod preening cove oe idle ond
+
+writing how dla Ths ces veer coche x or dely 0. we, ow coset, 2 2 3343 3.2 gue THE
+
+Direct Caching
+
+Associativity
+
+Floating Pick Beal in is te TEEE which improves accuracy ued by using He of TEEE using 754 Standard 3 a bit, am exponent, Ty    TEEE 754 farm, He fst the decimal is 2°) shay pe, 754 does store + (His is called the hidden bit). Tistead, part allowing Jo more bits   Ths From standard scientific whee tte digit is x 10? in decimal). By formalization ta using a hidden bt, TEEE efficent storage cand accuracy” in point pret A 754 Standard of + Sige a. Sign bik (S) determines he is postive (0) or 6 is, contigo. ~ haw much to itt te (steed a biased format) sts digts of the umber (with an assumed 1)
+
+Ta the we use decimal, or bate 10, to We con represent numbers wing ony b, bv a petitive greeter | Baz, (0 we 965, cm be a: 6-10'+54]0 Bos. Let b be a thon |. Tha ws it com be in te form,“ aK less thon this of is called He bue b of con fe by Coy do th 2) Ta expansions, He of dyls ued ose What is oF He Hot hos ase = Ige “27 Bow To b of the integer a, by te a ond O4 eb 00, is He it the b of 1 “No, by to Os a, The 0, is from in the base b of 'n by He quotients by b, bare b “as The proce He quotient is 0.
+
+Cache Cache on hit ond mss A is” quick» bt miss con chs For exanpe, if the cache miss cote is ord the data cache mas rate is 47, wilh base CPI of 2 ond a mis of (00 we cam the mss as Glows = mar 0.02 +100=2 = D-cache mss Cth 36% oF loads and 6.0¢ = Total 346 Ths in 0 CPT of 5.44 2+ wis Tn an ideal with a cache (no mises), He CPU cn al the CPT of 2. the CPL ths He CPU veld be 2.72 fe te menny Tf we CPL by halt, the CPL beams 4.44. Menory remain a of the overall CPI, shoving how the CPL aloe
+
+Tn on seal Here be val acer, a. He of of fast memory by di of gel od 8203 the fol Thee main               The cache sens ond to = the be ame - = ond       From SD ar de) to. (DRAM), then (SHAM) he CPU. ees ace lip sa
+
+
+
+Control Signals
+
+Datapath with Control 
+Examples
+
+Control Signal Overview
+
+Karnough Maps ore used to wh logic wth in the Mags (K-Maps) ave used — drivel Each cal in to 0 rou in He Yooh ond oe sizes be goes of 2 (I, 2, #, 8) + alle), of He con be utd fo ager
+
+and such as ord altering Pos. occur valhin CPU, or overflow, rie from 1/0 For on mh} cd on when a dela, promping the CPU b sul to 0 wailing Th by the pr ‘he Bagi in He The reading fhe cause, the ard el, EPC fo ke form oF Fer cong, dey taken hye awd a The bel “oll lnc oe Ye
+
+Th 0 20 men go fo bk 20. Te 20 to on index is 4 MIDs multiples by 2) fo get the ble ade. ony sere ‘Dy bs To wrk tis, 2 bits (giving 26 bits), Hen Fills te upper 4 bis using te PCS top Ths ill 32-b gles So for 20 $0, Hen Hab wih The bs
+
+Block Diagram
+1 scan
+Combinatinal vs Sequential
+1 scan
+Block Diagram
+1 scan
+Combinatinal vs Sequential
+1 scan
+
+Logic Gates
+3 scans
+Adder
+4 scans
+Logic Gates
+3 scans
+Adder
+4 scans
+
+forms 07 express Bookan Te 2 ob Product of (Pos), o a 0 SOP bail fom he the oop is I, POS ore bill frm bch (00s hee is 0. Sam of SOP uses minterms = Look af ous where ig He | ores (18°C) OR AND For of Fel af Bel, He is of Sis POS Lok ab FO in Yo 4k = Each on term = AND all for © ab the
+
+CPU A hh 0 of CPV dig wh basic con ot. Thy CPL Jar od He evn of Clock Period: Te of om Chak Hou gd cca per CPU Time = amount of CPU chek X Chk Gob Tie amount of CPU cock fale Time is Further defined cant, He fold under af execute, ond Per (CPI) The CPL ord, whch He CPUs design, ond is affected by the mix of diffeen of The compulaton oF CPU the CPU Ge Ths varas of lo bow cn of of eee by he = Clock 05 it in the CPU ~ Per (CPE): An ren oF er Ths oo ye beng CPT in deli! te where each CPI Example          
+
+oe Jab pratt ped He pe fom aries when 0 Far the ue of 0 aie dela We for Dek occur iden af depends on the of dala For i the $10,411 by sb $12,950,993, He later wal for tel ag sel fe sy   on 0 lad by rev Ty con alwys be by ond sib $12, 4.0, 93 te x wh Code to He use of a lad in ral om Branch: Ty mihgate yet 15 the is on but it si He of br to felch or Pl 1) cok by ch fied bakers ae as 05 ret
+
+uses set with 3 Rhye, Tra are in   Fah 0 depending on used Fr ued fields op, (8,4, ond 14, ond restr is the The ood of on Tye bb a destination ow as (su, bet) For The MIDs of feb 2 of for base ond la = ads ae Sr gg par sch ot) esl for He flow of  
+
+Thy sels of as Lo os 05° = become tems one fr nl pd He in imide The ond for enna, all to lod preening cove oe idle ond
+
+writing how dla Ths ces veer coche x or dely 0. we, ow coset, 2 2 3343 3.2 gue THE
+
+Direct Caching
+
+Associativity
+
+Floating Pick Beal in is te TEEE which improves accuracy ued by using He of TEEE using 754 Standard 3 a bit, am exponent, Ty    TEEE 754 farm, He fst the decimal is 2°) shay pe, 754 does store + (His is called the hidden bit). Tistead, part allowing Jo more bits   Ths From standard scientific whee tte digit is x 10? in decimal). By formalization ta using a hidden bt, TEEE efficent storage cand accuracy” in point pret A 754 Standard of + Sige a. Sign bik (S) determines he is postive (0) or 6 is, contigo. ~ haw much to itt te (steed a biased format) sts digts of the umber (with an assumed 1)
+
+Ta the we use decimal, or bate 10, to We con represent numbers wing ony b, bv a petitive greeter | Baz, (0 we 965, cm be a: 6-10'+54]0 Bos. Let b be a thon |. Tha ws it com be in te form,“ aK less thon this of is called He bue b of con fe by Coy do th 2) Ta expansions, He of dyls ued ose What is oF He Hot hos ase = Ige “27 Bow To b of the integer a, by te a ond O4 eb 00, is He it the b of 1 “No, by to Os a, The 0, is from in the base b of 'n by He quotients by b, bare b “as The proce He quotient is 0.
+
+Cache Cache on hit ond mss A is” quick» bt miss con chs For exanpe, if the cache miss cote is ord the data cache mas rate is 47, wilh base CPI of 2 ond a mis of (00 we cam the mss as Glows = mar 0.02 +100=2 = D-cache mss Cth 36% oF loads and 6.0¢ = Total 346 Ths in 0 CPT of 5.44 2+ wis Tn an ideal with a cache (no mises), He CPU cn al the CPT of 2. the CPL ths He CPU veld be 2.72 fe te menny Tf we CPL by halt, the CPL beams 4.44. Menory remain a of the overall CPI, shoving how the CPL aloe
+
+Tn on seal Here be val acer, a. He of of fast memory by di of gel od 8203 the fol Thee main               The cache sens ond to = the be ame - = ond       From SD ar de) to. (DRAM), then (SHAM) he CPU. ees ace lip sa
+
+
+
+Control Signals
+
+Datapath with Control 
+Examples
+
+Control Signal Overview
+
+Karnough Maps ore used to wh logic wth in the Mags (K-Maps) ave used — drivel Each cal in to 0 rou in He Yooh ond oe sizes be goes of 2 (I, 2, #, 8) + alle), of He con be utd fo ager
+
+and such as ord altering Pos. occur valhin CPU, or overflow, rie from 1/0 For on mh} cd on when a dela, promping the CPU b sul to 0 wailing Th by the pr ‘he Bagi in He The reading fhe cause, the ard el, EPC fo ke form oF Fer cong, dey taken hye awd a The bel “oll lnc oe Ye
+
+Th 0 20 men go fo bk 20. Te 20 to on index is 4 MIDs multiples by 2) fo get the ble ade. ony sere ‘Dy bs To wrk tis, 2 bits (giving 26 bits), Hen Fills te upper 4 bis using te PCS top Ths ill 32-b gles So for 20 $0, Hen Hab wih The bs
+
+Block Diagram
+1 scan
+Combinatinal vs Sequential
+1 scan
+Block Diagram
+1 scan
+Combinatinal vs Sequential
+1 scan
+
+Logic Gates
+3 scans
+Adder
+4 scans
+Logic Gates
+3 scans
+Adder
+4 scans
+
+forms 07 express Bookan Te 2 ob Product of (Pos), o a 0 SOP bail fom he the oop is I, POS ore bill frm bch (00s hee is 0. Sam of SOP uses minterms = Look af ous where ig He | ores (18°C) OR AND For of Fel af Bel, He is of Sis POS Lok ab FO in Yo 4k = Each on term = AND all for © ab the
+
+CPU A hh 0 of CPV dig wh basic con ot. Thy CPL Jar od He evn of Clock Period: Te of om Chak Hou gd cca per CPU Time = amount of CPU chek X Chk Gob Tie amount of CPU cock fale Time is Further defined cant, He fold under af execute, ond Per (CPI) The CPL ord, whch He CPUs design, ond is affected by the mix of diffeen of The compulaton oF CPU the CPU Ge Ths varas of lo bow cn of of eee by he = Clock 05 it in the CPU ~ Per (CPE): An ren oF er Ths oo ye beng CPT in deli! te where each CPI Example          
+
+oe Jab pratt ped He pe fom aries when 0 Far the ue of 0 aie dela We for Dek occur iden af depends on the of dala For i the $10,411 by sb $12,950,993, He later wal for tel ag sel fe sy   on 0 lad by rev Ty con alwys be by ond sib $12, 4.0, 93 te x wh Code to He use of a lad in ral om Branch: Ty mihgate yet 15 the is on but it si He of br to felch or Pl 1) cok by ch fied bakers ae as 05 ret
+
+uses set with 3 Rhye, Tra are in   Fah 0 depending on used Fr ued fields op, (8,4, ond 14, ond restr is the The ood of on Tye bb a destination ow as (su, bet) For The MIDs of feb 2 of for base ond la = ads ae Sr gg par sch ot) esl for He flow of  
+
+Thy sels of as Lo os 05° = become tems one fr nl pd He in imide The ond for enna, all to lod preening cove oe idle ond
+
+writing how dla Ths ces veer coche x or dely 0. we, ow coset, 2 2 3343 3.2 gue THE
+
+Direct Caching
+
+Associativity
+
+Floating Pick Beal in is te TEEE which improves accuracy ued by using He of TEEE using 754 Standard 3 a bit, am exponent, Ty    TEEE 754 farm, He fst the decimal is 2°) shay pe, 754 does store + (His is called the hidden bit). Tistead, part allowing Jo more bits   Ths From standard scientific whee tte digit is x 10? in decimal). By formalization ta using a hidden bt, TEEE efficent storage cand accuracy” in point pret A 754 Standard of + Sige a. Sign bik (S) determines he is postive (0) or 6 is, contigo. ~ haw much to itt te (steed a biased format) sts digts of the umber (with an assumed 1)
+
+Introduction MIPS ISA 3 Instruction Types R-type, I-type, J-type » Datapath and Control Unit Simplified Pipelined Simple subset » Memory reference: Iw, sw Arithmetic/logical: add, addi, sub, and, or, slit Control transfer: j
+
+Ta the we use decimal, or bate 10, to We con represent numbers wing ony b, bv a petitive greeter | Baz, (0 we 965, cm be a: 6-10'+54]0 Bos. Let b be a thon |. Tha ws it com be in te form,“ aK less thon this of is called He bue b of con fe by Coy do th 2) Ta expansions, He of dyls ued ose What is oF He Hot hos ase = Ige “27 Bow To b of the integer a, by te a ond O4 eb 00, is He it the b of 1 “No, by to Os a, The 0, is from in the base b of 'n by He quotients by b, bare b “as The proce He quotient is 0.
+
+Cache Cache on hit ond mss A is” quick» bt miss con chs For exanpe, if the cache miss cote is ord the data cache mas rate is 47, wilh base CPI of 2 ond a mis of (00 we cam the mss as Glows = mar 0.02 +100=2 = D-cache mss Cth 36% oF loads and 6.0¢ = Total 346 Ths in 0 CPT of 5.44 2+ wis Tn an ideal with a cache (no mises), He CPU cn al the CPT of 2. the CPL ths He CPU veld be 2.72 fe te menny Tf we CPL by halt, the CPL beams 4.44. Menory remain a of the overall CPI, shoving how the CPL aloe
+
+Tn on seal Here be val acer, a. He of of fast memory by di of gel od 8203 the fol Thee main               The cache sens ond to = the be ame - = ond       From SD ar de) to. (DRAM), then (SHAM) he CPU. ees ace lip sa
+
+
+
+Control Signals
+
+Datapath with Control 
+Examples
+
+Control Signal Overview
+
+Karnough Maps ore used to wh logic wth in the Mags (K-Maps) ave used — drivel Each cal in to 0 rou in He Yooh ond oe sizes be goes of 2 (I, 2, #, 8) + alle), of He con be utd fo ager
+
+and such as ord altering Pos. occur valhin CPU, or overflow, rie from 1/0 For on mh} cd on when a dela, promping the CPU b sul to 0 wailing Th by the pr ‘he Bagi in He The reading fhe cause, the ard el, EPC fo ke form oF Fer cong, dey taken hye awd a The bel “oll lnc oe Ye
+
+Th 0 20 men go fo bk 20. Te 20 to on index is 4 MIDs multiples by 2) fo get the ble ade. ony sere ‘Dy bs To wrk tis, 2 bits (giving 26 bits), Hen Fills te upper 4 bis using te PCS top Ths ill 32-b gles So for 20 $0, Hen Hab wih The bs
+
+Block Diagram
+1 scan
+Combinatinal vs Sequential
+1 scan
+Block Diagram
+1 scan
+Combinatinal vs Sequential
+1 scan
+
+Logic Gates
+3 scans
+Adder
+4 scans
+Logic Gates
+3 scans
+Adder
+4 scans
+
+forms 07 express Bookan Te 2 ob Product of (Pos), o a 0 SOP bail fom he the oop is I, POS ore bill frm bch (00s hee is 0. Sam of SOP uses minterms = Look af ous where ig He | ores (18°C) OR AND For of Fel af Bel, He is of Sis POS Lok ab FO in Yo 4k = Each on term = AND all for © ab the
+
+Ta the we use decimal, or bate 10, to We con represent numbers wing ony b, bv a petitive greeter | Baz, (0 we 965, cm be a: 6-10'+54]0 Bos. Let b be a thon |. Tha ws it com be in te form,“ aK less thon this of is called He bue b of con fe by Coy do th 2) Ta expansions, He of dyls ued ose What is oF He Hot hos ase = Ige “27 Bow To b of the integer a, by te a ond O4 eb 00, is He it the b of 1 “No, by to Os a, The 0, is from in the base b of 'n by He quotients by b, bare b “as The proce He quotient is 0.
+
+
+Cache Cache on hit ond mss A is” quick» bt miss con chs For exanpe, if the cache miss cote is ord the data cache mas rate is 47, wilh base CPI of 2 ond a mis of (00 we cam the mss as Glows = mar 0.02 +100=2 = D-cache mss Cth 36% oF loads and 6.0¢ = Total 346 Ths in 0 CPT of 5.44 2+ wis Tn an ideal with a cache (no mises), He CPU cn al the CPT of 2. the CPL ths He CPU veld be 2.72 fe te menny Tf we CPL by halt, the CPL beams 4.44. Menory remain a of the overall CPI, shoving how the CPL aloe
+
+Tn on seal Here be val acer, a. He of of fast memory by di of gel od 8203 the fol Thee main               The cache sens ond to = the be ame - = ond       From SD ar de) to. (DRAM), then (SHAM) he CPU. ees ace lip sa
+
+
+
+
+
+Control Signals
+
+Datapath with Control 
+Examples
+
+Control Signal Overview
+
+Karnough Maps ore used to wh logic wth in the Mags (K-Maps) ave used — drivel Each cal in to 0 rou in He Yooh ond oe sizes be goes of 2 (I, 2, #, 8) + alle), of He con be utd fo ager
+
+
+and such as ord altering Pos. occur valhin CPU, or overflow, rie from 1/0 For on mh} cd on when a dela, promping the CPU b sul to 0 wailing Th by the pr ‘he Bagi in He The reading fhe cause, the ard el, EPC fo ke form oF Fer cong, dey taken hye awd a The bel “oll lnc oe Ye
+
+
+Th 0 20 men go fo bk 20. Te 20 to on index is 4 MIDs multiples by 2) fo get the ble ade. ony sere ‘Dy bs To wrk tis, 2 bits (giving 26 bits), Hen Fills te upper 4 bis using te PCS top Ths ill 32-b gles So for 20 $0, Hen Hab wih The bs
+
+
+Block Diagram
+1 scan
+Combinatinal vs Sequential
+1 scan
+Block Diagram
+1 scan
+Combinatinal vs Sequential
+1 scan
+
+Logic Gates
+3 scans
+Adder
+4 scans
+Logic Gates
+3 scans
+Adder
+4 scans
+
+forms 07 express Bookan Te 2 ob Product of (Pos), o a 0 SOP bail fom he the oop is I, POS ore bill frm bch (00s hee is 0. Sam of SOP uses minterms = Look af ous where ig He | ores (18°C) OR AND For of Fel af Bel, He is of Sis POS Lok ab FO in Yo 4k = Each on term = AND all for © ab the
+
+
+CPU A hh 0 of CPV dig wh basic con ot. Thy CPL Jar od He evn of Clock Period: Te of om Chak Hou gd cca per CPU Time = amount of CPU chek X Chk Gob Tie amount of CPU cock fale Time is Further defined cant, He fold under af execute, ond Per (CPI) The CPL ord, whch He CPUs design, ond is affected by the mix of diffeen of The compulaton oF CPU the CPU Ge Ths varas of lo bow cn of of eee by he = Clock 05 it in the CPU ~ Per (CPE): An ren oF er Ths oo ye beng CPT in deli! te where each CPI Example          
+
+
+oe Jab pratt ped He pe fom aries when 0 Far the ue of 0 aie dela We for Dek occur iden af depends on the of dala For i the $10,411 by sb $12,950,993, He later wal for tel ag sel fe sy   on 0 lad by rev Ty con alwys be by ond sib $12, 4.0, 93 te x wh Code to He use of a lad in ral om Branch: Ty mihgate yet 15 the is on but it si He of br to felch or Pl 1) cok by ch fied bakers ae as 05 ret
+
+
+uses set with 3 Rhye, Tra are in   Fah 0 depending on used Fr ued fields op, (8,4, ond 14, ond restr is the The ood of on Tye bb a destination ow as (su, bet) For The MIDs of feb 2 of for base ond la = ads ae Sr gg par sch ot) esl for He flow of  
+
+
+Thy sels of as Lo os 05° = become tems one fr nl pd He in imide The ond for enna, all to lod preening cove oe idle ond
+
+
+writing how dla Ths ces veer coche x or dely 0. we, ow coset, 2 2 3343 3.2 gue THE
+
+
+Direct Caching
+
+Associativity
+
+Floating Pick Beal in is te TEEE which improves accuracy ued by using He of TEEE using 754 Standard 3 a bit, am exponent, Ty    TEEE 754 farm, He fst the decimal is 2°) shay pe, 754 does store + (His is called the hidden bit). Tistead, part allowing Jo more bits   Ths From standard scientific whee tte digit is x 10? in decimal). By formalization ta using a hidden bt, TEEE efficent storage cand accuracy” in point pret A 754 Standard of + Sige a. Sign bik (S) determines he is postive (0) or 6 is, contigo. ~ haw much to itt te (steed a biased format) sts digts of the umber (with an assumed 1)
+
+
+Introduction MIPS ISA 3 Instruction Types R-type, I-type, J-type » Datapath and Control Unit Simplified Pipelined Simple subset » Memory reference: Iw, sw Arithmetic/logical: add, addi, sub, and, or, slit Control transfer: j
 

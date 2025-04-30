@@ -33,10 +33,15 @@ def end_answer(answer_buffer):
 # IMAGE CALL
 def image_call(file_path):
     # Get the Base64 string of the file
+    
     # Function to encode the image
-    def encode_image(image_path):
-        with open(image_path, "rb") as image_file:
-            return base64.b64encode(image_file.read()).decode("utf-8")
+    def encode_image(image_source):
+        if hasattr(image_source, "read"):  # it's a file-like object
+            return base64.b64encode(image_source.read()).decode("utf-8")
+        else:  # it's a file path
+            with open(image_source, "rb") as image_file:
+                return base64.b64encode(image_file.read()).decode("utf-8")
+
     base64_image = encode_image(file_path)
 
     prompt1 = "Whats in this image?"

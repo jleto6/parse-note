@@ -15,3 +15,5 @@ NOTE_INPUTS_DIR = os.path.join(DATA_DIR, 'note_inputs')
 RAW_TEXT = os.path.join(DATA_DIR, 'raw_text.txt')
 COMPLETED_NOTES = os.path.join(DATA_DIR, 'completed_notes.txt')
 ANSWERS = os.path.join(DATA_DIR, 'answers.txt')
+EMBEDDINGS = os.path.join(DATA_DIR, 'embeddings.csv')
+
