@@ -1,0 +1,175 @@
+taken in MEM:
+PC
+Flush these
+instructions
+(Set control
+values to 0)
+
+Predict Branch Not Taken
+Prediction 
+correct
+Prediction 
+incorrect
+
+Predict Branch Not Taken
+• If branches are untaken half the time, and if it costs little to 
+discard the instructions, this optimization halves the cost 
+of control hazards.
+
+Branch Prediction
+• Static branch prediction
+• Based on typical branch behavior
+• Example: loop and if-statement branches
+• Predict backward branches taken
+• Predict forward branches not taken
+
+Dynamic Branch Prediction
+• In deeper and superscalar pipelines, branch 
+penalty is more significant
+• Use dynamic prediction
+• Branch History Table
+• Indexed by recent branch instruction addresses
+• Stores outcome (taken/not taken)
+• To execute a branch
+• Check table, expect the same outcome
+• Start fetching from fall-through or target
+• If wrong, flush pipeline and flip prediction
+
+1-Bit Predictor: Shortcoming
+• Inner loop branches mispredicted twice!
+outer: …
+…
+inner: …
+…
+beq …, …, inner
+…
+beq …, …, outer
+Mispredict as taken on last iteration of 
+inner loop
+Then mispredict as not taken on first 
+iteration of inner loop next time around
+
+2-Bit Predictor
+• Only change prediction on two successive mispredictions
+
+Delayed Decision
+• Branch Instruction
+• Execute the next sequential instruction
+• Execute the instruction that resulted from the branch
+• add $4, $5, $6
+->
+beq $1, $2, 40
+• beq $1, $2, 40
+->
+add $4, $5, $6
+• <branch result>
+<branch result>
+
+Cycle Time Matters
+• Delayed branches work when branches are short
+• no processor uses a delayed branch of more than 1 cycle
+• Longer branch delays rely on hardware based branch 
+prediction
+
+Reducing Branch Delay
+• Insight:
+• many branches rely only on simple tests 
+• can be implemented with a few gates over an ALU
+• more complex branches take two instructions
+• slt followed by beq/bne
+• Move hardware to determine outcome to ID stage
+• Target address adder
+• Register comparator
+• Reduces the penalty of a branch to only one instruction if 
+the branch is taken
+
+Summary
+• Pipelining improves performance by increasing instruction 
+throughput
+• Executes multiple instructions in parallel
+• Each instruction has the same latency
+• Subject to hazards
+• Structure, data, control
+• Instruction set design affects complexity of pipeline 
+implementation
+
+Exceptions and Interrupts
+• “Unexpected” events requiring change in flow of 
+control
+• Exception
+• Arises within the CPU
+• Examples: undefined opcode, overflow, syscall
+• Interrupt
+• From an external I/O controller
+
+Handling Exceptions
+• In MIPS, exceptions managed by a System 
+Control Coprocessor (CP0)
+• Save PC of offending (or interrupted) instruction
+• In MIPS: Exception Program Counter (EPC)
+• Save indication of the problem
+• In MIPS: Status register
+• 0000 – undefined instruction
+• 0180 – arithmetic overflow
+• Jump to handler
+
+Handler Actions
+• Read cause, and transfer to relevant handler
+• Determine action required
+• If restartable
+• Take corrective action
+• use EPC to return to program
+• Otherwise
+• Terminate program
+• Report error using EPC
+
+Exceptions in a Pipeline
+• Another form of control hazard
+• Consider overflow on add in EX stage
+add $1, $2, $1
+• Prevent $1 from being overwritten
+• Complete previous instructions
+• Flush add and subsequent instructions
+• Set Cause and EPC register values
+• Transfer control to handler
+• Similar to mispredicted branch
+• Use much of the same hardware
+
+Multiple Exceptions
+• Pipelining overlaps multiple instructions
+• Could have multiple exceptions at once
+• Simple approach: deal with exception from 
+earliest instruction
+• Flush subsequent instructions
+
+Fallacies
+• Pipelining is easy
+• The basic idea is easy
+• The devil is in the details
+• e.g., detecting data hazards
+• Pipelining is independent of technology
+• So why haven’t we always done pipelining?
+• More transistors make more advanced techniques 
+feasible
+• Pipeline-related ISA design needs to take account of 
+technology trends
+
+Pitfalls
+• Poor ISA design can make pipelining harder
+• e.g., complex instruction sets (VAX, IA-32)
+• Significant overhead to make pipelining work
+• e.g., complex addressing modes
+• Register update side effects, memory indirection
+• e.g., delayed branches
+• Advanced pipelines have long delay slots
+
+Concluding Remarks
+• ISA influences design of datapath and control
+• Datapath and control influence design of ISA
+• Pipelining improves instruction throughput
+• More instructions completed per second
+• Latency for each instruction not reduced
+• Hazards: structural, data, control
+• Exceptions are handled by a outside handler and 
+control hazard logic.
+

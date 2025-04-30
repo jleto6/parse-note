@@ -24,25 +24,28 @@ def get_embedding(text, model="text-embedding-3-small"):
 
 # Function To Embedd a Corpus
 def embed_corpus(corpus):
-    # Read the content of the corpus
+    # Read and clean the corpus
     with open(corpus, "r") as file:
-        corpus = file.read()
-    chunks = corpus.splitlines() # Split it line by line
+        chunks = [line.strip() for line in file if line.strip()]
 
-    embeddings = [get_embedding(chunk) for chunk in chunks if chunk.strip()]     # Embed each line
+    batch_size = 100
+    all_embeddings = []
 
-    # Pair chunk with its respective embedding
-    pairs = zip(chunks, embeddings)
-    pairs = list(pairs)
+    # Batch the requests to reduce API load and increase speed
+    for i in range(0, len(chunks), batch_size):
+        batch = chunks[i:i + batch_size]
+        response = openai_client.embeddings.create(
+            input=batch,
+            model="text-embedding-3-small"
+        )
+        all_embeddings.extend([item.embedding for item in response.data])
 
-    # Write to CSV file
-    with open(EMBEDDINGS, "w", newline='') as f: # Open CSV file for writing
-        writer = csv.writer(f) # Create a CSV writer object
-        writer.writerow(["text", "embedding"]) # Write the header row
-        # For text and embedding in pairs, write them to the CSV file
-        for text, embedding in pairs:
-            if text.strip(): # Only write non-empty text
-                writer.writerow([text, str(embedding)])
+    # Write to CSV
+    with open(EMBEDDINGS, "w", newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(["text", "embedding"])
+        for text, embedding in zip(chunks, all_embeddings):
+            writer.writerow([text, str(embedding)])
 
 
 string_buffer = ""

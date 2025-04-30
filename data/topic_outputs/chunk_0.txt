@@ -1,1 +1,197 @@
-hello world i'm carry on philbin and welcome to crash course computer science so computers really have allowed us to do some pretty amazing things think global telecommunications international commerce global transportation breakthroughs in medicine distributed education online shopping online dating just the internet in general computers are allowing us to explore our own world and other worlds and of course some seemingly mundane things like permitting us to smile our pets from work or communicating with our friends in a nearly indecipherable stream of the movie but don't call computers magical they are not i repeat are not magical so before we get into what we're going to took part in the series it might be useful to tell you what we're not going to talk about we aren't going to teach you how to program programming is a really crucial aspect of computer science and we will get to the rules that guide the logic of hardware and software design but we are going to teach you how to program an arduino to watch your plant or how to change the css on your grandma sewing blog so visitors curses turn into kittens this all also isn't a competing course or at least how computing is thought of in the us computing here is a goal is what computers do and we'll talk about saw that for sure but our go for this course is much broader but computing means other things in other countries it's all pretty confusing but we all going to look at the history of computers even before we had electricity we're going to re each race the design decisions have given us are present day components were going gonna talk about how operating systems work or don't work how he achieves get to you over the internet how our smartphones and other smart devices are or getting smarter and of course mysterious futuristic stuff like quantum computing and frustrating present day stuff like hacking it's a lot to cover by suppose before we get started i should introduce myself i'm carrie and philbin hello i'm an award winning computing teach author of adventures in ross reply and the creator of a you tube video series for teenagers called the get go diaries which includes stuff like interviews of women working in technology be a science based tutorials and hands on digital make a style projects in my day job i help people learn about technology and how to make things with computers as director of education for the raspberry pi foundation which is a charity based in cambridge in the uk needless to say i am passionate about this stuff but not because computers are these amazing devices that are always making our lives easier sometimes that's debatable but because computers in arguably have become pivotal in our society from our cause i'm thermostats to pacemakers and cell phones computers are everywhere and it's my hope that by the end of this course you'll have a better understanding and appreciation for how far we've come and how far they may take us see next week  
+Datapath   Ad       Read                           register 1 n           ALU operation                 sn ata 1 8 | sign- | 22 MemRead      
+
+
+PROCESSOR 
+DATAPATH
+
+Introduction
+• MIPS ISA
+• 3 Instruction Types
+• R-type, I-type, J-type
+• Datapath and Control Unit
+• Simplified
+• Pipelined
+• Simple subset
+• Memory reference: lw, sw
+• Arithmetic/logical: 
+add, addi, sub, and, or, slt
+• Control transfer: 
+beq, j
+
+Instruction Format Review
+• Three  instruction formats
+• R-type
+• I-type
+• J-type
+• Fields:
+• op: operation of the instruction
+• rs, rt, rd: source/destination register specifiers
+• shamt: shift amount
+• funct: selects variant of the operation in the “op” field
+• address/immediate: address offset or immediate value
+• target address: target address of the jump instruction 
+op
+target address
+0
+26
+31
+6 bits
+26 bits
+op
+rs
+rt
+rd
+shamt
+funct
+0
+6
+11
+16
+21
+26
+31
+6 bits
+6 bits
+5 bits
+5 bits
+5 bits
+5 bits
+op
+rs
+rt
+immediate
+0
+16
+21
+26
+31
+6 bits
+16 bits
+5 bits
+5 bits
+
+MIPS Subset
+• Add, Subtract, AND, OR, SLT
+• add rd, rs, rt
+• sub rd, rs, rt
+• and rd, rs, rt
+• or rd, rs, rt
+• slt rd, rs, rt
+• ADD Immediate
+• addi  rt, rs, imm16
+• Load, Store
+• lw rt, rs, imm16
+• sw rt, rs, imm16
+• BRANCH
+• beq rs, rt, imm16
+• JUMP:
+• j  target
+op
+rs
+rt
+rd
+shamt
+funct
+0
+6
+11
+16
+21
+26
+31
+6 bits
+6 bits
+5 bits
+5 bits
+5 bits
+5 bits
+op
+rs
+rt
+immediate
+0
+16
+21
+26
+31
+6 bits
+16 bits
+5 bits
+5 bits
+op
+target address
+0
+26
+31
+6 bits
+26 bits
+
+Instruction Execution
+• For every instruction:
+1.
+Send the program counter (PC) to the memory that contains the 
+code and fetch the instruction from that memory.
+1.
+Read one or two registers, using fields of the instruction to select 
+the registers to read. For the load word instruction, we need to 
+read only one register, but most other instructions require that we 
+read two registers.
+
+Instruction Execution
+• Fetch:
+• Get the next instruction: stored at PC
+
+Instruction Execution
+• Decode:
+• Opcode determines if the instruction is arithmetic/logical, memory 
+logical, or branch.
+
+Instruction Execution
+• Update PC:  PC target address or PC + 4
+• If the instruction is a branch, we have to calculate the target 
+address
+• If the instruction is not a branch, the new PC will be PC + 4
+
+Instruction Execution
+• Update PC:  PC target address or PC + 4
+• If the instruction is a branch, we have to calculate the target 
+address
+• If the instruction is not a branch, the new PC will be PC + 4
+
+Instruction Execution
+• Execute:
+• Depending on instruction class, we use the ALU to calculate:
+• Arithmetic result
+• Memory address for load/store
+• Branch target address
+
+Instruction Execution
+• To read and write registers, we need a register file
+• R-types read two registers and write one register
+• Memory-reference instructions read one register
+• Also access data memory
+
+Processor Overview
+Data “flows” through 
+memory and 
+functional units
+
+Processor Overview
+Can’t just join 
+wires together
+Use multiplexers
+
+Processor Overview
+Multiplexers require 
+selection signals 
+Control Signals
+
+Signals
+• Information encoded in binary
+• Low voltage = 0, High voltage = 1
+• One wire per bit
+• Multi-bit data encoded on multi-wire buses
+
+Logic Design Review
+• Combinational Circuits
+• Output depends only on current 

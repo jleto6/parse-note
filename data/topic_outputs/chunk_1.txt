@@ -1,0 +1,197 @@
+input
+• Operate on data
+• Example: ALU
+• Given the same input a combinational
+circuit will always produce the same 
+output
+
+Logic Design Review
+• Sequential Circuits
+• Have “state”
+• Output depends on current input and previous outputs
+• Example: Register File
+• Output depends on the contents
+of the registers in the file
+
+MIPS Register File
+• 32 32-bit registers
+• One write bus
+• Two read buses
+• Selection Inputs
+• RegWrite (write enable signal) 
+• Reg. Source A
+• Reg. Source B
+• Reg. Destination
+
+Write Control Signals
+Every Clock Cycle
+• We do not show a write control 
+signal when a state element is 
+written on every active clock 
+edge.
+• Program Counter
+When Necessary
+• If a state element is not 
+updated on every clock, then 
+an explicit write control signal is 
+required.
+• Register File
+
+Datapath Elements
+• Most elements have 32-bit wide inputs and outputs 
+• Buses labeled with their width
+
+Datapath Elements - Combinational
+I0
+I1
+Y
+M
+u
+x
+S
+Multiplexer
+Y = S ? I1 : I0
+A
+B
+Y
++
+A
+B
+Y
+ALU
+F
+Adder
+Y = A + B
+Arithmetic/Logic Unit
+Y = F(A, B)
+
+Datapath Elements - Sequential
+
+Fetch Elements
+• Memory Unit
+• Program Counter
+• Adder
+
+R-Type Instructions
+• Read two register operands
+• Perform arithmetic/logical operation
+• Write register result
+
+R-Type Instructions
+add $t1, $t2, $t3
+• RW = 9
+• RA = 10
+• RB = 11
+• ALUop = “add”
+
+Datapath: R-Type Instructions
+
+I-Type Instructions
+• Replace one read register, shamt, and funct with 16 bit 
+constant
+• ALU requires 32-bit inputs
+• Sign-extend the 16 bit immediate
+• Fill with 0s if the constant is positive
+• Fill with 1s if the constant is negative
+• Choose between the second read registers 
+and the sign extended constant.
+
+Datapath: I-Type Instructions
+
+Load/Store Instructions
+• lw 
+$t1, offset($t2)
+• sw 
+$t1, offset($t2)
+• Compute memory address: $t2 + offset
+• Since offset is 16 bits, it needs to be extended to 32 bits
+
+Load/Store Instructions
+• Load: Read memory and update register
+• Store: Write register value to memory
+• Elements: 
+• Register file
+• Sign extension unit
+• Data memory unit
+
+Datapath: Load Instruction
+
+Datapath: Store Instruction
+
+Branch Instructions
+beq
+$t1, $t2, offset
+• Read register operands
+• Compare operands
+• Use ALU, subtract and check Zero output
+• Calculate target address
+• Sign-extend displacement
+• Shift left 2 places (word displacement)
+• Add to PC + 4
+• Already calculated by instruction fetch
+
+Target Address Details
+• The base for the branch address calculation is the 
+address of the instruction following the branch. 
+• PC+4
+• Memory is byte addressed 
+• The offset field must be shifted left 2 bits
+
+Branch Instructions
+Just
+re-routes 
+wires
+Sign-bit wire 
+replicated
+
+Branching
+beq
+$t1, $t2, offset
+• Branch is taken
+• When $t1 - $t2 = 0, the zero signal from the ALU
+• PC = PC + 4 + 4*offset
+• Branch is not taken
+• PC = PC + 4
+
+Datapath: Branch
+
+Jump Instructions
+• PC = PC[31-28] : Offset << 2
+
+Single Datapath
+• All instructions executed in one clock cycle
+• Each datapath element can only do one function at a time
+• Any element needed more than once must be duplicated
+• Hence, we need separate instruction and data memories
+• Use multiplexers where alternate data sources are used 
+for different instructions
+
+Control Unit
+• Take in input
+• Generate signals for each state element
+• Generate selection signals for each multiplexor
+• Generate function signals for ALU
+• ALU Control
+
+ALU Control
+• MIPS subset: lw, sw, beq, add, addi, sub, and, or, slt
+• ALU has 4 control inputs
+• 16 possible functions
+ALU Control
+Function
+0000
+AND
+0001
+OR
+0010
+Add
+0110
+Subtract
+0111
+Set-on-less-than
+1100
+NOR
+
+ALU Control
+• Load/Store: add
+• 
