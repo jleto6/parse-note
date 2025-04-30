@@ -7,14 +7,11 @@
     <link rel="stylesheet" type="text/css" href="static/style.css">
     <title>Notes</title>
 </head>
-<body style="background-color: rgb(33, 33, 33); color:whitesmoke;">
-
+<body>
     <!-- Socketio -->
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script>
-
         window.myGlobalVariable = false;
-
         var socket = io(); // Connect to Flask-SocketIO Server
 
         /* Update Notes */
@@ -41,50 +38,52 @@
         /* Update Answers */
         let isFirstAnswer = true;
         socket.on("answers", function(data){
-
             console.log("Updated answer:", data.answer);
 
-                if (isFirstAnswer || data.refresh){
-                    document.querySelector("#response-text").innerHTML = data.answer;
-                    isFirstAnswer = false;
-
-
-                } else {
-                    document.querySelector("#response-text").innerHTML += data.answer;
-
-
-                }
+            if (isFirstAnswer || data.refresh){
+                document.querySelector("#response-text").innerHTML = data.answer;
+                isFirstAnswer = false;
+            } else {
+                document.querySelector("#response-text").innerHTML += data.answer;
+            }
         });
-
     </script>
 
-    <div class="container mt-4">
+    <div class="app-container">
+        <!-- Document/Notes area (left side) -->
+        <div class="document-area">
+            <div class="document-header">
+                <h1>Notes</h1>
+            </div>
+            
+            <div contenteditable="true" id="notes-container">
+                <!-- Notes Displayed Here-->
+                {{ notes | safe }}
+            </div>
 
-        <h1 class="text-center pt-3 fixed-top" style="width: 100%; z-index: 10;">Notes</h1>
-
-        
-
-        <div contenteditable="true" id="notes-container" class="p-4 mx-auto" style="margin-top: 80px; height: 80vh; overflow-y: auto; width: 80%;">
-            <!-- Notes Displayed Here-->
-            {{ notes | safe }}
+            <div id="file-upload">
+                <form method='POST' enctype='multipart/form-data'>
+                    {{form.hidden_tag()}}
+                    {{form.file()}}
+                    {{form.submit()}}
+                </form>
+            </div>
         </div>
 
-        <div id="file-upload" style="display: flex; flex-direction: column; align-items: center; margin-top: 25;"> <!-- -400 for in middle-->
-            <form method='POST' enctype='multipart/form-data'>
-                {{form.hidden_tag()}}
-                {{form.file()}}
-                {{form.submit()}}
-            </form>
-        </div>
-
-        <!-- textbox -->
-        <div id="text-box">
-            <div id="response-text">  </div>
-
-            <div id="input-container"> 
-                <input type="text" id="note-input" placeholder="Edit or explain..."/>
-                <button class="send-button" id="send-button"></button>
-                <button class="explain-button" id="explain-button"></button>
+        <!-- Chat/Sidebar area (right side) -->
+        <div class="sidebar">
+            <div class="sidebar-content">
+                <div id="response-text">
+                <!-- Answers Displayed Here-->
+                </div>
+            </div>
+            
+            <div class="input-area">
+                <input type="text" id="note-input" placeholder="Edit or explain..." />
+                <div class="button-group">
+                    <button class="btn btn-primary" id="send-button">Send</button>
+                    <!-- <button class="btn btn-outline-secondary" id="explain-button">Explain</button> -->
+                </div>
             </div>
         </div>
     </div>

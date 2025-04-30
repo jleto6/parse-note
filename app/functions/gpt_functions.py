@@ -22,7 +22,7 @@ def end_section(string_buffer):
 
 def end_answer(answer_buffer):
     from app import socketio
-    if "<!-- END_SECTION -->" in answer_buffer:
+    if "<!-- END_ANSWER -->" in answer_buffer:
         answer_buffer = markdown.markdown(answer_buffer) # Convert to HTML
         socketio.emit("answers", {"answer": answer_buffer, "refresh": True})
 

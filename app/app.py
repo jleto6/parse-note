@@ -6,8 +6,8 @@ from wtforms import FileField, SubmitField
 from werkzeug.utils import secure_filename
 import os
 import markdown
-from config import COMPLETED_NOTES
-from functions.question_manager import question_call, explanation
+from config import COMPLETED_NOTES, ANSWERS
+from functions.question_manager import question_call
 
 app = Flask(__name__)
 app.secret_key = "dev"  # Set a secret key for session
@@ -38,19 +38,21 @@ def get_notes():
             if action_type == "question":
                 question = data.get("inputQuestion")
                 selection = data.get("selection")
-                for chunk in question_call(question, selection):
-                    print(chunk, end="", flush=True)  # Stream to terminal
-                print("")
-
-            if action_type == "explanation":
-                selection = data.get("selection")
-                explanation(selection)
+                try:
+                    for chunk in question_call(question, selection):
+                        print(chunk, end="", flush=True)  # Stream to terminal
+                    print("")
+                except:
+                    pass
+            # if action_type == "explanation":
+            #     selection = data.get("selection")
+            #     explanation(selection)
 
             return "", 204  # Respond with "No Content" since everything happens via socket    
     
     return render_template("index.html", form=form)
 
-# Read from notes.txt on every refresh
+# Read from text files on every refresh
 @socketio.on('connect')
 def handle_connect():
 
@@ -58,6 +60,11 @@ def handle_connect():
         stored_notes = file.read()
         stored_notes = markdown.markdown(stored_notes) # Convert to HTML
     socketio.emit("update_notes", {"notes": stored_notes, "refresh": True})
+
+    with open(ANSWERS, "r") as file:
+        stored_answers = file.read()
+        stored_answers = markdown.markdown(stored_answers) # Convert to HTML
+    socketio.emit("answers", {"answer": stored_answers, "refresh": True})
 
     
 

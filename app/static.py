@@ -1,5 +1,9 @@
-from app.app import get_notes
-from app.app import app
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from app import get_notes
+from app import app
 from threading import Thread
 import threading
 

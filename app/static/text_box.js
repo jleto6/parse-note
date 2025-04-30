@@ -1,24 +1,22 @@
 var socket = io(); // Connect to Flask-SocketIO Server
 
 document.addEventListener("DOMContentLoaded", function() {
-    const textBox = document.getElementById("text-box");
+    const sidebar = document.querySelector(".sidebar");
     const button = document.getElementById("send-button");
-    const explainButton = document.getElementById("explain-button")
+    const explainButton = document.getElementById("explain-button");
 
     let range = null;
-    let selection = ""
-
-    textBox.style.display = "none"; // Hides the text box if click is outside
+    let selection = "";
+    let rawHTML = "";
 
     document.addEventListener("mouseup", function(event) { 
         checkSelection = window.getSelection().toString().trim(); // Check the current selection
-        sel = window.getSelection
-
-        // If the selection has words and it didnt come from the text box set it to the selection to use
-        if (checkSelection.length > 1 && !textBox.contains(event.target)) {
+        
+        // If the selection has words and it didn't come from the sidebar set it to the selection to use
+        if (checkSelection.length > 1 && !sidebar.contains(event.target)) {
             // Get raw text
             selection = window.getSelection().toString().trim();
-            console.log(selection)
+            console.log(selection);
 
             range = window.getSelection().getRangeAt(0);
 
@@ -31,16 +29,8 @@ document.addEventListener("DOMContentLoaded", function() {
             rawHTML = serializer.serializeToString(div);
             console.log(rawHTML);
 
-            // set the box at the location
-            const rect = range.getBoundingClientRect();
-
-            textBox.style.top = `${rect.bottom + window.scrollY + 5}px`;
-            textBox.style.left = `${rect.left + window.scrollX}px`;
-            textBox.style.display = "flex";
-
             // Highlight text
             const highlightSpan = document.createElement("span");
-            highlightSpan.style.backgroundColor = "Highlight";
             highlightSpan.classList.add("highlight");
 
             // Remove any previous highlight
@@ -65,77 +55,75 @@ document.addEventListener("DOMContentLoaded", function() {
             } catch (e) {
                 console.error("Unable to highlight selection:", e);
             }
+        }
+    });
+
+    // Handle send button click
+    button.addEventListener("click", function() {
+        
+        // Get the question in input field
+        let inputQuestion = document.getElementById("note-input").value;
+        
+        if (inputQuestion.trim() === "" && selection.trim() === "") {
+            return; // Don't send empty messages
+        }
+        
+        console.log(`Button clicked sending question: ${inputQuestion} and selection: ${selection}`);
+        
+        // Send question and selection to backend
+        fetch("/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                type: "question",
+                inputQuestion: inputQuestion,
+                selection: selection
+            })
+        });
+        
+        // Clear input after sending
+        document.getElementById("note-input").value = "";
+    });
+
+    // // Handle explain button click
+    // explainButton.addEventListener("click", function() {
+    //     if (!rawHTML || rawHTML.trim() === "") {
+    //         return; // No selection to explain
+    //     }
+        
+    //     // Send selection to backend
+    //     console.log(`Explain button clicked sending: ${rawHTML}`);
+    //     fetch("/", {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json"
+    //         },
+    //         body: JSON.stringify({
+    //             type: "explanation",
+    //             selection: rawHTML
+    //         })
+    //     });
+        
+    //     // Replace text with explanation when received
+    //     socket.on("explanation", function(data) {
+    //         if (!range) return;
             
+    //         const gptResponse = data.explanation;
+    //         const fragment = document.createRange().createContextualFragment(gptResponse);
+
+    //         range.deleteContents();
+    //         // Insert new GPT content
+    //         range.insertNode(fragment);
+    //     });
+    // });
+    
+    // Allow sending with Enter key
+    document.getElementById("note-input").addEventListener("keypress", function(e) {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            button.click();
         }
     });
-
-    /* resize function */
-    padding = 0;
-    function moveBox(timestamp){
-        if (padding < 20){
-            padding += 1;
-            responseBox.style.padding = padding + "px";
-            requestAnimationFrame(moveBox); 
-        }
-      }
-
-    document.addEventListener("mousedown", function(event) {
-        document.getElementById("file-upload").style.marginTop = "25px"; // move upload box
-
-        if (!textBox.contains(event.target)) {
-            textBox.style.display = "none"; // Hides the text box if click is outside
-        }
-        // if clicked on send button
-        if (event.target === button) {
-            responseBox = document.getElementById("response-text")
-            requestAnimationFrame(moveBox); // increase padding
-            responseBox.style.display = "block"; // Show the answer field
-            document.getElementById("input-container").style.padding = "0px 10px 8px 10px"; // change input padding
-
-            // Get the question in input field
-            let inputQuestion = document.getElementById("note-input").value;
-            console.log(inputQuestion);
-
-            // Send question and selection to backend
-            console.log(`Button clicked sending ${selection} to GPT`)
-            fetch("/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    type: "question",
-                    inputQuestion: inputQuestion,
-                    selection: selection
-                })
-            });
-        }
-
-        // if clicked on update explanation
-        if (event.target === explainButton) {
-            // Send selection to backend
-            console.log(`Button clicked sending ${rawHTML} to GPT`)
-            fetch("/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    type: "explanation",
-                    selection: rawHTML
-                })
-            });
-            // Replace text
-            socket.on("explanation", function(data){
-                const gptResponse = data.explanation
-                const fragment = document.createRange().createContextualFragment(gptResponse);
-
-            range.deleteContents();
-            // Insert new GPT content
-            range.insertNode(fragment);
-        }
-    )
-        }
-    });
-
 });
