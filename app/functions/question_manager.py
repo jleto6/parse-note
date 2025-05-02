@@ -22,16 +22,28 @@ openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) # Use OpenAI
 def get_embedding(text, model="text-embedding-3-small"):
     return openai_client.embeddings.create(input=[text], model=model).data[0].embedding
 
+# Function to split text into ~300-word chunks
+def chunk_text_by_words(text, words_per_chunk=300):
+    words = text.split()
+    chunks = [
+        ' '.join(words[i:i + words_per_chunk])
+        for i in range(0, len(words), words_per_chunk)
+    ]
+    return chunks
+
 # Function To Embedd a Corpus
 def embed_corpus(corpus):
-    # Read and clean the corpus
-    with open(corpus, "r") as file:
-        chunks = [line.strip() for line in file if line.strip()]
+    # Read and clean the corpus as one block of text
+    with open(corpus, "r", encoding="utf-8") as file:
+        full_text = file.read()
 
-    batch_size = 100
+    # Create word-based chunks (~300 words each)
+    chunks = chunk_text_by_words(full_text, words_per_chunk=300)
+
+    batch_size = 10
     all_embeddings = []
 
-    # Batch the requests to reduce API load and increase speed
+    # Batch the requests
     for i in range(0, len(chunks), batch_size):
         batch = chunks[i:i + batch_size]
         response = openai_client.embeddings.create(
@@ -41,7 +53,7 @@ def embed_corpus(corpus):
         all_embeddings.extend([item.embedding for item in response.data])
 
     # Write to CSV
-    with open(EMBEDDINGS, "w", newline='') as f:
+    with open(EMBEDDINGS, "w", newline='', encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(["text", "embedding"])
         for text, embedding in zip(chunks, all_embeddings):
