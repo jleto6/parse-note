@@ -18,10 +18,6 @@ def do_ocr(image):
     extracted_text = " ".join(important_text["text"]) # Extract the text as a list or single string
     #print(f"Extracted text: {extracted_text}")
 
-    # Try to open the file in write mode 
-    with open(RAW_TEXT, "a", encoding="utf-8") as file:
-        file.write(extracted_text + "\n\n")
-
     # Get word count
     word_count = extracted_text.split() # Split text on spaces into a list
     word_count = len(word_count) # Get length of the list
@@ -45,7 +41,13 @@ def do_ocr(image):
         image = image_io  # overwrite the original variable
 
         print(f"Calling GPT Vision on {image}")
-        response_content = ""
-        image_call(image)
+        response_content = image_call(image)
+
         with open(RAW_TEXT, "a", encoding="utf-8") as file:
             file.write(response_content + "\n")
+
+    # Else write OCR result to file
+    else:
+        # Try to open the file in write mode 
+        with open(RAW_TEXT, "a", encoding="utf-8") as file:
+            file.write(extracted_text + "\n\n")

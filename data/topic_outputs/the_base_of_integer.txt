@@ -1,0 +1,29 @@
+**Binary Conversions** **In the modern world,** we use decimal, or base 10, notation to represent integers. We can represent numbers using any base b, where b is a positive integer greater than 1. **Base 10:** For example, we write 965, this can be translated as: 9·10^2 + 6·10^1 + 5·10^0
+
+---
+
+**Base b:** - Let b be a positive integer greater than 1. Then, n is a positive integer. It can be expressed uniquely in the form n, where k is a nonnegative integer and a_k, a_k-1, ..., a_1, a_0 are nonnegative integers less than b. - This representation of n
+
+---
+
+is called the base b expansion of n and can be denoted by a_k a_k-1 ... a_1 a_0ⱼ **Binary Operations:** - Computers represent integers and do arithmetic with binary (base 2) expansions of integers. In these expansions, the only digits used are 0 and 1. - Example: What is the
+
+---
+
+decimal expansion of the integer that has (11011)_2 as its binary expansion? - Solution: (11011)_2 - 1·2^4 + 1·2^3 + 0·2^2 + 1·2^1 + 1·2^0 - 16 + 8 + 0 + 2 + 1 - 27 **Base Conversion:** - To construct the base b expansion of the integer n,
+
+---
+
+divide n by b to obtain a quotient q and a remainder: n = b·q + a_0, where a_0 < b. - Next, divide q by b to get the rightmost digit in the base b expansion of n. - Continue, by successively dividing the quotient by b, obtaining the
+
+---
+
+--- Here is the transcription of the handwritten notes: --- **Karnaugh Maps** Truth tables are used to completely specify a combinational hardware element, commonly called a logic block. A logic block with n inputs has 2^n entries in the truth table. Karnaugh Maps (K-Maps) are used to simplify boolean expressions
+
+---
+
+derived from truth tables. Each cell in a K-Map corresponds to a row in the truth table, and groups of cells are used to minimize logic functions. - Group size must be powers of 2. (1, 2, 4, 8) - "Wraparound grouping" is allowed, connecting opposite edges of the map.
+
+---
+
+- "Don't-care" conditions (X) can be used to form larger groups for simplification. ---

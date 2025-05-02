@@ -10,7 +10,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph
 
 from functions.gpt_functions import order_files
 from functions.note_creation import note_creation
-from functions.file_handler import handle_image, handle_pdf, get_file_type, handle_video
+from functions.file_handler import handle_image, handle_pdf, get_file_type, handle_video, clear_output, split_text
 from functions.topic_modelling import nlp
 from functions.question_manager import embed_corpus
 
@@ -31,42 +31,6 @@ def run_flask():
 # Start Flask in a separate thread
 flask_thread = Thread(target=run_flask)
 flask_thread.start()
-
-# Text Splitter
-def split_text(filename, split_size):
-    text = open(filename, 'r', encoding='utf-8').read()
-    space_ctr = 0
-    file_ctr = 0
-    chunk = ""
-    for char in text:
-        chunk += char
-        if char == " ":
-            space_ctr += 1
-        if space_ctr >= split_size:
-            with open(f"{TOPIC_OUTPUTS_DIR}/chunk_{file_ctr}.txt", 'w', encoding='utf-8') as f:
-                f.write(chunk)
-            file_ctr += 1
-            chunk = ''
-            space_ctr = 0
-    # Write the last chunk if anything is left
-    if chunk:
-        if file_ctr == 0:
-            # No full chunks were made, so create first file
-            with open(f"{TOPIC_OUTPUTS_DIR}/chunk_0.txt", 'w', encoding='utf-8') as f:
-                f.write(chunk)
-        else:
-            with open(f"{TOPIC_OUTPUTS_DIR}/chunk_{file_ctr-1}.txt", 'a', encoding='utf-8') as f:
-                    f.write(chunk)
-
-# File deleter
-def clear_output(folder_path):
-    try:
-        for item in os.listdir(folder_path):
-            item_path = os.path.join(folder_path, item)
-            if os.path.isfile(item_path):
-                os.remove(item_path)
-    except:
-        os.remove(folder_path)
 
 # Timer
 stop_timer = threading.Event() # Stop event
@@ -89,6 +53,7 @@ def main():
 
     # Clear old outputs
     clear_output(TOPIC_OUTPUTS_DIR)
+    clear_output(COMPLETED_NOTES)
     clear_output(RAW_TEXT)
 
     # Uploaded Files

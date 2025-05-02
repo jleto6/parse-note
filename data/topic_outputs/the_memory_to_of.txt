@@ -1,0 +1,25 @@
+corresponding remainders as the remainder. The process terminates when the quotient is 0. The image contains handwritten notes on the topic of "Caches." Here is the transcribed text: --- **Caches** In an ideal computing system there would be unlimited fast memory access. Lower such a system is not practically achievable.
+
+---
+
+Instead, a memory hierarchy provides the illusion of a large amount of fast memory by organizing different types of storage to optimize speed and access. The principal of locality refers to the observation that programs tend to access only a small portion of their address space at any given time,
+
+---
+
+which is crucial to optimizing the memory hierarchy. There are two main types of locality: 1. **Temporal locality**: Refers to the tendency of programs to access the same memory locations repeatedly within a short period. For example, instructions in loops and induction variables. 2. **Special locality**: Denotes the likelihood of
+
+---
+
+accessing memory locations close together during memory access. This occurs in sequential instruction access and accessing array data. Understanding these principals helps in designing cache systems and hardware to enhance performance. **Memory Hierarchy Levels** - Cache levels include smaller, faster memory that is closer to the processor. - Data moves
+
+---
+
+through the hierarchy from frequent use and shorter times (upper levels, small size, expensive) to less frequently accessed and cheaper space (like SSD or disk). - From memory (DRAM) and then to smaller, faster cache (SRAM) near the CPU. - Data is moved between levels in blocks, which may multiple
+
+---
+
+words. This is a key concept in managing memory transitions. - Caches are used to store frequently accessed data closer to the processor, minimizing access times and improving speed. Cache memory is the closest level of memory hierarchy to the CPU. It serves to supply the most frequently or recently
+
+---
+
+accessed data. A hit occurs when accessed data is present in the upper memory level, while a miss occurs when it is not. These hits and misses are key performance measures for caches. In this way, caches form an important part of any memory hierarchy designed to optimize computing performance.
