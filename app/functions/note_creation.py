@@ -15,6 +15,8 @@ previous_content = ""
 string_buffer = ""
 answer_buffer = ""
 
+# note generation
+
 def note_creation(content):
     print("Calling GPT (Creating Notes)")
 
