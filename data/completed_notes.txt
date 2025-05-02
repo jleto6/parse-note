@@ -1,28 +1,239 @@
-<h2 style="color:whitesmoke;">Caches</h2><!-- END_SECTION -->
+<p style="color:whitesmoke;">Binary numbers are at the heart of data representation in computers. Leveraging the <strong>base-2 numeral system</strong>, binary uses two digits, 0 and 1, to perform operations and encode various forms of data. This system underscores all computational processes.</p><!-- END_SECTION -->
 
-<p style="color:whitesmoke;">In an ideal computing system, there would be <strong>unlimited fast memory access</strong>. However, realizing such a system is not practically achievable due to physical and economic constraints. To address this limitation, a <strong>memory hierarchy</strong> is employed. This hierarchical organization of <strong>different types of storage</strong> optimizes both speed and access, creating the <strong>illusion of a large amount of fast memory</strong>. The <strong>memory hierarchy</strong> is critical because it strategically balances the trade-off between the <strong>rapid access speeds</strong> and <strong>high storage capacities</strong>.</p><!-- END_SECTION -->
+<p style="color:whitesmoke;">The <strong>2’s complement</strong> method is key for representing signed integers within binary arithmetic. Its value lies in its ability to unify the handling of positive and negative numbers, simplifying operations such as addition and subtraction.</p><!-- END_SECTION -->
 
-<p style="color:whitesmoke;">A fundamental principle aiding in this optimization is the <strong>principle of locality</strong>. This principle observes that <strong>programs tend to access only a small portion of their address space</strong> at any given time. <strong>Locality</strong> ensures that a system can predict data access patterns to some extent, allowing for strategic data placement in the hierarchy.</p><!-- END_SECTION -->
+<p style="color:whitesmoke;">To obtain the 2’s complement of a binary number, one must invert all digits, swapping 0s for 1s and vice versa, and then add one to the binary's <strong>least significant bit (LSB)</strong>. This approach effectively transforms subtraction into addition, which is more efficient computationally.</p><!-- END_SECTION -->
 
-<h3 style="color:whitesmoke;">Types of Locality</h3><!-- END_SECTION -->
+<p style="color:whitesmoke;">At the core of the CPU's functionality is the <strong>Arithmetic Logic Unit (ALU)</strong>, a critical component that performs arithmetic and logical operations. Equipped with <strong>adders</strong>, which are specialized circuits for executing addition, the ALU exploits 2’s complement representation to effortlessly manage both addition and subtraction operations.</p><!-- END_SECTION -->
+
+<p style="color:whitesmoke;">Importantly, in 2’s complement arithmetic, subtraction is conducted by adding the complement of a number. This reveals the ALU's capacity to handle signed integer operations seamlessly, reinforcing computational efficiency.</p><!-- END_SECTION -->
+
+<p style="color:whitesmoke;"><strong>Integer multiplication</strong> in binary resembles traditional multiplication with paper and pencil, but it involves several discrete steps formatted for binary computation. This method roots itself in the alignment of binary operands and their bitwise operations.</p><!-- END_SECTION -->
 
 <ol style="color:whitesmoke;">
-    <li><strong>Temporal locality</strong>: This refers to the tendency of programs to <strong>access the same memory locations repeatedly</strong> within a short period. A common scenario where this occurs is with <strong>instructions in loops</strong> and <strong>induction variables</strong>. By taking advantage of <strong>temporal locality</strong>, systems can improve performance by retaining frequently accessed data in faster storage.</li><!-- END_SECTION -->
-    <li><strong>Spatial locality</strong>: This type refers to the <strong>likelihood of accessing memory locations close together</strong> during an operation. This occurs during <strong>sequential instruction access</strong> and when accessing <strong>array data</strong>. Effective handling of <strong>spatial locality</strong> allows systems to prefetch data, reducing latency when accessing contiguous data elements.</li><!-- END_SECTION -->
+    <li style="color:whitesmoke;">Position the multiplicand (represented by binary 1000, equivalent to decimal 8) below the multiplier (binary 1001, equivalent to decimal 9) for multiplication.</li><!-- END_SECTION -->
+    <li style="color:whitesmoke;">Examine each bit of the multiplier in turn. If a bit is 1, add the current shifted multiplicand to the resultant sum; if it is 0, simply shift the multiplicand without performing an addition.</li><!-- END_SECTION -->
+    <li style="color:whitesmoke;">For the initial bit (rightmost) of the multiplier, which is 1, write down the multiplicand as the first partial product.</li><!-- END_SECTION -->
+    <li style="color:whitesmoke;">Shift the multiplicand left in alignment with the next bit in the multiplier. Since this bit is 0, record a 0000 result without adding to the product.</li><!-- END_SECTION -->
+    <li style="color:whitesmoke;">Shift again with another 0 in the multiplier, adding another zero result of 0000.</li><!-- END_SECTION -->
+    <li style="color:whitesmoke;">For the final 1, write down the shifted multiplicand 1000. Sum these results for the final product.</li><!-- END_SECTION -->
 </ol><!-- END_SECTION -->
 
-<p style="color:whitesmoke;">Understanding these two principal types of <strong>locality</strong> assists in designing <strong>cache systems</strong> and hardware tailored to enhance overall performance. By anticipating data access patterns, systems can make informed decisions on data placement and retrieval, cutting down access times.</p><!-- END_SECTION -->
+<p style="color:whitesmoke;">The combination of the<p style="color:whitesmoke;">Binary numbers form the basis for <strong>data representation</strong> in computers. These numbers utilize a <strong>base-2 numeral system</strong> consisting of only two digits: 0 and 1. This binary system is fundamental, as computers rely on it to perform operations and represent all types of data. <!-- END_SECTION --></p>
 
-<h3 style="color:whitesmoke;">Memory Hierarchy Levels</h3><!-- END_SECTION -->
+<p style="color:whitesmoke;"><strong>2's complement</strong> is a method used for representing <strong>signed integers</strong> in binary. This representation is pivotal because it allows for straightforward implementation of arithmetic operations, such as <strong>addition</strong> and <strong>subtraction</strong>, with uniform handling of both positive and negative numbers. <!-- END_SECTION --></p>
+
+<ol style="color:whitesmoke;">  
+    <li>To find the <strong>2's complement</strong> of a binary number, invert all the digits (change 0s to 1s and vice versa) and then add one to the <strong>least significant bit (LSB)</strong>.</li> <!-- END_SECTION -->
+    <li>This representation effectively simplifies <strong>binary subtraction</strong> by treating it as an addition operation, which is computationally efficient. <!-- END_SECTION --></li>
+</ol>
+
+<p style="color:whitesmoke;">The <strong>Arithmetic Logic Unit (ALU)</strong> is a critical component in a computer's <strong>central processing unit (CPU)</strong> that performs arithmetic and logical operations. The ALU includes <strong>adders</strong>, specialized circuits designed to execute addition processes. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">By utilizing <strong>2's complement</strong> representation, these adders can seamlessly perform both <strong>addition</strong> and <strong>subtraction</strong>. This dual functionality is achieved because, in <strong>2's complement arithmetic</strong>, subtraction is executed by adding the complement of a number instead of directly subtracting it. Thus, the ALU efficiently handles signed integer operations by leveraging these principles. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;"><strong>Integer multiplication</strong> in binary operates similarly to multiplication using paper and pencil in the decimal system. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">For example, consider when the multiplicand is <strong>1000</strong> (binary for decimal 8) and the multiplier is <strong>1001</strong> (binary for decimal 9). The multiplication process involves multiple steps akin to manual calculations. <!-- END_SECTION --></p>
+
+<ol style="color:whitesmoke;">
+    <li>Start by aligning the multiplicand (<code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1000</code>) below the multiplier (<code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1001</code>).</li> <!-- END_SECTION -->
+    <li>Each step involves a right-left shift of the multiplicand and addition based on the corresponding bit of the multiplier. <!-- END_SECTION --></li>
+    <li>If the bit in the multiplier is a 1, add the shifted multiplicand to the product. If it is 0, skip the addition for that bit position and only perform the shift. <!-- END_SECTION --></li>
+</ol>
+
+<p style="color:whitesmoke;">The binary multiplication process consists of the following detailed steps: <!-- END_SECTION --></p>
+
+<ol style="color:whitesmoke;">
+    <li>The first bit from the right of the multiplier (<code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1001</code>) is 1, so write down the multiplicand (<code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1000</code>) as the first sum beneath the line. <!-- END_SECTION --></li>
+    <li>Shift the multiplicand to the left, maintaining the position relative to the multiplier. The next bit of the multiplier (<code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1001</code>) is 0, so write down <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">0000</code> for this step. <!-- END_SECTION --></li>
+    <li>Shift the multiplicand again to the left. The next multiplier bit is also 0, resulting in another set of zeros (<code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">0000</code>) being added. <!-- END_SECTION --></li>
+    <li>For the final bit of the multiplier, which is again 1, shift the multiplicand and write down the shifted result, which is <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1000</code>. <!-- END_SECTION --></li>
+</ol>
+
+<p style="color:whitesmoke;">After executing all these steps, add together all the binary numbers derived from multiplication. The sum of these steps is the final binary product <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">01001000</code>, equivalent to decimal 72, which is the result of multiplying 8 (<code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1000</code>) by 9 (<code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1001</code>). <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">This binary multiplication example illustrates the importance of <strong>sequential shifting</strong> and <strong>conditional addition</strong> in the binary number system, corresponding with how a computer efficiently performs these operations within the ALU. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">The process of shifting and conditional addition can be effectively implemented in hardware, enabling computers to perform multiplication operations with speed and accuracy. Binary numbers, using the base-2 numeral system, are fundamental to data representation and operations conducted by computers. <!-- END_SECTION --></p><h2 style="color:whitesmoke;">The Binary Number System</h2>
+<p style="color:whitesmoke;">The <strong>binary number system</strong> is fundamental to data representation and operations performed by computers. This system utilizes only two digits, 0 and 1, to encode information, allowing computers to execute calculations and store diverse types of data efficiently. <!-- END_SECTION --></p>
+
+<h2 style="color:whitesmoke;">2's Complement Representation</h2>
+<p style="color:whitesmoke;">The <strong>2’s complement</strong> is a crucial technique for expressing signed integers in binary form. It simplifies arithmetic by enabling consistent representation for both positive and negative integers, thus facilitating easier addition and subtraction operations. In 2’s complement notation, to derive the negative counterpart of a binary number, one must first invert all the digits—converting 0s into 1s and vice versa—and then add one to the <strong>least significant bit (LSB)</strong>. This approach streamlines binary subtraction by converting it into an addition problem, enhancing computational efficiency. <!-- END_SECTION --></p>
+
+<h2 style="color:whitesmoke;">The Arithmetic Logic Unit (ALU)</h2>
+<p style="color:whitesmoke;">The <strong>Arithmetic Logic Unit (ALU)</strong> is an essential component of a computer's central processing unit (CPU), responsible for executing both arithmetic and logical operations. These operations include basic arithmetic tasks such as addition and subtraction as well as logical comparisons. The ALU employs specialized circuits known as <strong>adders</strong>, which are expertly designed to carry out these operations efficiently. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">By utilizing the 2’s complement representation, the ALU can proficiently handle the addition and subtraction of signed integers. This capability arises because, within the framework of 2’s complement arithmetic, subtraction is accomplished by adding the complement of a number. Consequently, this technique maximizes computational efficiency by reducing subtraction tasks to addition operations, which are inherently simpler. <!-- END_SECTION --></p>
+
+<h2 style="color:whitesmoke;">Memory Unit (MU)</h2>
+<p style="color:whitesmoke;">The <strong>Memory Unit (MU)</strong> is pivotal for storing data and instructions within a computer system. It plays a key role in ensuring that the processor has rapid access to necessary information and instructions for computational tasks. The MU stores both temporary data for immediate processing and permanent data essential for long-term storage. Data is organized in binary format, consistent with the binary numeral system utilized by digital computers, allowing for efficient data retrieval and manipulation that aligns with computational processes carried out by the ALU. <!-- END_SECTION --></p>
+
+<h2 style="color:whitesmoke;">Input Unit</h2>
+<p style="color:whitesmoke;">The <strong>Input Unit</strong> serves as the interface through which a computer receives external data and commands. It converts user inputs or external signals into binary code, which the computer system can comprehend and process. Devices within the input unit—such as keyboards, mice, and scanners—perform distinctive functions to capture data. The converted data is subsequently transmitted to the Memory Unit for storage or directly to the ALU for immediate processing, depending on the task's requirements. <!-- END_SECTION --></p>
+
+<h2 style="color:whitesmoke;">Output Unit</h2>
+<p style="color:whitesmoke;">The <strong>Output Unit</strong> is tasked with presenting the results of computations performed by the CPU to users or other systems. It translates processed binary data from the computer into a format that is either human-readable or machine-readable. Devices within the output unit, including monitors, printers, and speakers, convey information in various forms such as visual displays, hard copies, or audio. This unit ensures that processed data is presented in a meaningful form, completing the data processing cycle initiated by the input unit and executed by the CPU. <!-- END_SECTION --></p><p style="color:whitesmoke;">Binary numbers are the foundation of data representation in computers, employing a <strong>base-2 numeral system</strong> that utilizes only two digits: <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">0</code> and <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1</code>. These digits form the basis for all operations and data representation within computer systems. Understanding how computers use this system for computations is crucial for appreciating modern computing processes.</p><!-- END_SECTION -->
+
+<p style="color:whitesmoke;">The <strong>2’s complement</strong> is a significant method for representing signed integers in binary. It provides an efficient technique for arithmetic operations, allowing the uniform handling of both positive and negative numbers. This method simplifies expressions by conceptualizing subtraction through addition operations, enhancing computational consistency.</p><!-- END_SECTION -->
+
+<ol style="color:whitesmoke;">
+    <li>To calculate the <strong>2’s complement</strong> of a binary number, first, <strong>invert all digits</strong> (changing 0s to 1s and vice versa). This initial step helps in transforming the original binary number to its inverse.</li><!-- END_SECTION -->
+    <li>Subsequently, <strong>add one</strong> to the <strong>least significant bit (LSB)</strong>. This step completes the 2’s complement process, converting the inverse of a binary number into its correct two's complement form. This operation plays a crucial role in simplifying binary subtraction by facilitating subtraction operations as addition tasks.</li><!-- END_SECTION -->
+</ol><!-- END_SECTION -->
+
+<p style="color:whitesmoke;">The <strong>Arithmetic Logic Unit (ALU)</strong> is a pivotal component within a computer's <strong>central processing unit (CPU)</strong>. It performs essential arithmetic and logical operations necessary for computation. Equipped with special circuits called <strong>adders</strong>, the ALU can efficiently execute both addition and subtraction. The 2’s complement representation is indispensable here, as it allows the ALU to perform subtraction by adding the complement of a number. This technique is integral for handling signed integer operations seamlessly.</p><!-- END_SECTION -->
+
+<p style="color:whitesmoke;">Binary multiplication operates similarly to traditional <strong>decimal multiplication</strong>, mirroring the paper-and-pencil methods used in arithmetic. An example involving a multiplicand and a multiplier in binary form illustrates this process:</p><!-- END_SECTION -->
+
+<ol style="color:whitesmoke;">
+    <li>Begin by aligning the <strong>multiplicand (1000)</strong> beneath the <strong>multiplier (1001)</strong>. This alignment sets the stage for a step-by-step multiplication process based on each binary digit of the multiplier.</li><!-- END_SECTION -->
+    <li>Each bit of the multiplier dictates actions: when a multiplier bit is <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1</code>, add the appropriately <strong>shifted multiplicand</strong> to the product. Conversely, a <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">0</code> in the multiplier results in a straightforward shift without addition, maintaining efficient calculations.</li><!-- END_SECTION -->
+    <li>Sequential shifting and conditional additions continue for each bit until the final bit operations are complete. For example, with a binary multiplier (1001), the multiplied results accumulate as follows:
+        <ul style="color:whitesmoke;">
+            <li>The first bit is <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1</code>, so record <strong>1000</strong>.</li><!-- END_SECTION -->
+            <li>The second bit is <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">0</code>, yielding <strong>0000</strong> after a left shift.</li><!-- END_SECTION -->
+            <li>Another <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">0</code> results in <strong>0000</strong> addition.</li><!-- END_SECTION -->
+            <li>The final bit, being <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1</code>, assigns <strong>1000</strong> as a shifted addition.</li><!-- END_SECTION -->
+        </ul><!-- END_SECTION -->
+    </li><!-- END_SECTION -->
+    <li>After summing all resultant binary products, the binary multiplication yields <strong>01001000</strong>, equivalent to the decimal 72, representing the precise product of multiplying 8 (1000) by 9 (1001).</li><!-- END_SECTION -->
+</ol><!-- END_SECTION -->
+
+<p style="color:whitesmoke;">This example underscores the <strong>importance of sequential shifting and conditional addition</strong> in binary multiplication, reflecting how efficiently such processes are executed within the ALU of a computer. By leveraging hardware, computers can perform these operations with remarkable <strong>speed and accuracy</strong>.</p><!-- END_SECTION --><p style="color:whitesmoke;">The <strong>binary numeral system</strong> is the fundamental data representation method used by computers. In this system, only two digits, 0 and 1, are employed to encode information. <strong>Binary language</strong> forms the basis of computer calculations and data storage, ensuring efficient management of operations and information.</p><!-- END_SECTION -->
+
+<p style="color:whitesmoke;">The <strong>2’s complement</strong> is a critical technique for expressing <strong>signed integers</strong> in binary. This method streamlines arithmetic operations by enabling consistent representation of both positive and negative integers, thus facilitating straightforward procedures for addition and subtraction. In 2’s complement notation, to acquire the negative equivalent of a binary number, invert all its digits, changing 0s to 1s and vice versa, then add one to the <strong>least significant bit (LSB)</strong>. This approach simplifies binary subtraction by transforming it into an addition task, enhancing computational efficiency.</p><!-- END_SECTION -->
+
+<p style="color:whitesmoke;">The <strong>Arithmetic Logic Unit (ALU)</strong> is an essential component of a computer's <strong>central processing unit (CPU)</strong>. It executes arithmetic and logical operations, including tasks such as addition, subtraction, and logical comparisons. The ALU utilizes specialized circuits called <strong>adders</strong>, designed for efficient execution of these operations. By using the 2’s complement system, the ALU can seamlessly handle both addition and subtraction of signed integers. This capability results from the ability to perform subtraction by adding the complement of a number, thereby maximizing processing efficiency for signed computations.</p><!-- END_SECTION -->
+
+<p style="color:whitesmoke;">The <strong>Memory Unit (MU)</strong> plays a pivotal role in computer systems by storing data and instructions. It ensures that the processor has immediate access to the necessary information for computational tasks. The MU is responsible for storing both temporary data needed for immediate processing and permanent data meant for long-term storage. This data is organized in a binary format, consistent with the binary numeral system, enabling efficient retrieval and manipulation aligned with computational processes executed by the ALU.</p><!-- END_SECTION -->
+
+<p style="color:whitesmoke;">The <strong>Input Unit</strong> serves as the interface for a computer to receive external data and commands. It converts user inputs or external signals into binary code that the computer system can comprehend and process. Devices within the input unit, including keyboards, mice, and scanners, each fulfill specific roles for capturing data. Once converted, this data is either transmitted to the Memory Unit for storage or directly to the ALU for instant processing, contingent upon the task's requirements.</p><!-- END_SECTION -->
+
+<p style="color:whitesmoke;">The <strong>Output Unit</strong> is responsible for displaying the results of computations conducted by the CPU to the user or other systems. It transforms processed binary data into formats that are human-readable or machine-readable. Output devices such as monitors, printers, and speakers convey information in various forms like visual displays, hard copies, or audio. This unit ensures data processed is presented meaningfully, completing the data processing cycle initiated by the Input Unit and executed by the CPU.</p><!-- END_SECTION --><p style="color:whitesmoke;">Binary numbers form the basis for <strong>data representation</strong> in computers. These numbers utilize a <strong>base-2 numeral system</strong> that consists of only two digits: 0 and 1. Computers leverage this binary system to execute operations and represent all forms of data. <!-- END_SECTION --></p>
+
+<h2 style="color:whitesmoke;">2's Complement Representation</h2>
+
+<p style="color:whitesmoke;">The concept of <strong>2's complement</strong> is a method used for representing <strong>signed integers</strong> in binary. This approach is integral as it allows straightforward execution of arithmetic operations, such as addition and subtraction, with uniform handling of positive and negative numbers. <!-- END_SECTION --></p>
+
+<ol style="color:whitesmoke;">
+    <li>To find the <strong>2's complement</strong> of a binary number, first <strong>invert all the digits</strong> (change 0s to 1s and vice versa). <!-- END_SECTION --></li>
+    <li>Next, add one to the <strong>least significant bit (LSB)</strong>. <!-- END_SECTION --></li>
+</ol>
+
+<p style="color:whitesmoke;">This representation simplifies <strong>binary subtraction</strong> by treating it as an <strong>addition operation</strong>, which enhances computational efficiency. <!-- END_SECTION --></p>
+
+<h2 style="color:whitesmoke;">Role of the Arithmetic Logic Unit (ALU)</h2>
+
+<p style="color:whitesmoke;">The <strong>Arithmetic Logic Unit (ALU)</strong> is a critical component within a computer's <strong>central processing unit (CPU)</strong>. It performs <strong>arithmetic and logical operations</strong>, essential for computational tasks. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">The ALU contains <strong>adders</strong>, which are specialized circuits designed to perform addition. By leveraging 2's complement representation, these adders can seamlessly execute both addition and subtraction operations. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">This dual functionality is because, in 2's complement arithmetic, <strong>subtraction can be carried out by adding the complement</strong> of a number rather than directly subtracting it. Thus, the ALU efficiently manages signed integer operations by using these principles, linking them to broader computational processes. <!-- END_SECTION --></p>
+
+<h2 style="color:whitesmoke;">Binary Multiplication Process</h2>
+
+<p style="color:whitesmoke;">Integer multiplication in binary is akin to <strong>multiplication using paper and pencil</strong> in the decimal system. This process is crucial for understanding how computers simulate manual calculations digitally. <!-- END_SECTION --></p>
+
+<ol style="color:whitesmoke;">
+    <li>Start by aligning the <strong>multiplicand</strong> (<code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1000</code>) beneath the <strong>multiplier</strong> (<code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1001</code>). <!-- END_SECTION --></li>
+    <li>Perform a right-left shift of the multiplicand and add based on the corresponding bit of the multiplier. <!-- END_SECTION --></li>
+    <ul style="color:whitesmoke;">
+        <li>If the bit in the multiplier is 1, add the <strong>shifted multiplicand</strong> to the product. <!-- END_SECTION --></li>
+        <li>If it is 0, skip the addition and only perform the shift. <!-- END_SECTION --></li>
+    </ul>
+</ol>
+
+<p style="color:whitesmoke;">The above steps ensure precise sequential operations similar to those in decimal multiplication. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;"><strong>Example:</strong> Assume the multiplicand is <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1000</code> (decimal 8) and the multiplier is <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1001</code> (decimal 9). <!-- END_SECTION --></p>
+
+<ol style="color:whitesmoke;">
+    <li>The first rightmost bit of the multiplier is 1, so write down the multiplicand <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1000</code>. <!-- END_SECTION --></li>
+    <li>Shift the multiplicand left. The next bit of the multiplier is 0, leading to <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">0000</code>. <!-- END_SECTION --></li>
+    <li>Shift left again. The next multiplier bit is 0, resulting in <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">0000</code>. <!-- END_SECTION --></li>
+    <li>For the final multiplier bit, which is 1, write down the shifted multiplicand <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1000</code>. <!-- END_SECTION --></li>
+</ol>
+
+<p style="color:whitesmoke;">Add together all the binary numbers from the multiplication process. The result—<code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">01001000</code>—is equivalent to decimal 72, the product of 8 and 9. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">This example underscores the importance of <strong>sequential shifting</strong> and <strong>conditional addition</strong> within the binary system, showcasing how computers emulate these processes efficiently within the ALU. The hardware-based implementation enables fast and accurate multiplication operations. <!-- END_SECTION --></p><p style="color:whitesmoke;">Binary numbers form the basis for data representation in computers. These numbers use a <strong>base-2 numeral system</strong> consisting of only two digits: 0 and 1. Computers utilize this binary system to <strong>perform operations</strong> and represent <strong>all types of data</strong>. This foundational aspect is crucial as it dictates how computers process and store information, allowing for the implementation of complex algorithms and data structures.<!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;"><strong>2's complement</strong> is a method used for representing <strong>signed integers in binary</strong>. This method simplifies arithmetic operations, such as addition and subtraction, by providing a uniform framework for handling both positive and negative numbers. Effectively, this means that operations on signed integers can be performed with high efficiency in computing environments.<!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">To find the <strong>2's complement</strong> of a binary number, <strong>invert all the digits</strong> (changing 0s to 1s and vice versa) and then <strong>add one</strong> to the least significant bit (LSB). This representation simplifies binary subtraction by treating it as an addition operation, which is computationally efficient because it uses the same hardware operations already optimized for addition.<!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">The <strong>Arithmetic Logic Unit (ALU)</strong> is a key component in a computer's <strong>central processing unit (CPU)</strong> that performs arithmetic and logical operations. It contains components such as <strong>adders</strong>, which are specialized circuits designed to perform addition operations. By utilizing 2's complement representation, these adders can seamlessly perform both addition and subtraction. This dual functionality is achieved because, in 2's complement arithmetic, subtraction can be executed by adding the complement of a number instead of directly subtracting it. This approach is crucial for maintaining high efficiency and reliability in processing signed integers within a computing system.<!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">Integer multiplication in binary functions similarly to <strong>multiplication using paper and pencil</strong> in the decimal system. The process involves multiple steps akin to traditional calculations, but is tailored to the base-2 numeral system. This parallel to familiar arithmetic methods allows for an intuitive understanding of how complex operations are broken down into manageable steps in computing.<!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">Consider an example where the <strong>multiplicand</strong> is <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1000</code> (which is binary for decimal 8) and the <strong>multiplier</strong> is <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1001</code> (which is binary for decimal 9). To multiply these binary numbers, perform the operation bit by bit. Start by aligning the multiplicand below the multiplier. Each step involves a right-left shift of the multiplicand and addition based on the corresponding bit of the multiplier.<!-- END_SECTION --></p>
+
+<ol style="color:whitesmoke;">
+    <li>The first bit from the right of the multiplier <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1001</code> is 1, so write down the multiplicand <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1000</code> as the first sum beneath the line.<!-- END_SECTION --></li>
+    <li>Shift the multiplicand to the left, maintaining the position relative to the multiplier. The next bit of the multiplier <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1001</code> is 0, so write down <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">0000</code> for this step.<!-- END_SECTION --></li>
+    <li>Shift the multiplicand again to the left. The next multiplier bit is also 0, resulting in another set of zeros <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">0000</code> being added.<!-- END_SECTION --></li>
+    <li>For the final bit of the multiplier, which is again 1, shift the multiplicand and write down the shifted result, which is <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1000</code>.<!-- END_SECTION --></li>
+</ol>
+
+<p style="color:whitesmoke;">After executing all these steps, add together all the binary numbers derived from multiplication. The sum of these steps is the final binary product <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">01001000</code>, equivalent to decimal 72, which is the result of multiplying 8 (1000) by 9 (1001).<!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">This binary multiplication example illustrates the importance of <strong>sequential shifting</strong> and <strong>conditional addition</strong> in the binary number system, corresponding with how a computer efficiently performs these operations within the ALU. The process can be effectively implemented in hardware, enabling computers to perform multiplication operations with speed and accuracy. Such hardware implementation ensures that computers handle large-scale calculations efficiently, which is crucial for advanced computing applications.<!-- END_SECTION --></p><p style="color:whitesmoke;">The binary numeral system is the foundation for data representation in computers. In this system, only two digits, <strong>0</strong> and <strong>1</strong>, are used to encode information. Computers rely on this <strong>binary language</strong> to perform calculations and efficiently store varied types of data. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">The <strong>2’s complement</strong> method is crucial for expressing signed integers in binary. This technique simplifies arithmetic operations by allowing both positive and negative integers to be uniformly represented, thus facilitating straightforward addition and subtraction. In 2’s complement notation, to obtain the <strong>negative counterpart</strong> of a binary number, one must invert all the digits, transforming 0s into 1s and vice versa, then add one to the <strong>least significant bit (LSB)</strong>. This process converts binary subtraction into an addition problem, which is computationally more efficient. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">The <strong>Arithmetic Logic Unit (ALU)</strong> is a vital component of a computer's central processing unit (<strong>CPU</strong>). It executes arithmetic and logical operations, including addition and subtraction, using circuits known as <strong>adders</strong>. By employing 2’s complement representation, the ALU can seamlessly handle both addition and subtraction of signed integers. This capability emerges because, in the context of 2’s complement arithmetic, subtraction is performed by adding the complement of a number. Consequently, the ALU enhances operational efficiency by leveraging this method for signed computations. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">Moreover, the <strong>Memory Unit (MU)</strong> plays a critical role in data storage and retrieval within a computer system, ensuring that the processor has swift access to essential information and instructions. The MU stores data in binary format, which aligns with the binary numeral system used by digital computers, enabling efficient data manipulation in conjunction with processes carried out by the ALU. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">The <strong>Input Unit</strong> serves as the interface through which a computer receives external data and commands. It translates user inputs or external signals into binary code that the computer can comprehend and process. Devices within this unit, such as keyboards, mice, and scanners, function to capture diverse forms of data, further transmitting them to the Memory Unit for storage or directly to the ALU for immediate action based on the task at hand. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">Finally, the <strong>Output Unit</strong> is responsible for presenting the computational results performed by the CPU to the user or other systems. It translates processed binary data from the computer into a human-readable or machine-readable format. Output devices, including monitors, printers, and speakers, disseminate information in various formats, such as visual displays, printed documents, or audio outputs. The output unit ensures that the data processing cycle, initiated by the input unit and executed by the CPU, culminates meaningfully and efficiently. <!-- END_SECTION --></p><p style="color:whitesmoke;">Binary numbers form the basis for <strong>data representation</strong> in computers. These numbers use a base-2 numeral system consisting of only two digits: 0 and 1. Computers utilize this binary system to perform operations and represent all types of data. The <strong>2’s complement</strong> is a method used for representing signed integers in binary, allowing for the straightforward implementation of arithmetic operations, such as addition and subtraction, with uniform handling of positive and negative numbers. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">To find the 2’s complement of a binary number, invert all the digits (changing 0s to 1s and vice versa) and then add one to the <strong>least significant bit (LSB)</strong>. This representation effectively simplifies binary subtraction by treating it as an addition operation, which is computationally efficient. It matters because it streamlines arithmetic procedures in digital circuits and reduces complexity. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">The <strong>Arithmetic Logic Unit (ALU)</strong> is a critical component in a computer's central processing unit (CPU) that performs arithmetic and logical operations. It contains <strong>adders</strong>, which are specialized circuits designed to perform addition. By utilizing 2’s complement representation, these adders can seamlessly perform both addition and subtraction. This dual functionality is achieved because, in 2’s complement arithmetic, subtraction is executed by adding the complement of a number instead of directly subtracting it. Thus, the ALU efficiently handles signed integer operations by leveraging these principles. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">The process of <strong>integer multiplication in binary</strong> operates similarly to multiplication using paper and pencil in the decimal system. Given an example where the multiplicand is <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1000</code> (which is binary for decimal 8) and the multiplier is <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1001</code> (which is binary for decimal 9), the multiplication process involves multiple steps akin to manual calculations. <!-- END_SECTION --></p>
+
+<ol style="color:whitesmoke;">
+    <li>The first bit from the right of the multiplier <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1001</code> is 1, so write down the multiplicand <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1000</code> as the first sum beneath the line. <!-- END_SECTION --></li>
+    <li>Shift the multiplicand to the left, maintaining the position relative to the multiplier. The next bit of the multiplier <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1001</code> is 0, so write down <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">0000</code> for this step. <!-- END_SECTION --></li>
+    <li>Shift the multiplicand again to the left. The next multiplier bit is also 0, resulting in another set of zeros <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">0000</code> being added. <!-- END_SECTION --></li>
+    <li>For the final bit of the multiplier, which is again 1, shift the multiplicand and write down the shifted result, which is <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1000</code>. <!-- END_SECTION --></li>
+</ol>
+
+<p style="color:whitesmoke;">After executing all these steps, add together all the binary numbers derived from multiplication. The sum of these steps is the final binary product <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">01001000</code>, equivalent to decimal 72, which is the result of multiplying 8 (<code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1000</code>) by 9 (<code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1001</code>). <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">This binary multiplication example illustrates the importance of <strong>sequential shifting</strong> and <strong>conditional addition</strong> in the binary number system, corresponding with how a computer efficiently performs these operations within the ALU. This process is crucial as it demonstrates how fundamental concepts in binary arithmetic are leveraged in hardware to achieve computational efficiency and accuracy. <!-- END_SECTION --></p><p style="color:whitesmoke;">The <strong>binary numeral system</strong> is crucial for data representation and operations conducted by computers. In this system, only two digits, <strong>0</strong> and <strong>1</strong>, are used to encode information. Computers rely on this binary language to perform calculations and store various types of data efficiently. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">The <strong>2’s complement</strong> is an essential technique for expressing signed integers in binary. This method simplifies arithmetic operations by allowing both positive and negative integers to be represented consistently, thereby facilitating easy addition and subtraction. <!-- END_SECTION --></p>
+
+<ol style="color:whitesmoke;">
+  <li>To obtain the negative counterpart of a binary number, first <strong>invert</strong> all the digits, transforming 0s into 1s and vice versa. <!-- END_SECTION --></li>
+  <li>Then, add one to the <strong>least significant bit (LSB)</strong>. <!-- END_SECTION --></li>
+</ol>
+
+<p style="color:whitesmoke;">This approach makes binary subtraction straightforward by converting it into an addition problem, which is more computationally efficient. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">The <strong>Arithmetic Logic Unit (ALU)</strong> forms a vital part of a computer's central processing unit (CPU). It executes arithmetic and logical operations, including addition and subtraction, through circuits known as <strong>adders</strong>. With the use of <strong>2’s complement</strong> representation, the ALU can seamlessly handle both addition and subtraction of signed integers. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">This ability arises because, in the realm of 2’s complement arithmetic, subtraction is effectively executed by adding the complement of a number. Consequently, the ALU maximizes efficiency by leveraging this method for signed computations. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">The <strong>Memory Unit (MU)</strong> is responsible for storing data and instructions within a computer system. It plays a key role in ensuring that the processor has quick access to necessary information and instructions for computational tasks. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">The MU stores both temporary data for immediate processing and permanent data necessary for long-term storage. Data is organized in binary format, consistent with the binary numeral system used by digital computers, enabling efficient data retrieval and manipulation in alignment with computational processes performed by the ALU. <!-- END_SECTION --></p>
+
+<p style="color:whitesmoke;">The <strong>Input Unit</strong> is the interface through which a computer receives external data and commands. It converts user inputs or external signals into binary code that the computer system can understand and process. <!-- END_SECTION --></p>
 
 <ul style="color:whitesmoke;">
-    <li><strong>Cache levels</strong> include smaller, faster memory that is positioned closer to the processor. These levels enable rapid access to critical data, enhancing processing speed.</li><!-- END_SECTION -->
-    <li>Data transitions through the hierarchy from frequently used, shorter-time-access storage (upper levels, small and expensive) to less frequently accessed, larger, cheaper storage (such as SSDs or disks).</li><!-- END_SECTION -->
-    <li>Data moves from <strong>memory</strong> (also known as DRAM), into smaller, faster <strong>caches</strong> (SRAM), which are situated near the CPU. This proximity dramatically reduces the time required for data retrieval and processing.</li><!-- END_SECTION -->
-</ul><!-- END_SECTION -->
+  <li>Devices within the input unit include <strong>keyboards</strong>, <strong>mice</strong>, and <strong>scanners</strong>, each serving unique functions for capturing data. <!-- END_SECTION --></li>
+  <li>The converted data is then transmitted to the Memory Unit for storage or directly to the ALU for immediate processing, depending on the requirements of the task. <!-- END_SECTION --></li>
+</ul>
 
-<p style="color:whitesmoke;">Data within the memory hierarchy is generally transferred in <strong>blocks</strong>, which may contain multiple words. This block-wise transfer is a fundamental principle in managing memory transitions, facilitating efficient use of bandwidth and cache storage.</p><!-- END_SECTION -->
+<p style="color:whitesmoke;">The <strong>Output Unit</strong> is responsible for presenting the results of computations performed by the CPU to the user or other systems. It takes processed binary data from the computer and translates it into a human-readable or machine-readable format. <!-- END_SECTION --></p>
 
-<p style="color:whitesmoke;"><strong>Caches</strong> play a key role by storing <strong>frequently accessed data</strong> closer to the processor, thus minimizing access times and increasing processing speed. Cache memory represents the <strong>closest level of the memory hierarchy to the CPU</strong>, ensuring that the most <strong>frequently</strong> or <strong>recently accessed data</strong> is readily available.</p><!-- END_SECTION -->
-
-<p style="color:whitesmoke;">A <strong>hit</strong> occurs when the accessed data is present in the higher memory level, allowing for quick access. Conversely, a <strong>miss</strong> happens when data must be fetched from a lower, slower level, which increases access time. The measures of <strong>hits and misses</strong> are critical performance indicators for caches, directly impacting the efficiency of the processor and, consequently, the entire system.</p><!-- END_SECTION -->
+<ul style="color:whitesmoke;">
+  <li>Devices within the output unit include <strong>monitors</strong>, <strong>printers</strong>, and <strong>speakers</strong>. <!-- END_SECTION --></li>
+  <li>These devices convey information in various forms, such as visual displays, hard copies, or audio. The output unit ensures that processed data is accessible in a meaningful format, completing the cycle of data processing initiated by the input unit and executed by the CPU. <!-- END_SECTION --></li>
+</ul>

@@ -4,9 +4,10 @@ import os
 import markdown
 from flask_socketio import SocketIO
 import json
+import csv
 from functions.gpt_functions import end_answer, end_section
 
-from config import COMPLETED_NOTES
+from config import COMPLETED_NOTES, FILE_EMBEDDINGS
 
 deepseek_client = OpenAI(api_key=os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com/v1"  ) # Use Deepseek
 openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) # Use OpenAI
@@ -15,16 +16,47 @@ previous_content = ""
 string_buffer = ""
 answer_buffer = ""
 
-# note generation
+def get_embedding(text, model="text-embedding-3-small"):
+    return openai_client.embeddings.create(input=[text], model=model).data[0].embedding
+
+# Function To Embed a File
+def embed_content(content_path):
+    # Read the entire content of the file as a single string
+    with open(content_path, "r", encoding="utf-8") as file:
+        full_text = file.read().strip()
+
+    # Generate embedding for the full text
+    response = openai_client.embeddings.create(
+        input=[full_text],
+        model="text-embedding-3-small"
+    )
+    embedding = response.data[0].embedding
+
+    # Check if the CSV already exists
+    file_exists = os.path.isfile(FILE_EMBEDDINGS)
+
+    # Append to the CSV
+    with open(FILE_EMBEDDINGS, "a", newline='', encoding="utf-8") as f:
+        writer = csv.writer(f)
+        if not file_exists:
+            writer.writerow(["filename", "text", "embedding"])
+        writer.writerow([os.path.basename(content_path), full_text, str(embedding)])
+
+
+# -----------------------------------------------
+# GENERATE THE NOTES
+# -----------------------------------------------
 
 def note_creation(content):
     print("Calling GPT (Creating Notes)")
 
     # Ensure completed_notes.txt exists and is empty (fresh file)
-    with open(COMPLETED_NOTES, 'w') as f:
+    with open(COMPLETED_NOTES, 'a') as f:
         pass
 
     from app import socketio
+
+    embed_content(content)
 
     global previous_content
     # Read the content of the current file

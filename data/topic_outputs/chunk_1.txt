@@ -1,44 +1,4 @@
-Binary numbers form the basis for data representation in computers. These numbers use a base-2
-numeral system consisting of only two digits: 0 and 1. Computers use this binary system to perform
-operations and represent all types of data. 2’s complement is a method used for representing signed
-integers in binary. It allows for the straightforward implementation of arithmetic operations, such as
-addition and subtraction, with uniform handling of positive and negative numbers.
-To find the 2’s complement of a binary number, invert all the digits (changing 0s to 1s and vice versa)
-and then add one to the least significant bit (LSB). This representation effectively simplifies binary
-subtraction by treating it as an addition operation, which is computationally efficient.
-The Arithmetic Logic Unit (ALU) is a critical component in a computer's central processing unit (CPU)
-that performs arithmetic and logical operations. It contains adders, which are specialized circuits
-designed to perform addition. By utilizing 2’s complement representation, these adders can seamlessly
-perform both addition and subtraction. This dual functionality is achieved because, in 2’s complement
-arithmetic, subtraction can be executed by adding the complement of a number instead of directly
-subtracting it. Thus, the ALU efficiently handles signed integer operations by leveraging these
-principles.
-Integer multiplication in binary operates similarly to multiplication using paper and pencil in the decimal
-system. Given an example where the multiplicand is 1000 (which is binary for decimal 8) and the
-multiplier is 1001 (which is binary for decimal 9), the multiplication process involves multiple steps akin
-to manual calculations.
-To multiply these binary numbers, perform the operation bit by bit. Start by aligning the multiplicand
-(1000) below the multiplier (1001). Each step involves a right-left shift of the multiplicand and addition
-based on the corresponding bit of the multiplier. If the bit in the multiplier is a 1, add the shifted
-multiplicand to the product. If it is 0, skip the addition for that bit position and only perform the shift.
-1. The first bit from the right of the multiplier (1001) is 1, so write down the multiplicand (1000) as the
-first sum beneath the line.
-2. Shift the multiplicand to the left, maintaining the position relative to the multiplier. The next bit of the
-multiplier (1001) is 0, so write down 0000 for this step.
-3. Shift the multiplicand again to the left. The next multiplier bit is also 0, resulting in another set of
-zeros (0000) being added.
-4. For the final bit of the multiplier, which is again 1, shift the multiplicand and write down the shifted
-result, which is 1000.
-After executing all these steps, add together all the binary numbers derived from multiplication. The
-sum of these steps is the final binary product (01001000), equivalent to decimal 72, which is the result
-of multiplying 8 (1000) by 9 (1001).
-This binary multiplication example illustrates the importance of sequential shifting and conditional
-addition in the binary number system, corresponding with how a computer efficiently performs these
-operations within the ALU. The process of shifting and conditional addition can be effectively
-implemented in hardware, enabling computers to perform multiplication operations with speed and
-accuracy.
-Binary numbers, using the base-2 numeral system, are fundamental to data representation and
-operations conducted by computers. In this system, only two digits, 0 and 1, are used to encode
+by computers. In this system, only two digits, 0 and 1, are used to encode
 information. Computers rely on this binary language to perform calculations and store various types of
 data efficiently.
 The 2’s complement is an essential technique for expressing signed integers in binary. This method

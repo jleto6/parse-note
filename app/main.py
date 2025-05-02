@@ -18,7 +18,7 @@ from app import socketio, app
 from threading import Thread
 import threading
 
-from config import TOPIC_OUTPUTS_DIR, NOTE_INPUTS_DIR, RAW_TEXT, COMPLETED_NOTES
+from config import TOPIC_OUTPUTS_DIR, NOTE_INPUTS_DIR, RAW_TEXT, COMPLETED_NOTES, FILE_EMBEDDINGS
 
 import logging
 log = logging.getLogger('werkzeug')
@@ -52,9 +52,12 @@ timer_thread.start()
 def main():
 
     # Clear old outputs
-    clear_output(TOPIC_OUTPUTS_DIR)
-    clear_output(COMPLETED_NOTES)
-    clear_output(RAW_TEXT)
+    try:
+        clear_output(TOPIC_OUTPUTS_DIR)
+        clear_output(RAW_TEXT)
+        clear_output(FILE_EMBEDDINGS)
+    except:
+        pass
 
     # Uploaded Files
     folder = NOTE_INPUTS_DIR

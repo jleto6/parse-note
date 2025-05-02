@@ -16,6 +16,10 @@ SetLogLevel(-1)
 from config import NOTE_INPUTS_DIR, RAW_TEXT, TOPIC_OUTPUTS_DIR
 from functions.ocr import do_ocr
 
+if not os.path.exists(RAW_TEXT):
+    with open(RAW_TEXT, "w") as f:
+        pass  # Just creates the file, does nothing else
+
 # Text Splitter
 def split_text(filename, split_size):
     text = open(filename, 'r', encoding='utf-8').read()
@@ -98,8 +102,8 @@ def handle_pdf(file, file_path):
                 
 
 # Handle Videos
-model = Model("data/en_model")  # Load the model
 def handle_video(file, file_path):
+    model = Model("data/en_model")  # Load the model
     # Convert file to wav
     process = subprocess.run(
     ["ffmpeg", "-i", file_path, "-f", "wav", "-ac", "1", "-ar", "16000", "pipe:1"],
