@@ -1,82 +1,106 @@
-Binary numbers form the basis for data representation in computers. These numbers use a base-2
-numeral system consisting of only two digits: 0 and 1. Computers use this binary system to perform
-operations and represent all types of data. 2’s complement is a method used for representing signed
-integers in binary. It allows for the straightforward implementation of arithmetic operations, such as
-addition and subtraction, with uniform handling of positive and negative numbers.
-To find the 2’s complement of a binary number, invert all the digits (changing 0s to 1s and vice versa)
-and then add one to the least significant bit (LSB). This representation effectively simplifies binary
-subtraction by treating it as an addition operation, which is computationally efficient.
-The Arithmetic Logic Unit (ALU) is a critical component in a computer's central processing unit (CPU)
-that performs arithmetic and logical operations. It contains adders, which are specialized circuits
-designed to perform addition. By utilizing 2’s complement representation, these adders can seamlessly
-perform both addition and subtraction. This dual functionality is achieved because, in 2’s complement
-arithmetic, subtraction can be executed by adding the complement of a number instead of directly
-subtracting it. Thus, the ALU efficiently handles signed integer operations by leveraging these
-principles.
-Integer multiplication in binary operates similarly to multiplication using paper and pencil in the decimal
-system. Given an example where the multiplicand is 1000 (which is binary for decimal 8) and the
-multiplier is 1001 (which is binary for decimal 9), the multiplication process involves multiple steps akin
-to manual calculations.
-To multiply these binary numbers, perform the operation bit by bit. Start by aligning the multiplicand
-(1000) below the multiplier (1001). Each step involves a right-left shift of the multiplicand and addition
-based on the corresponding bit of the multiplier. If the bit in the multiplier is a 1, add the shifted
-multiplicand to the product. If it is 0, skip the addition for that bit position and only perform the shift.
-1. The first bit from the right of the multiplier (1001) is 1, so write down the multiplicand (1000) as the
-first sum beneath the line.
-2. Shift the multiplicand to the left, maintaining the position relative to the multiplier. The next bit of the
-multiplier (1001) is 0, so write down 0000 for this step.
-3. Shift the multiplicand again to the left. The next multiplier bit is also 0, resulting in another set of
-zeros (0000) being added.
-4. For the final bit of the multiplier, which is again 1, shift the multiplicand and write down the shifted
-result, which is 1000.
-After executing all these steps, add together all the binary numbers derived from multiplication. The
-sum of these steps is the final binary product (01001000), equivalent to decimal 72, which is the result
-of multiplying 8 (1000) by 9 (1001).
-This binary multiplication example illustrates the importance of sequential shifting and conditional
-addition in the binary number system, corresponding with how a computer efficiently performs these
-operations within the ALU. The process of shifting and conditional addition can be effectively
-implemented in hardware, enabling computers to perform multiplication operations with speed and
-accuracy.
-Binary numbers, using the base-2 numeral system, are fundamental to data representation and
-operations conducted by computers. In this system, only two digits, 0 and 1, are used to encode
-information. Computers rely on this binary language to perform calculations and store various types of
-data efficiently.
-The 2’s complement is an essential technique for expressing signed integers in binary. This method
-simplifies arithmetic operations by allowing both positive and negative integers to be represented
-consistently, thereby facilitating easy addition and subtraction. In 2’s complement notation, to obtain the
-negative counterpart of a binary number, first invert all the digits, transforming 0s into 1s and vice
-versa, then add one to the least significant bit (LSB). This approach makes binary subtraction
-straightforward by converting it into an addition problem, which is more computationally efficient.
-The Arithmetic Logic Unit (ALU) forms a vital part of a computer's central processing unit (CPU). It
-executes arithmetic and logical operations, including addition and subtraction, through circuits known
-as adders. With the use of 2’s complement representation, the ALU can seamlessly handle both
-addition and subtraction of signed integers. This ability arises because, in the realm of 2’s complement
+Binary numbers form the basis for data representation in computers. These numbers use a base-2 
+numeral system consisting of only two digits: 0 and 1. Computers use this binary system to perform 
+operations and represent all types of data. 2’s complement is a method used for representing signed 
+integers in binary. It allows for the straightforward implementation of arithmetic operations, such as 
+addition and subtraction, with uniform handling of positive and negative numbers. 
+To find the 2’s complement of a binary number, invert all the digits (changing 0s to 1s and vice versa) 
+and then add one to the least significant bit (LSB). This representation effectively simplifies binary 
+subtraction by treating it as an addition operation, which is computationally efficient. 
+The Arithmetic Logic Unit (ALU) is a critical component in a computer's central processing unit (CPU) 
+that performs arithmetic and logical operations. It contains adders, which are specialized circuits 
+designed to perform addition. By utilizing 2’s complement representation, these adders can seamlessly 
+perform both addition and subtraction. This dual functionality is achieved because, in 2’s complement 
+arithmetic, subtraction can be executed by adding the complement of a number instead of directly 
+subtracting it. Thus, the ALU efficiently handles signed integer operations by leveraging these 
+principles. 
+Integer multiplication in binary operates similarly to multiplication using paper and pencil in the decimal 
+system. Given an example where the multiplicand is 1000 (which is binary for decimal 8) and the 
+multiplier is 1001 (which is binary for decimal 9), the multiplication process involves multiple steps akin 
+to manual calculations. 
+To multiply these binary numbers, perform the operation bit by bit. Start by aligning the multiplicand 
+(1000) below the multiplier (1001). Each step involves a right-left shift of the multiplicand and addition 
+based on the corresponding bit of the multiplier. If the bit in the multiplier is a 1, add the shifted 
+multiplicand to the product. If it is 0, skip the addition for that bit position and only perform the shift. 
+1. 
+The first bit from the right of the multiplier (1001) is 1, so write down the multiplicand (1000) as 
+thefirst sum beneath the line. 
+2. 
+Shift the multiplicand to the left, maintaining the position relative to the multiplier. The next bit 
+of themultiplier (1001) is 0, so write down 0000 for this step. 
+3. 
+Shift the multiplicand again to the left. The next multiplier bit is also 0, resulting in another set 
+ofzeros (0000) being added. 
+4. 
+For the final bit of the multiplier, which is again 1, shift the multiplicand and write down the 
+shiftedresult, which is 1000. 
+After executing all these steps, add together all the binary numbers derived from multiplication. The 
+sum of these steps is the final binary product (01001000), equivalent to decimal 72, which is the result 
+of multiplying 8 (1000) by 9 (1001). 
+This binary multiplication example illustrates the importance of sequential shifting and conditional 
+addition in the binary number system, corresponding with how a computer efficiently performs these 
+operations within the ALU. The process  
+ 
+Apples are one of the most widely cultivated and consumed fruits in the world, having played 
+a central role in agriculture, culture, and human nutrition for thousands of years. Their origins 
+trace back to the mountainous regions of Central Asia, particularly Kazakhstan, where the 
+wild ancestor Malus sieversii still grows today. Modern apples, classified scientifically as 
+Malus domestica, belong to the Rosaceae family, which also includes pears, cherries, and 
+roses. Over centuries, apples have been selectively bred not only for size and sweetness but 
+also for resilience to pests, climatic adaptability, and storage longevity. This has resulted in the 
+development of over 7,500 named cultivars worldwide, each differing in shape, skin color, 
+ripening season, and flavor profile. Some, like the tart Granny Smith, are favored for baking, 
+while others, such as the honeyed Fuji or crisp Gala, are enjoyed fresh.
 
-arithmetic, subtraction is effectively executed by adding the complement of a number. Consequently,
-the ALU maximizes efficiency by leveraging this method for signed computations.
-The Arithmetic Logic Unit (ALU) is an integral component of a computer's central processing unit
-(CPU). It is responsible for executing arithmetic and logical operations. These operations include basic
-arithmetic tasks like addition and subtraction, as well as logical comparisons. The ALU utilizes
-specialized circuits called adders, which are designed to perform these operations efficiently. By
-implementing the 2’s complement system, the ALU handles signed integer addition and subtraction
-seamlessly as subtraction can be performed by adding the 2’s complement of a number. This technique
-streamlines computations by reducing subtraction tasks to addition operations, making processing
-more efficient.
-The Memory Unit (MU) is responsible for storing data and instructions within a computer system. It
-plays a key role in ensuring that the processor has quick access to necessary information and
-instructions for computational tasks. The MU stores both temporary data for immediate processing and
-permanent data necessary for long-term storage. Data is organized in binary format, consistent with the
-binary numeral system used by digital computers. This enables efficient data retrieval and manipulation
-in alignment with computational processes performed by the ALU.
-The Input Unit is the interface through which a computer receives external data and commands. It
-converts user inputs or external signals into binary code that the computer system can understand and
-process. Devices within the input unit include keyboards, mice, and scanners, each serving unique
-functions for capturing data. The converted data is then transmitted to the Memory Unit for storage or
-directly to the ALU for immediate processing, depending on the requirements of the task.
-The Output Unit is responsible for presenting the results of computations performed by the CPU to the
-user or other systems. It takes processed binary data from the computer and translates it into a
-human-readable or machine-readable format. Devices within the output unit include monitors, printers,
-and speakers. These devices convey information in various forms, such as visual displays, hard copies,
-or audio. The output unit ensures that processed data is accessible in a meaningful format, completing
-the cycle of data processing initiated by the input unit and executed by the CPU.
+The anatomy of an apple includes distinct parts, each serving a specific purpose. The skin acts 
+as a natural barrier, protecting the fruit from pests, dehydration, and microbial invasion. It also 
+contains compounds like quercetin and catechin, antioxidants that may reduce inflammation 
+and oxidative stress. Beneath the skin lies the flesh, composed mainly of water, sugars, and 
+fibers, which provides the bulk of the apple’s refreshing taste and texture. Deeper still is the 
+core, which houses the seeds within a papery casing known as the endocarp. These seeds 
+contain small amounts of amygdalin, a compound that can release cyanide in large doses, 
+although the quantity present in a typical apple seed is generally not harmful unless consumed 
+in excess. Apples can be eaten raw, juiced, cooked into sauces or pies, dried, or fermented to 
+create beverages like hard cider and apple vinegar. Their high content of soluble fiber, 
+especially pectin, aids digestion and helps regulate cholesterol and blood sugar levels. They 
+are also rich in vitamin C, potassium, and numerous polyphenols that support cardiovascular 
+and immune health. 
+ 
+Apple trees grow best in temperate climates where winters are cold enough to meet chilling 
+requirements—periods of dormancy needed to trigger flowering in spring. The trees blossom 
+in early to mid-spring, producing delicate white or pink flowers that are heavily reliant on 
+insect pollinators, especially honeybees, for fertilization. Each flower contains both male and 
+female reproductive structures, but cross-pollination between different cultivars is typically 
+required for viable fruit development. Once pollinated, the flowers gradually develop into fruit 
+over the summer, with most harvesting taking place between late August and October. 
+Commercial orchards often utilize grafting techniques, where branches from desirable apple 
+cultivars are attached to disease-resistant or climate-adapted rootstocks. This ensures genetic 
+consistency in fruit production while also enhancing the tree’s resistance to soil-borne diseases 
+and environmental stress. 
+ 
+One remarkable biological trait of apples is their ability to produce ethylene, a gaseous plant 
+hormone that regulates the ripening process. Ethylene not only affects the apple itself but can 
+also influence nearby fruits, accelerating their ripening and eventual decay if stored 
+improperly. This is why apples are often stored separately in home kitchens and distribution 
+centers. In commercial settings, apples are kept in controlled atmosphere (CA) storage, where 
+oxygen and carbon dioxide levels are precisely adjusted and temperatures are kept just above 
+freezing. These conditions slow down respiration and ethylene production, dramatically 
+extending shelf life while preserving flavor and texture for months after harvest. 
+ 
+Culturally, apples hold significant symbolic and historical importance. They appear in ancient 
+mythologies—such as the Greek tale of the golden apple that sparked the Trojan War—and
+
+religious texts like the Bible, where the “forbidden fruit” of the Tree of Knowledge is often 
+depicted as an apple, despite the original text being non-specific. In Norse mythology, apples 
+symbolize youth and rejuvenation. In literature and folklore, apples frequently represent 
+temptation, wisdom, or magic, depending on the context. The phrase “an apple a day keeps the 
+doctor away” is a testament to the enduring belief in the fruit’s health benefits, which have 
+now been validated by modern nutritional science. Economically, apples are a cornerstone of 
+the global fruit trade. The United States, China, Poland, and Turkey are among the top 
+producers, with apples contributing billions annually to global agricultural markets. 
+ 
+From orchard to supermarket, from myth to medicine, apples exemplify the deep and enduring 
+connection between biology, cultivation, and culture. Their journey through history reflects 
+both human ingenuity in agriculture and nature’s capacity for diversity. Whether enjoyed raw, 
+baked into a pie, or pressed into cider, apples remain a globally cherished fruit—one whose 
+role in human life continues to evolve but never fades.
 

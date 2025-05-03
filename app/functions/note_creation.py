@@ -5,9 +5,17 @@ import markdown
 from flask_socketio import SocketIO
 import json
 import csv
-from functions.gpt_functions import end_answer, end_section
+import numpy as np
+import pandas as pd
+import ast
+import re
 
-from config import COMPLETED_NOTES, FILE_EMBEDDINGS
+from functions.gpt_functions import end_answer, end_section
+from config import COMPLETED_NOTES_INDEX, FILE_EMBEDDINGS, DATA_DIR
+
+
+def strip_html(text):
+    return re.sub(r'<[^>]*>', '', text)
 
 deepseek_client = OpenAI(api_key=os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com/v1"  ) # Use Deepseek
 openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) # Use OpenAI
@@ -20,7 +28,7 @@ def get_embedding(text, model="text-embedding-3-small"):
     return openai_client.embeddings.create(input=[text], model=model).data[0].embedding
 
 # Function To Embed a File
-def embed_content(content_path):
+def embed_file(content_path):
     # Read the entire content of the file as a single string
     with open(content_path, "r", encoding="utf-8") as file:
         full_text = file.read().strip()
@@ -32,15 +40,19 @@ def embed_content(content_path):
     )
     embedding = response.data[0].embedding
 
-    # Check if the CSV already exists
-    file_exists = os.path.isfile(FILE_EMBEDDINGS)
+    return embedding
 
-    # Append to the CSV
-    with open(FILE_EMBEDDINGS, "a", newline='', encoding="utf-8") as f:
-        writer = csv.writer(f)
-        if not file_exists:
-            writer.writerow(["filename", "text", "embedding"])
-        writer.writerow([os.path.basename(content_path), full_text, str(embedding)])
+# Function To Embed Text
+def embed_text(content):
+
+    # Generate embedding for the full text
+    response = openai_client.embeddings.create(
+        input=[content],
+        model="text-embedding-3-small"
+    )
+    embedding = response.data[0].embedding
+
+    return embedding
 
 
 # -----------------------------------------------
@@ -48,20 +60,69 @@ def embed_content(content_path):
 # -----------------------------------------------
 
 def note_creation(content):
+
+    output_buffer = ""
+
     print("Calling GPT (Creating Notes)")
 
-    # Ensure completed_notes.txt exists and is empty (fresh file)
-    with open(COMPLETED_NOTES, 'a') as f:
-        pass
 
     from app import socketio
 
-    embed_content(content)
+    # RAG
+    current_embedding = embed_file(content)
+
+    i = 0
+    # Try to open CSV file to compare current embedding to prior embeddings
+    try:
+        # Load the saved CSV file as a pandas DataFrame
+        corpus_df = pd.read_csv(FILE_EMBEDDINGS)
+        corpus_df['embedding'] = corpus_df['embedding'].apply(ast.literal_eval) # Convert the embedding column from a string back into a list of floats
+
+        # Function to compare two vectors similarity
+        def similarity_score(page_embedding, question_embedding):
+            return np.dot(page_embedding, question_embedding) # Return their dot product (similarity score)
+
+        # Compute similarity scores for each chunk
+        corpus_df["score"] = corpus_df["embedding"].apply( # Create a new 'score' column for each chunk
+            lambda file_embedding: similarity_score(file_embedding, current_embedding) # Get a similarity score for each
+        )
+        top_chunk = corpus_df.sort_values("score", ascending=False).head(1) # sort the DataFrame by similarity score in descending order
+        # print(top_chunk)
+        most_similar_file_text = top_chunk["text"].iloc[0] # Get the text of the top_chunk
+        most_similar_file_name = top_chunk["filename"].iloc[0] # Get the filename the top_chunk came from
+
+        print(top_chunk["score"].iloc[0])
+
+        if top_chunk["score"].iloc[0] < 0.4:
+            print("# Low similarity – create a new file")
+            i += 1
+            current_file = f"{COMPLETED_NOTES_INDEX}_{i}.txt"
+
+        else:
+            print(f"The most similar file to the current file is: {most_similar_file_name}")
+            current_file = os.path.join(DATA_DIR, most_similar_file_name)
+        
+
+    except:
+        # No CSV file to compare to yet
+        # print("No CSV file to compare to yet")
+        current_file = f"{COMPLETED_NOTES_INDEX}_{i}.txt"
+        pass
+
+    
+
+    # GPT
 
     global previous_content
     # Read the content of the current file
     with open(content, "r") as file:
         file_content = file.read()
+
+        # print("===============================")
+        # print(file_content)
+        # print("===============================")
+
+
         previous_content += file_content # Store all read files in memory so GPT knows whats covered
 
     # GPT Call
@@ -123,8 +184,9 @@ def note_creation(content):
 
             if content:
                 string_buffer += content
+                output_buffer += content
                 socketio.emit("update_notes", {"notes": content})
-                with open(COMPLETED_NOTES, "a", encoding="utf-8") as f:
+                with open(current_file, "a", encoding="utf-8") as f:
                     f.write(content)
                     f.flush()
                 end_section(string_buffer)
@@ -134,3 +196,17 @@ def note_creation(content):
             print(f"Chunk content: {chunk}")
 
     socketio.emit("update_notes", {"notes" : "<br/><br/>"})
+
+    output_buffer = strip_html(output_buffer)
+
+    # Embed what gpt just created
+    embedded_notes = embed_text(output_buffer)
+    # Then, add the current_embedding to the CSV
+    file_exists = os.path.isfile(FILE_EMBEDDINGS)   # Check if the CSV already exists
+
+    # Append to the CSV
+    with open(FILE_EMBEDDINGS, "a", newline='', encoding="utf-8") as f:
+        writer = csv.writer(f)
+        if not file_exists:
+            writer.writerow(["filename", "text", "embedding"])
+        writer.writerow([os.path.basename(current_file), output_buffer, str(embedded_notes)])
