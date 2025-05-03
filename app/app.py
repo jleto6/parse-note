@@ -5,8 +5,9 @@ from flask_wtf import FlaskForm
 from wtforms import FileField, SubmitField
 from werkzeug.utils import secure_filename
 import os
+import re
 import markdown
-from config import COMPLETED_NOTES, ANSWERS
+from config import COMPLETED_NOTES, ANSWERS, COMPLETED_NOTES_FILE
 from functions.question_manager import question_call
 
 app = Flask(__name__)
@@ -56,13 +57,18 @@ def get_notes():
 @socketio.on('connect')
 def handle_connect():
 
-    with open(COMPLETED_NOTES, "r") as file:
-        stored_notes = file.read()
-        stored_notes = markdown.markdown(stored_notes) # Convert to HTML
-    socketio.emit("update_notes", {"notes": stored_notes, "refresh": True})
+    # Generated Notes
+    folder = COMPLETED_NOTES_FILE
+    files = sorted(os.listdir(folder), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
 
-    with open(ANSWERS, "r") as file:
-        stored_answers = file.read()
+    for file in files: 
+        with open(f"{COMPLETED_NOTES_FILE}/{file}", "r") as f:
+            stored_notes = f.read()
+            stored_notes = markdown.markdown(stored_notes) # Convert to HTML
+        socketio.emit("update_notes", {"notes": stored_notes, "refresh": True})
+
+    with open(ANSWERS, "r") as f:
+        stored_answers = f.read()
         stored_answers = markdown.markdown(stored_answers) # Convert to HTML
     socketio.emit("answers", {"answer": stored_answers, "refresh": True})
 
