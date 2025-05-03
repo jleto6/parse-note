@@ -1,0 +1,37 @@
+is taken • When $t1 - $t2 = 0, the zero signal from the ALU • PC = PC + 4 + 4*offset • Branch is not taken • PC = PC + 4 Datapath: Branch Jump Instructions • PC = PC[31-28] : Offset << 2 Single Datapath • All
+
+---
+
+Unit • Take in input • Generate signals for each state element • Generate selection signals for each multiplexor • Generate function signals for ALU • ALU Control ALU Control • MIPS subset: lw, sw, beq, add, addi, sub, and, or, slt • ALU has 4 control inputs • 16
+
+---
+
+possible functions ALU Control Function 0000 AND 0001 OR 0010 Add 0110 Subtract 0111 Set-on-less-than 1100 NOR ALU Control • Load/Store: add • Branch: subtract • R-type: depends on funct field ALU Control Function 0000 AND 0001 OR 0010 Add 0110 Subtract 0111 Set-on-less-than 1100 NOR ALU Control • Opcode
+
+---
+
+determines which type of instruction • The ALUOp is a 2-bit signal derived from this Opcode • ALUOp and the funct field will determine ALU control Opcode ALUOp Operation Funct ALU function ALU Control Lw 00 Load word XXXXXX Add 0010 Sw 00 Store word XXXXXX Add 0010 Beq 01
+
+---
+
+Branch XXXXXX Subtract 0110 R-type 10 Add 100000 Add 0010 Subtract 100010 Subtract 0110 AND 100100 AND 0000 OR 100101 OR 0001 Set-on-Less- Than 101010 Set-on-Less- Than 0111 ALU Control • Multiple levels of decoding: • Main Control generates ALUOp • ALUOp and funct bits determine ALU Control ALU Control
+
+---
+
+• ALUOp and funct bits determine ALU Control ALUOp1 ALUOp2 Funct Operation 0 0 X X X X X X 0010 (add) X 1 X X X X X X 0110 (subtract) 1 X X X 0 0 0 0 0010 (add) 1 X X X 0 0 1 0
+
+---
+
+0110 (subtract) 1 X X X 0 1 0 0 0000 (and) 1 X X X 0 1 0 1 0001 (or) 1 X X X 1 0 1 0 0111 (slt) The Main Control Unit • Control signals derived from instruction 0 rs rt rd shamt funct 31:26 5:0
+
+---
+
+and the zero output of the ALU is asserted Datapath With Control Opcode to Control Instruction RegDst ALUSrc MemtoReg RegWrite R-Format 1 0 0 1 Lw 0 1 1 1 Sw X 1 X 0 Beq X 0 X 0 Instruction MemRead MemWrite Branch ALUOp1 ALUOp0 R-Format 0 0 0
+
+---
+
+1 0 Lw 1 0 0 0 0 Sw 0 1 0 0 0 Beq 0 0 1 0 1 R-Type Instruction Load Instruction Branch-on-Equal Instruction Opcode to Control In/Out Signal R-Format Lw Sw Beq Inputs Op5 0 1 1 0 Op4 0 0 0 0 Op3 0 0 1
+
+---
+
+0 Op2 0 0 0 1 Op1 0 1 1 0 Op0 0 1 1 0 Outputs RegDst 1 0 X X ALUSrc 0 1 1 0 MemToReg 0 1 X X RegWrite 1 1 0 0 MemRead 0 1 0 0 MemWrite 0 0 1 0 Branch 0 0

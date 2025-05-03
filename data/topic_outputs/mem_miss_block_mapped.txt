@@ -1,0 +1,45 @@
+• Each word can go in exactly one place in the cache • Assign a location based on the address of the word • (Block address) modulo (#Blocks in cache) Direct Mapped Cache • Each word can go in exactly one place in the cache • Assign a location based
+
+---
+
+on the address of the word • (Block address) modulo (#Blocks in cache) Direct Mapped Cache • Each word can go in exactly one place in the cache • Assign a location based on the address of the word • (Block address) modulo (#Blocks in cache) #Blocks is a power
+
+---
+
+0, 6, 8 • Direct mapped Block address Cache index Hit/miss Cache content after access 0 1 2 3 0 0 miss Mem[0] Associativity Example • Compare 4-block caches • Direct mapped, 2-way set associative, fully associative • Block access sequence: 0, 8, 0, 6, 8 • Direct mapped Block
+
+---
+
+address Cache index Hit/miss Cache content after access 0 1 2 3 0 0 miss Mem[0] 8 0 miss Mem[8] Associativity Example • Compare 4-block caches • Direct mapped, 2-way set associative, fully associative • Block access sequence: 0, 8, 0, 6, 8 • Direct mapped Block address Cache index
+
+---
+
+Hit/miss Cache content after access 0 1 2 3 0 0 miss Mem[0] 8 0 miss Mem[8] 0 0 miss Mem[0] Associativity Example • Compare 4-block caches • Direct mapped, 2-way set associative, fully associative • Block access sequence: 0, 8, 0, 6, 8 • Direct mapped Block address Cache
+
+---
+
+index Hit/miss Cache content after access 0 1 2 3 0 0 miss Mem[0] 8 0 miss Mem[8] 0 0 miss Mem[0] 6 2 miss Mem[0] Mem[6] Associativity Example • Compare 4-block caches • Direct mapped, 2-way set associative, fully associative • Block access sequence: 0, 8, 0, 6, 8
+
+---
+
+• Direct mapped Block address Cache index Hit/miss Cache content after access 0 1 2 3 0 0 miss Mem[0] 8 0 miss Mem[8] 0 0 miss Mem[0] 6 2 miss Mem[0] Mem[6] 8 0 miss Mem[8] Mem[6] Associativity Example • Compare 4-block caches • Direct mapped, 2-way set associative,
+
+---
+
+fully associative • Block access sequence: 0, 8, 0, 6, 8 • Direct mapped • 5 misses Block address Cache index Hit/miss Cache content after access 0 1 2 3 0 0 miss Mem[0] 8 0 miss Mem[8] 0 0 miss Mem[0] 6 2 miss Mem[0] Mem[6] 8 0 miss
+
+---
+
+Block access sequence: 0, 8, 0, 6, 8 • 2-way set associative Block address Cache index Hit/miss Cache content after access Set 0 Set 1 0 0 miss Mem[0] 8 0 miss Mem[0] Mem[8] 0 0 hit Mem[0] Mem[8] Associativity Example • Compare 4-block caches • Direct mapped, 2-way set
+
+---
+
+• Compare 4-block caches • Direct mapped, 2-way set associative, fully associative • Block access sequence: 0, 8, 0, 6, 8 • 2-way set associative Block address Cache index Hit/miss Cache content after access Set 0 Set 1 0 0 miss Mem[0] 8 0 miss Mem[0] Mem[8] 0 0 hit
+
+---
+
+Mem[0] Mem[8] 6 0 miss Mem[0] Mem[6] 8 0 miss Mem[8] Mem[6] Associativity Example • Compare 4-block caches • Direct mapped, 2-way set associative, fully associative • Block access sequence: 0, 8, 0, 6, 8 • 2-way set associative • 4 misses Block address Cache index Hit/miss Cache content after
+
+---
+
+6, 8 • Fully associative • 3 misses Block address Hit/miss Cache content after access 0 miss Mem[0] 8 miss Mem[0] Mem[8] 0 hit Mem[0] Mem[8] 6 miss Mem[0] Mem[8] Mem[6] 8 hit Mem[0] Mem[8] Mem[6] How Much Associativity • Increased associativity decreases miss rate • But with diminishing returns

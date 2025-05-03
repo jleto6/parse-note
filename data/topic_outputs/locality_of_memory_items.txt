@@ -1,0 +1,13 @@
+this is not possible • A memory hierarchy gives the illusion of large amounts of fast memory Principle of Locality • Programs access only a small proportion of their address space at any time • Temporal locality • Items accessed recently are likely to be accessed again soon • e.g.,
+
+---
+
+nearby items from disk to smaller DRAM memory • Main memory • Copy recently accessed and nearby items from DRAM to smaller SRAM memory • Cache memory attached to CPU • Cache may also refer to any storage that takes advantage of locality Memory Hierarchy Levels • Block: unit of
+
+---
+
+• Capacity • Working set of program is larger than cache size • Not enough room to cache a locality • Conflict • collisions, multiple blocks competing for the same space • Misses may be reduced by changing the associativity of the cache Cache Organizations • Direct mapped • Set
+
+---
+
+in memory technologies • Create an illusion of large amounts of fast memory with a hierarchy • Uses caches close to the processor • Cache Details • Organization: direct mapped, set associative, fully associative • Write policy: write-through vs. write-back • Replacement policy: direct, LRU, random Summary • Tradeoffs to

@@ -1,0 +1,25 @@
+or data memory output. ### Data Trends and Insights - The diagram represents data flow and control paths in a basic single-cycle datapath, indicating how instructions are fetched, decoded, executed, and results stored. - It visualizes how different control signals manipulate the flow of data for tasks like arithmetic operations,
+
+---
+
+memory access, and branching. - By changing the control signals, different types of instructions (e.g., R-type, I-type) can be executed effectively. ### Conclusion - This diagram forms the basis of understanding CPU operations and how different components interact during the execution cycle, crucial for designing efficient processor architectures. PROCESSOR DATAPATH
+
+---
+
+Introduction • MIPS ISA • 3 Instruction Types • R-type, I-type, J-type • Datapath and Control Unit • Simplified • Pipelined • Simple subset • Memory reference: lw, sw • Arithmetic/logical: add, addi, sub, and, or, slt • Control transfer: beq, j Instruction Format Review • Three instruction formats •
+
+---
+
+instructions executed in one clock cycle • Each datapath element can only do one function at a time • Any element needed more than once must be duplicated • Hence, we need separate instruction and data memories • Use multiplexers where alternate data sources are used for different instructions Control
+
+---
+
+25:0 Jump Datapath With Jumps Added Single-Cycle Implementation • Every instruction begins execution on one clock edge and completes execution on the next clock edge. • Clock cycle time must be at least as long as the longest instruction (load word). • Cycle time = PC’s propagation time + Instruction
+
+---
+
+Memory Access Time + Register File Access Time + ALU Delay (address calculation) + Data Memory Access Time + Register File Setup Time + Clock Skew Single-Cycle Implementation • Every instruction begins execution on one clock edge and completes execution on the next clock edge. • Clock cycle time must
+
+---
+
+32-bits • Easier to fetch and decode • Few and regular instruction formats • Can decode and read registers in one step • Load/store addressing • Can calculate address in 3rd stage, access memory in 4th stage • Alignment of memory operands • Memory access takes only one cycle MIPS

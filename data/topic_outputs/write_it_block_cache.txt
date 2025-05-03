@@ -1,0 +1,17 @@
+it is a hit • We can use the data stored in the cache • CPU proceeds normally Cache Misses • If the valid bit is not set or if the tags do not match, it is a miss • Control unit must detect and process a miss • Creates
+
+---
+
+• Simulation of a system with 64KB cache, 16-word blocks • 1-way: 10.3% • 2-way: 8.6% • 4-way: 8.3% • 8-way: 8.1% Cache Write • If we replace the data memory in our datapath with a cache, what happens on a store word instruction? • If we wrote the data
+
+---
+
+into only the data cache without changing main memory; then main memory would have a different value from that in the cache. • In such a case, the cache and memory are said to be inconsistent. Write-Through • Whenever changes are made to the data in the cache, also change
+
+---
+
+on write if write buffer is already full Write-Back • On data-write hit, just update the block in cache • Keep track of whether each block is “clean” or “dirty” • When a dirty block is replaced • Write it back to memory • Can use a write buffer to
+
+---
+
+allow replacing block to be read first Write Allocation • What should happen on a write miss? • Alternatives for write-through • Allocate on miss: fetch the block • Write around: don’t fetch the block • Since programs often write a whole block before reading it (e.g., initialization) • For

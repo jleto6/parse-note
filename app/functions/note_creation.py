@@ -11,7 +11,7 @@ import ast
 import re
 
 from functions.gpt_functions import end_answer, end_section
-from config import COMPLETED_NOTES_INDEX, FILE_EMBEDDINGS, DATA_DIR
+from config import COMPLETED_NOTES_INDEX, FILE_EMBEDDINGS, COMPLETED_NOTES_FILE
 
 
 def strip_html(text):
@@ -23,6 +23,7 @@ openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) # Use OpenAI
 previous_content = ""
 string_buffer = ""
 answer_buffer = ""
+i = 0
 
 def get_embedding(text, model="text-embedding-3-small"):
     return openai_client.embeddings.create(input=[text], model=model).data[0].embedding
@@ -65,13 +66,15 @@ def note_creation(content):
 
     print("Calling GPT (Creating Notes)")
 
+    global i
 
     from app import socketio
 
     # RAG
     current_embedding = embed_file(content)
 
-    i = 0
+    prior_context = "<strong>Heading Rule:</strong> You must insert exactly one <h2> heading at the beginning of the output to represent the main topic. There must be one and only one <h2> tag. Do not include multiple <h2> tags under any circumstances. You may optionally include one or two <h3> subheadings if absolutely necessary, but avoid them unless essential for clarity or structure. Treat the rest of the content as a single section under that heading."
+    
     # Try to open CSV file to compare current embedding to prior embeddings
     try:
         # Load the saved CSV file as a pandas DataFrame
@@ -93,23 +96,47 @@ def note_creation(content):
 
         print(top_chunk["score"].iloc[0])
 
-        if top_chunk["score"].iloc[0] < 0.4:
+
+        if top_chunk["score"].iloc[0] < 0.6:
             print("# Low similarity – create a new file")
             i += 1
             current_file = f"{COMPLETED_NOTES_INDEX}_{i}.txt"
 
+            prior_context = "<strong>Heading Rule:</strong> You must insert exactly one <h2> heading at the beginning of the output to represent the main topic. There must be one and only one <h2> tag. Do not include multiple <h2> tags under any circumstances. You may optionally include one or two <h3> subheadings if absolutely necessary, but avoid them unless essential for clarity or structure. Treat the rest of the content as a single section under that heading."
+
         else:
             print(f"The most similar file to the current file is: {most_similar_file_name}")
-            current_file = os.path.join(DATA_DIR, most_similar_file_name)
-        
 
-    except:
+            similar_file_dir = (f"{COMPLETED_NOTES_FILE}/{most_similar_file_name}")
+
+            # Read the content of the current file
+            with open(similar_file_dir, "r") as file:
+                similar_file_content = file.read()
+
+            current_file = os.path.join(COMPLETED_NOTES_FILE, most_similar_file_name)
+
+            prior_context = f"""
+            You are continuing work in an existing file. Below is the current content of that file. 
+            Do not discard or reword its details—preserve everything. However, you must now expand it using the new raw content. 
+            Do not simply append it to the end. Instead, intelligently merge the new material into the existing file in a way that flows naturally, 
+            while preserving accuracy, logic, and formatting. You may revise transitions or slightly adjust the structure to unify them. 
+            The final output should contain exactly one <h2> heading, possibly renamed to better reflect the combined content, but never duplicated. 
+            At most, use one or two <h3> subheadings only if necessary. Think of this like you’re evolving the document—not just adding on.
+
+            The current content of the file is:
+            {similar_file_content}
+            """
+
+
+    except Exception as e:
+        print(e)
         # No CSV file to compare to yet
-        # print("No CSV file to compare to yet")
+        print("No CSV file to compare to yet")
         current_file = f"{COMPLETED_NOTES_INDEX}_{i}.txt"
         pass
 
     
+    # print(prior_context)
 
     # GPT
 
@@ -140,43 +167,45 @@ def note_creation(content):
                 )
             },
             {
-                "role": "user",
-                "content": f"""
-    Write clear, detailed documentation in valid HTML to be inserted into a Jinja template. Output valid HTML without triple backticks, code fences, or extra symbols like >>>. Do not use any Markdown syntax (such as ** ** or __ __) for bold text; only use HTML <strong> tags for emphasis. Use headings (such as <h2> or <h3>) occasionally only on MAJOR new sections, but primarily use paragraphs (<p>) with inline styling. All text should default to a 'whitesmoke' color (for example, use style="color:whitesmoke;"). Bold all important terms and keywords by wrapping them in <strong> tags (for example, <strong>important term</strong>).
+            "role": "user",
+            "content": f"""
+        Write deeply detailed, structured documentation in valid HTML, intended for insertion into a Jinja template. Output raw HTML—no Markdown, code fences, or formatting artifacts. Use <p style="color:whitesmoke;"> for all body text. Bold all key terms using <strong>. All code or syntax references should use <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">.
 
-    For any actual code references or code snippets—identified by context or formatting—wrap them in a <code> tag styled with a cold tech blue color and a monospaced font (for example, <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">exampleCode</code>).
+        <strong>Structural Rules:</strong>  
+        - Use exactly one <h2> tag for the overall topic. Do not generate more than one.  
+        - Use at most one or two <h3> subheadings if essential for clarity.  
+        - Use <ol> for any step-by-step processes, ordered procedures, or sequences—<strong>always</strong>.  
+        - Use <ul> only if content clearly involves categories or non-ordered groupings.  
+        - Avoid excessive lists—favor <p> for general explanation.  
+        - Insert '<!-- END_SECTION -->' after every HTML block.
 
-    <strong>Enforce structure strictly:</strong> Use an <strong>ordered list (<ol>)</strong> whenever the content describes a clear step-by-step process, sequence of operations, or historical developments—<strong>always</strong>. If the text describes types, categories, examples, or grouped concepts without a required order, use an <strong>unordered list (<ul>)</strong> instead of paragraphs sparingly, only if clearly warranted. Do not collapse clearly structured sequences or groupings into plain text. If a process or grouping is implied but not explicitly stated as a list, <strong>still format it as a list</strong> if the structure is logically clear.
+        <strong>Clarity & Integration Rules:</strong>  
+        - When a new concept or term appears, briefly define it and explain its role or relevance within the system or topic.  
+        - If content contains examples, scenarios, or data, include them—they may replace long explanations if they clarify the point.  
+        - Seamlessly insert brief (1–2 sentence) insights only when needed to explain:  
+        1. Why a concept matters  
+        2. How it fits into the system  
+        3. How it builds on prior content  
 
-    Avoid excessive or unnecessary lists. Only use <ul> or <ol> when the content strongly implies grouping or order. Otherwise, favor paragraphs (<p>).
+        Do not introduce or summarize. Do not address the reader. Avoid filler or framing statements.
 
-    At the end of each and every single element of HTML, insert '<!-- END_SECTION -->'.
+        {prior_context}
 
-    <strong>Subtle Contextual Insight Rule:</strong> When necessary, include <strong>short, direct context-building remarks</strong> to explain:
-    1. <strong>Why a concept matters</strong> in the current topic.
-    2. <strong>What role the concept plays</strong> in the overall subject area or system.
-    3. <strong>How it connects to the previous content</strong>.
+        The following is a summary of previously covered material (for context only—do not repeat it):
+        {previous_content}
 
-    These remarks must be integrated seamlessly, expressed in one or two sentences max, and <strong>strictly tied to the topic at hand</strong>—not general summaries or extrapolations. If no context is needed, skip it.
-
-    <strong>Concept Clarity Rule (NEW):</strong> When a new concept, event, term, process, or component is introduced, <strong>briefly define what it is</strong> and <strong>explain how it fits into the subject matter or relates to earlier material</strong>. This should be concise and embedded naturally into the explanation, ensuring the learner can follow the logic and purpose of the term without needing outside references.
-
-    <strong>Example Handling Rule:</strong> If the provided content includes an <strong>example, scenario, or source excerpt</strong> meant to illustrate a concept, <strong>always include it</strong> in the output. When an example is used, it may substitute for a longer explanation if the concept becomes clear through it. Prefer slightly more concise, conceptual phrasing in these cases—but only if the example fully supports the understanding.
-
-    Do not introduce the output with framing or general statements. Do not address an audience or use phrases like 'you should' or 'we now see.' Stick strictly to factual, structured, and academic exposition.
-
-    The following is a summary of previously covered material. Do not repeat this information, but use it to build continuity and contextual understanding if helpful:
-    {previous_content}
-
-    Now focus primarily and thoroughly on the following new content. Generate deeply detailed, structured documentation that closely adheres to the text, with structure and insight as described:
-    {file_content}
-    """
-            },
+        Now expand upon this new content with structured, accurate, and conceptually faithful output:
+        {file_content}
+        """
+        },
         ],
         stream=True
     )
 
     global string_buffer
+
+    open(current_file, "w", encoding="utf-8") # Clear/open the file in
+
     for chunk in completion:
         try:
             delta = chunk.choices[0].delta
@@ -185,7 +214,8 @@ def note_creation(content):
             if content:
                 string_buffer += content
                 output_buffer += content
-                socketio.emit("update_notes", {"notes": content})
+                # Stream notes to backend via websockets
+                # socketio.emit("update_notes", {"notes": content})d
                 with open(current_file, "a", encoding="utf-8") as f:
                     f.write(content)
                     f.flush()
@@ -195,7 +225,8 @@ def note_creation(content):
             print(f"Chunk type: {type(chunk)}")
             print(f"Chunk content: {chunk}")
 
-    socketio.emit("update_notes", {"notes" : "<br/><br/>"})
+    # Emit linebreaks at the end
+    # socketio.emit("update_notes", {"notes" : "<br/><br/>"})
 
     output_buffer = strip_html(output_buffer)
 

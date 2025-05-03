@@ -1,0 +1,45 @@
+This image is a diagram of a datapath in a computer architecture context. Here's a detailed analysis: ### Layout Analysis - **Top Section**: - **MUX**: There are two multiplexers (MUX). The top MUX is labeled with "PCSrc" and affects the path of the ALU result going back to adder. -
+
+---
+
+(`Read data 1` and `Read data 2`) and writing data back (`Write data`). - **Right Section**: - **ALU Control**: The ALU performs operations based on the "ALU operation" signal, with inputs from "Read data 1" and a MUX which decides between "Read data 2" and the sign-extended immediate value. -
+
+---
+
+**Shift left 2**: Shifts the sign-extended immediate value for branch calculations. - **Data Memory**: The ALU result is used to address the data memory for read/write operations. This is controlled by the "MemWrite" and "MemRead" signals. ### Labels and Components - **PCSrc**: Determines the source of the new PC value,
+
+---
+
+deciding between sequential execution and branch/jump. - **RegWrite, MemWrite, MemRead**: Control signals for writing to registers, writing to memory, and reading from memory, respectively. - **ALUSrc**: MUX control for ALU input, choosing between register data and immediate values. - **MemtoReg**: Controls whether data written to a register is from ALU
+
+---
+
+Circuits • Have “state” • Output depends on current input and previous outputs • Example: Register File • Output depends on the contents of the registers in the file MIPS Register File • 32 32-bit registers • One write bus • Two read buses • Selection Inputs • RegWrite (write
+
+---
+
+destination number for the write register comes from the rt field (bits 20:16) • Asserted: the register destination number for the write register comes from the rd field (bits 15:11) Control Signals – Register Write • RegWrite • Asserted: the register destination specified by the write register input is written
+
+---
+
+with the value from the write data input Control Signals – ALU Source • ALUSrc • Deasserted: The second ALU operand comes from the second register file output • Asserted: The second ALU operand is the sign-extended lower 16 bits of the instruction Control Signals - PCSrc • Program Counter
+
+---
+
+Source • Deasserted: The PC is replaced by PC + 4 • Asserted: The PC is replaced by a branch target address Control Signals – Memory Read • MemRead • Asserted: Data memory contents designated by the address input are put on the read data output. Control Signals – Memory
+
+---
+
+Write • MemWrite • Asserted: Data memory contents designated by the address input are replaced by the value on the write data input. Control Signals – Memory to Register • MemtoReg • Deasserted: The value fed to the register write data input comes from the ALU • Asserted: The value
+
+---
+
+fed to the register write data input comes from the data memory. Control Signals • All but one signal can be set based only on the opcode • PCSrc is the exception • Relies on the result of a branch • PCSrc should be set if the instruction is beq
+
+---
+
+select the ALU operation • Set ALUSrc. select either Read data 2 or a sign-extended immediate for the ALU. • Memory access: • Set Branch: affects PCSrc • Set MemRead • Set MemWrite. • Write back: • Set MemtoReg: decides between sending the ALU result or the memory value to
+
+---
+
+the register file • Set Reg-Write: specifies whether the register file can be written Pipelined Control RegDst ALUSrc ALUOp1 ALUOp0 Branch MemRead MemWrite MemtoReg Regwrite Pipelined Control Hazards • Situations that prevent starting the next instruction in the next cycle • Structure hazard • A required resource is busy •

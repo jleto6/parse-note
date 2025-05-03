@@ -61,11 +61,14 @@ def handle_connect():
     folder = COMPLETED_NOTES_FILE
     files = sorted(os.listdir(folder), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
 
+    notes_buffer = ""
     for file in files: 
         with open(f"{COMPLETED_NOTES_FILE}/{file}", "r") as f:
             stored_notes = f.read()
             stored_notes = markdown.markdown(stored_notes) # Convert to HTML
-        socketio.emit("update_notes", {"notes": stored_notes, "refresh": True})
+            notes_buffer += stored_notes
+
+    socketio.emit("update_notes", {"notes": notes_buffer, "refresh": True})
 
     with open(ANSWERS, "r") as f:
         stored_answers = f.read()

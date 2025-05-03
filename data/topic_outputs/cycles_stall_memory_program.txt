@@ -1,0 +1,25 @@
+instructions in a loop, induction variables • Spatial locality • Items near those accessed recently are likely to be accessed soon • E.g., sequential instruction access, array data Memory Hierarchy • Smaller, faster memory is closer to the processor Caches • Permanent storage on disk • Copy recently accessed and
+
+---
+
+Stall until the data is fetched from memory • Instruction cache miss • Restart instruction fetch • Data cache miss • Complete data access Cache Miss • Misses are classified into three different types • Compulsory (cold start) • First access to a piece of data • Cannot be avoided
+
+---
+
+the data in main memory. Write-Through • Whenever changes are made to the data in the cache, also change the data in main memory. • Writes take longer • Suppose 10% of instructions are stores and write to memory takes 100 cycles • If base CPI = 1, then effective
+
+---
+
+CPI = 1 + 0.1×100 = 11 Write-Through • Whenever changes are made to the data in the cache, also change the data in main memory. • Writes take longer • Solution: write buffer • Holds data waiting to be written to memory • CPU continues immediately • Only stalls
+
+---
+
+block from the next lowest level • Hit time < Miss penalty Measuring Cache Performance • Components of CPU time • Program execution cycles • Includes cache hit time • Memory stall cycles • Mainly from cache misses • CPU time = (CPU cycles + Memory-stall cycles) * Clock cycle
+
+---
+
+time • Memory-stall cycles = Read-stall cycles + Write-stall cycles • Read-stall cycles = Reads/Program * Read miss rate * Read miss penalty • Write-stall cycles = (Writes/Program * write miss rate * write miss penalty) + Write buffer stalls Measuring Cache Performance • Components of CPU time • Program
+
+---
+
+execution cycles • Includes cache hit time • Memory stall cycles • Mainly from cache misses penalty Miss n Instructio Misses Program ns Instructio penalty Miss rate Miss Program accesses Memory cycles stall Memory   =   = Cache Performance Example • Assume an instruction cache miss rate

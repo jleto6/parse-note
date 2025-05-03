@@ -1,0 +1,21 @@
+or two registers, using fields of the instruction to select the registers to read. For the load word instruction, we need to read only one register, but most other instructions require that we read two registers. Instruction Execution • Fetch: • Get the next instruction: stored at PC Instruction Execution
+
+---
+
+read one register • Also access data memory Processor Overview Data “flows” through memory and functional units Processor Overview Can’t just join wires together Use multiplexers Processor Overview Multiplexers require selection signals Control Signals Signals • Information encoded in binary • Low voltage = 0, High voltage = 1 •
+
+---
+
+One wire per bit • Multi-bit data encoded on multi-wire buses Logic Design Review • Combinational Circuits • Output depends only on current input • Operate on data • Example: ALU • Given the same input a combinational circuit will always produce the same output Logic Design Review • Sequential
+
+---
+
+enable signal) • Reg. Source A • Reg. Source B • Reg. Destination Write Control Signals Every Clock Cycle • We do not show a write control signal when a state element is written on every active clock edge. • Program Counter When Necessary • If a state element is
+
+---
+
+not updated on every clock, then an explicit write control signal is required. • Register File Datapath Elements • Most elements have 32-bit wide inputs and outputs • Buses labeled with their width Datapath Elements - Combinational I0 I1 Y M u x S Multiplexer Y = S ? I1
+
+---
+
+• PC written on every clock cycle • Instruction memory read on every clock cycle • no optional control lines • Instruction decode/register file read • Register file read on every clock cycle • no optional control lines • Execution: • Set RegDst: select the Result register • Set ALUOp:
