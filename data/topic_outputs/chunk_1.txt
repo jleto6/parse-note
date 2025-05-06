@@ -1,0 +1,41 @@
+illusion of large amount of fast memory by organizing different types of storage to optimize speed and access.
+
+The principal of locality refers to the observation that programs tend to access only a small portion of their address space at any given time, which is crucial to optimizing the memory hierarchy. There are 2 main types of locality: 
+
+1. **Temporal locality**: Refers to the tendency of programs to access the same memory locations repeatedly within a short period. For example, instructions in loops and function variables.
+
+2. **Spatial locality**: Denotes the likelihood of accessing memory locations close to those recently accessed. This occurs in sequential instruction access and accessing array data.
+
+Understanding these principals helps in designing cache systems and hardware to enhance performance.
+
+**Memory Hierarchy Levels**
+
+- Cache levels include smaller, faster memory that is closer to the processor.
+- **Data** moves through the levels — from input and secondary storage to memory and through to the processor — from permanent storage (like SSD or HDD) to main memory (DRAM), and then to smaller, faster cache (SRAM) near the CPU.
+- Data is moved between levels in blocks, which may be multiple words wide. This is a key concept in managing memory transitions.
+- Caches are used to store frequently accessed data closer to the processor, minimizing access times and improving speed.
+
+Cache memory is the closest level of memory hierarchy to the CPU. It serves to satisfy either the most frequently or recently accessed data.
+
+A hit occurs when accessed data is present in the upper memory level, and a miss occurs when it is not. The task of a memory hierarchy and cache system is to maximize hit rates.
+
+---
+
+These notes describe the importance of memory hierarchy, the principle of locality, types of locality, and how caches function in computing systems to improve performance.
+The image is blank, containing no visible content. If you intended to upload or describe an image with content such as a diagram, chart, graph, or handwritten notes, please try again.
+Control Signals
+
+Datapath with Control 
+Examples
+
+Control Signal Overview
+
+**Exceptions and Interrupts**
+
+"Unexpected" events such as exceptions and interrupts require altering control flow. Exceptions occur within the CPU, e.g., undefined opcodes or overflows, while interrupts arise from external I/O controllers. For example, an I/O controller might send an interrupt when a disk finish reading data, prompting the CPU to switch context to a waiting process.
+
+In MIPS, exceptions are handled by the System Control Coprocessor (CP0), saving the program counter in the Exception Program Counter (EPC), indicating problems in the status register.
+
+The exception handling process involves reading the cause, transferring control to the appropriate handler, and determining required actions. If resolvable, corrective measures are taken; otherwise, the program is terminated, using the EPC to correct errors.
+
+Pipeline exceptions introduce another form of control hazard. For example, overflow during the execution stage requests premature register overwrite. Delays in handling instructions and instructing the control of the handler. This approach is similar to handling mispredictions. The PC holds the instruction, requiring  in pipeline, simulating execution in parallel as a speculative address anticipation 

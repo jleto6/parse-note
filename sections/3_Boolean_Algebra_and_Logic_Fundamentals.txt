@@ -1,0 +1,6 @@
+3: Boolean Algebra and Logic Fundamentals  
+- Canonical forms: Sum of Products (SOP) and Product of Sums (POS)  
+- Minterms and maxterms: connecting truth tables to canonical forms  
+- Constructing SOP from rows where output = 1  
+- Constructing POS from rows where output = 0  
+- Examples using minterms and maxterms

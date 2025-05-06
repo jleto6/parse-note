@@ -1,45 +1,60 @@
-<h2>Instruction Execution in MIPS Architecture</h2>
-
-<p style="color:whitesmoke;">The MIPS architecture is a streamlined, RISC (Reduced Instruction Set Computing) based model which employs a series of steps and components to execute instructions. The instructions are fetched sequentially, with <strong>program counter (PC)</strong> incrementing by 4 to accommodate the next instruction's address.</p>
+<h1>Caches in Computing Systems</h1>
+<p style="color:whitesmoke;">
+<strong>Caches</strong> are specialized, fast storage components used within computer systems to temporarily remember frequently accessed data. The fundamental goal of a cache is to reduce the average access time to memory by keeping copies of data that are likely to be used again soon. This is crucial because modern processors are significantly faster than main memory; without a cache, the processor would often be forced to wait, reducing overall efficiency.
+</p>
 <!-- END_SECTION -->
-
-<p style="color:whitesmoke;">The <strong>instruction set</strong> defines a range of operations including arithmetic, logical, memory, and control operations. Each instruction is represented in a specific binary format:</p>
+<p style="color:whitesmoke;">
+In an <strong>ideal computing system</strong>, unlimited fast memory access would be available. Such a system is not practically achievable due to physical and economic constraints. As a solution, systems employ a <strong>memory hierarchy</strong>, which is an arrangement of storage types where each level balances size, cost, and speed. <strong>Caches</strong> usually occupy one or more levels close to the processor in this hierarchy, serving as a buffer between fast processing units and slower main memory.
+</p>
+<!-- END_SECTION -->
+<p style="color:whitesmoke;">
+The performance of a cache is often measured in terms of <strong>hit rate</strong> and <strong>miss rate</strong>:
+</p>
 <ul>
-    <li>Format for all operations except jump and branch: <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">op rs rt rd shamt funct</code> where each field has a designated bit-size, such as opcode (6 bits), source registers <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">rs</code> and <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">rt</code> (each 5 bits), destination register <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">rd</code> (5 bits), shift amount <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">shamt</code> (5 bits), and function code <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">funct</code> (6 bits).</li>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>Hit rate</strong>: The proportion of memory accesses found in the cache. When a data item requested by the CPU is already stored in the cache, this is considered a <strong>cache hit</strong>, and the data is quickly returned.
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>Miss rate</strong>: The proportion of memory accesses not found in the cache. In a <strong>cache miss</strong>, the data must be fetched from a slower, lower level of the memory hierarchy, increasing access time.
+    </p>
+  </li>
 </ul>
 <!-- END_SECTION -->
-
-<p style="color:whitesmoke;">Key operations in the MIPS subset include:</p>
-<ul>
-    <li><strong>Arithmetic Operations</strong>: add, subtract, AND, OR, SLT (Set on Less Than)</li>
-    <li><strong>Immediate Operations</strong>: e.g., <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">addi rt, rs, imm16</code>, which involve a constant value.</li>
-    <li><strong>Memory Access</strong>: e.g., <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">lw rt, rs, imm16</code> for loading from memory.</li>
-    <li><strong>Control Flow</strong>: branch and jump instructions.</li>
-</ul>
+<p style="color:whitesmoke;">
+The <strong>CPI</strong>, or <strong>Cycles Per Instruction</strong>, indicates how many clock cycles, on average, the processor needs to execute each instruction. Cache performance heavily influences CPI: high miss rates cause CPI to increase because more time is required to retrieve data from slower memory, whereas high hit rates keep the CPI closer to the base value (the CPI measured if all memory accesses were hits).
+</p>
 <!-- END_SECTION -->
-
-<h3>Execution Process</h3>
+<p style="color:whitesmoke;">
+An example illustrates the impact of cache miss rates on overall system performance:
+</p>
 <ol>
-    <li><p style="color:whitesmoke;"><strong>Fetch:</strong> Retrieve the instruction from instruction memory using the address in the <strong>PC</strong>. This marks the start of the execution cycle.</p></li>
-    <!-- END_SECTION -->
-    <li><p style="color:whitesmoke;"><strong>Decode:</strong> The opcode field of the instruction determines the type of operation, whether arithmetic/logical, memory, or branch, allowing the control unit to set up the required pathways and operations within the processor.</p></li>
-    <!-- END_SECTION -->
-    <li><p style="color:whitesmoke;"><strong>Execute:</strong> The execution is based on type; an ALU might perform arithmetic, while memory instructions access data from cache or RAM.</p></li>
-    <!-- END_SECTION -->
-    <li><p style="color:whitesmoke;"><strong>Write Back:</strong> For instructions that produce a result, such as arithmetic instructions, the result is written back to a register.</p></li>
-    <!-- END_SECTION -->
+  <li>
+    <p style="color:whitesmoke;">
+      Suppose the <strong>data cache miss rate</strong> is <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">0.02</code> (2%), with a <strong>base CPI</strong> of <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">2</code> and a <strong>miss penalty</strong> of <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">100</code> cycles. The <strong>extra cycles</strong> added for each miss can be calculated as:
+    </p>
+    <p style="color:whitesmoke;">
+      <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">0.02 * 100 = 2</code> additional cycles per instruction, on average.
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      If <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">36%</code> of instructions are loads, and <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">6%</code> are store operations, the overall effect on the CPI can be accumulated (for example): 
+      <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">base CPI + D-cache miss cycles = 2 + 2 = 4</code>. 
+    </p>
+    <p style="color:whitesmoke;">
+      Depending on instruction mix and memory operation frequencies, the resulting CPI could be higher, such as <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">5.44</code>.
+    </p>
+  </li>
 </ol>
-
-<h3>Branching and Jumping</h3>
-<p style="color:whitesmoke;">Branching, such as using <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">beq rs, rt, offset</code>, involves comparing register values and potentially altering the control flow when conditions are met. This requires calculating a new <strong>target address</strong>, based on the instruction's offset field, which is handled through:</p>
-<ol>
-    <li><p style="color:whitesmoke;">Register operands are fetched and evaluated.</p></li>
-    <!-- END_SECTION -->
-    <li><p style="color:whitesmoke;">The <strong>ALU</strong> calculates the offset address, following a shift and concatenation process if a jump is needed. This involves appending the most significant bits of the current PC to the target address derived from the instruction's fields.</p></li>
-    <!-- END_SECTION -->
-</ol>
-<p style="color:whitesmoke;">In summary, the transition of control flow, through branch or jump instructions, is critical for implementing loops and conditional structures efficiently in MIPS.</p>
 <!-- END_SECTION -->
-
-<p style="color:whitesmoke;">The systematic approach of instruction execution and effective handling of control flow instructions underscore the MIPS architecture's commitment to efficiency and performance.</p>
+<p style="color:whitesmoke;">
+In a hypothetical scenario with a perfect cache (i.e., <strong>no misses</strong>), the CPU would maintain the <strong>base CPI</strong> (e.g., <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">2</code>). However, if memory performance degrades—such as by increasing miss rate or penalty—the CPI correspondingly grows, e.g., to <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">2.72</code> or higher.
+</p>
+<!-- END_SECTION -->
+<p style="color:whitesmoke;">
+If memory performance is halved, the CPI might increase further, illustrating how significantly memory management, and specifically cache effectiveness, determines overall system efficiency. The fraction of time spent waiting for memory consistently forms a major part of the CPU's cycle count, which demonstrates the critical role caches play in balancing processor speed and memory latency.
+</p>
 <!-- END_SECTION -->

@@ -1,0 +1,5 @@
+4: Logic Gates and Circuits  
+- Basic logic gates  
+- Adder circuits  
+- Combinational vs sequential circuits  
+- Block diagrams of digital circuits

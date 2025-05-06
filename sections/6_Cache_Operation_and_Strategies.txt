@@ -1,0 +1,10 @@
+6: Cache Operation and Strategies  
+- Cache levels and memory hierarchy details  
+- Cache operation: storing frequently accessed data for speed  
+- Managing data movements: blocks and words  
+- Write strategies:  
+  - Write-through cache  
+  - Write-back cache  
+  - Use of dirty bit  
+  - Handling write hits and misses  
+- Cache performance metrics (CPI calculation involving cache)

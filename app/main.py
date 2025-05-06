@@ -13,6 +13,7 @@ from functions.note_creation import note_creation
 from functions.file_handler import handle_image, handle_pdf, get_file_type, handle_video, clear_output, split_text
 from functions.topic_modelling import nlp
 from functions.question_manager import embed_corpus
+from functions.outline import create_outline
 
 from app import socketio, app   
 from threading import Thread
@@ -104,6 +105,9 @@ def main():
 
     time.sleep(3)
 
+    # Creata an outline from the raw text and return a df with info
+    df = create_outline(RAW_TEXT)
+
     # Embed the extracted RAW TEXT
     embed_corpus(RAW_TEXT)
 
@@ -112,36 +116,41 @@ def main():
     # Wait for the timer thread to finish
     timer_thread.join()
 
-    # If only one file, no topic modelling needed
-    if file_flag:
-        split_text(RAW_TEXT, 500)
-        ordered_files = sorted(os.listdir(TOPIC_OUTPUTS_DIR), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
-    else:
+    # Chunk sequentially
+    split_text(RAW_TEXT, 500)
+    ordered_files = sorted(os.listdir(TOPIC_OUTPUTS_DIR), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
 
-        # Try NLP if more than one file
-        print("Topic Modelling")
-        try:
-            # Topic Modeling For Large Input
-            nlp()
-            files = os.listdir(TOPIC_OUTPUTS_DIR) # Loop through topic text files
-            ordered_files = order_files(files) # Order the topics in a logical order with GPT
-            print(ordered_files)
-        # If Too Small For Topic Modelling, Just Split
-        except TypeError as e:
-            print(e)
-            split_text(RAW_TEXT, 500)
-            ordered_files = sorted(os.listdir(TOPIC_OUTPUTS_DIR), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
-            # print("-------------")
-            # print(ordered_files)
-            # time.sleep(500)
+    # # If only one file, no topic modelling needed
+    # if file_flag:
+    #     split_text(RAW_TEXT, 500)
+    #     ordered_files = sorted(os.listdir(TOPIC_OUTPUTS_DIR), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
+    # else:
+
+    #     # Try NLP if more than one file
+    #     print("Topic Modelling")
+    #     try:
+    #         # Topic Modeling For Large Input
+    #         topic_summary = nlp() # Perform NLP and get its data
+    #         files = os.listdir(TOPIC_OUTPUTS_DIR) # Loop through topic text files
+    #         ordered_files = order_files(files, topic_summary) # Order the topics in a logical order with GPT
+    #         print(ordered_files)
+    #     # If Too Small For Topic Modelling, Just Split
+    #     except TypeError as e:
+    #         print(e)
+    #         split_text(RAW_TEXT, 500)
+    #         ordered_files = sorted(os.listdir(TOPIC_OUTPUTS_DIR), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
+    #         # print("-------------")
+    #         # print(ordered_files)
+    #         # time.sleep(500)
 
     print("--------------")
     print("Creating Notes")
     print("--------------")
 
+
     # Create notes on files
     for file in ordered_files:
-        note_creation(f"{TOPIC_OUTPUTS_DIR}/{file}") # Send topics GPT to make notes on
+        note_creation(f"{TOPIC_OUTPUTS_DIR}/{file}", df) # Send topics GPT to make notes on
 
     # Read the content of the notes file
     with open(COMPLETED_NOTES, "r") as file:

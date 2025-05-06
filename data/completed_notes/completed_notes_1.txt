@@ -1,59 +1,59 @@
-<h2>MIPS Architecture and Pipelining: Instruction Set, Datapath, Hazards, and Interrupt Handling</h2>
-
-<p style="color:whitesmoke;">The <strong>MIPS instruction set</strong> consists of three primary instruction types: <strong>R-type</strong>, <strong>I-type</strong>, and <strong>J-type</strong>. Each is defined by distinct fields, essential for both instruction formatting and execution. Understanding these fields is crucial for grasping how instructions are processed:</p>
-<ul>
-  <li><p style="color:whitesmoke;"><strong>op:</strong> The <em>operation code</em> that specifies the instruction type and operation.</p></li>
-  <li><p style="color:whitesmoke;"><strong>rs, rt, rd:</strong> These <em>register specifiers</em> are used for identifying source and destination registers necessary for instruction execution.</p></li>
-  <li><p style="color:whitesmoke;"><strong>shamt:</strong> Specifies the <em>shift amount</em>, integral for shift operations.</p></li>
-  <li><p style="color:whitesmoke;"><strong>funct:</strong> This field details the specific operation within R-type instructions, complementing the <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">op</code> code.</p></li>
-  <li><p style="color:whitesmoke;"><strong>address/immediate:</strong> Utilized for arithmetic computations or memory addresses, serving as either an immediate value or offset in I-type instructions.</p></li>
-  <li><p style="color:whitesmoke;"><strong>target address:</strong> Employed in J-type instructions to direct the execution flow through jumps.</p></li>
-</ul>
+<h1>Caches, Locality, and Memory Hierarchy in Computer Systems</h1>
+<p style="color:whitesmoke;">
+The <strong>illusion of a large amount of fast memory</strong> is created in computer systems by organizing various types of storage into a layered structure that optimizes both speed and access. This layered organization is referred to as the <strong>memory hierarchy</strong>, a foundational architectural strategy enabling systems to approach the ideal of rapid, expansive memory without the prohibitive cost or physical limitations posed by providing only the fastest technologies at large scales.
+</p>
 <!-- END_SECTION -->
 
-<h3>Advanced Pipelining Integration in MIPS Architecture</h3>
+<p style="color:whitesmoke;">
+The fundamental <strong>principle of locality</strong> is central to efficient memory hierarchy operation. This principle recognizes that <strong>programs tend to access only a small subset of their address space within short time intervals</strong>. Leveraging this behavioral property is critical in designing cache systems that increase performance by maximizing the possibility that needed data is quickly accessible.
+</p>
+<!-- END_SECTION -->
 
-<p style="color:whitesmoke;"><strong>Pipelining</strong> facilitates overlapping execution of instructions, enhancing overall throughput without impacting individual instruction <strong>latency</strong>. In pipelined MIPS systems, each stage is balanced to maintain consistent processing times across stages.</p>
-
+<p style="color:whitesmoke;">
+There are <strong>two main types of locality</strong>:
+</p>
 <ol>
-  <li><p style="color:whitesmoke;"><strong>Instruction Fetch (IF):</strong> Obtains the next instruction from memory. This step is crucial to keep the pipeline full.</p></li>
-  <li><p style="color:whitesmoke;"><strong>Instruction Decode (ID):</strong> Interprets the fetched instruction and fetches necessary registers, producing control signals.</p></li>
-  <li><p style="color:whitesmoke;"><strong>Execute (EX):</strong> The ALU performs operations, essential for completing arithmetic and logic functions.</p></li>
-  <li><p style="color:whitesmoke;"><strong>Memory Access (MEM):</strong> Involves read/write operations in memory, primarily for load/store instructions.</p></li>
-  <li><p style="color:whitesmoke;"><strong>Write Back (WB):</strong> Finalizes execution by saving results back to the register file.</p></li>
+  <li>
+    <strong>Temporal locality</strong>: This phenomenon describes the tendency of programs to access the same memory locations repeatedly over short durations. It is commonly seen with instructions inside loops, local variables, or frequently used program data. Exploiting temporal locality allows hardware to keep recently accessed data in faster, smaller storage (such as cache), anticipating repeated use in the near future.
+  </li>
+  <li>
+    <strong>Spatial locality</strong>: In contrast, spatial locality refers to the likelihood that memory locations physically adjacent to a recently accessed address will be accessed soon. This is observed in linear instruction execution and iteration over contiguous data structures like arrays. Hardware often fetches and stores not just the requested data, but also nearby values in anticipation of access, making block-based data movement in memory hierarchy advantageous.
+  </li>
 </ol>
 <!-- END_SECTION -->
 
-<p style="color:whitesmoke;">The <strong>Main Control Unit</strong> generates vital signals to orchestrate stage operations: <strong>RegDst</strong>, <strong>ALUSrc</strong>, <strong>MemtoReg</strong>, <strong>RegWrite</strong>, <strong>MemRead</strong>, and <strong>MemWrite</strong>. Such control is critical for managing interaction between ALU processes, registers, and memory accesses. <strong>Control hazards</strong> like conditional branches require control signals, such as <strong>PCSrc</strong>, to ensure successive instruction handling aligns correctly.</p>
-
+<p style="color:whitesmoke;">
+Applying both <strong>temporal</strong> and <strong>spatial locality</strong> is essential for cache system and hardware design. Such designs aim to enhance system performance by predicting patterns of memory access and preemptively positioning relevant data in fast, accessible locations.
+</p>
 <!-- END_SECTION -->
 
-<h3>Challenges and Solutions: Hazards and Interrupt Handling in MIPS Pipelining</h3>
-
-<p style="color:whitesmoke;">MIPS pipelining faces various <strong>hazards</strong>: <strong>data hazards</strong> from instruction dependencies, <strong>control hazards</strong> due to branch predictions, and <strong>structural hazards</strong> from resource conflicts. These complications necessitate additional strategies, such as data <strong>forwarding</strong>, where computed values are passed along the pipeline before being officially stored.</p>
-
-<p style="color:whitesmoke;">Moreover, the <strong>single-cycle design</strong> lacks efficiency for more elaborate instruction sets, as all steps occur within one cycle, against pipelining which distributes these operations across multiple cycles to boost throughput.</p>
-<!-- END_SECTION -->
-
-<p style="color:whitesmoke;">Handling <strong>exceptions and interrupts</strong> is integral in pipelined designs. An <strong>exception</strong> stems from within the CPU (e.g., overflow), whereas an <strong>interrupt</strong> arises externally (e.g., I/O operations). Managed via a <strong>System Control Coprocessor (CP0)</strong>, it preserves the <strong>Program Counter (PC)</strong> and generates <strong>Exception Program Counter (EPC)</strong> for system stability and subsequent error handling.</p>
-
+<p style="color:whitesmoke;">
+<strong>Memory hierarchy levels</strong> describe how data is arranged and flows from the slowest, largest, and typically most distant storage, up through faster and smaller layers, finally reaching memory closest to the processor (<strong>CPU</strong>).
+</p>
 <ul>
-  <li><p style="color:whitesmoke;"><strong>Handler Operations:</strong> Upon detecting an exception, transfer control to an appropriate handler, utilizing EPC for program realignment or error reporting.</p></li>
-  <li><p style="color:whitesmoke;"><strong>Pipeline Exceptions:</strong> These pose <strong>control hazards</strong>, resolved by flushing instructions similar to branch mispredictions.</p></li>
+  <li>
+    <strong>Input and secondary storage</strong> (e.g., <strong>SSD</strong>, <strong>HDD</strong>): These levels provide permanent data storage and are much slower compared to main memory or caches.
+  </li>
+  <li>
+    <strong>Main memory</strong> (typically <strong>DRAM</strong>): This layer offers larger, moderately fast storage for data and instructions needed by running programs.
+  </li>
+  <li>
+    <strong>Cache memory</strong> (typically <strong>SRAM</strong>): Caches exist in several levels (L1, L2, sometimes L3) and are physically located closer to the CPU. They are much faster but smaller in capacity than main memory. 
+  </li>
 </ul>
 <!-- END_SECTION -->
 
-<p style="color:whitesmoke;">Pipelining, despite its complexity—evident through challenges of implementing consistent data flow and handling asynchronous events—substantially improves instruction throughput, capturing multiple stages within a CPU's cycle. Comprehending these intricate elements is vital for optimizing modern CPU performance to meet demanding computational tasks.</p>
+<p style="color:whitesmoke;">
+<strong>Data movement</strong> through the hierarchy occurs in <strong>blocks</strong>, often called <strong>cache lines</strong>, with each block typically multiple words wide. This block-based transfer is fundamental to the effective utilization of spatial locality, as adjacent data can be accessed with minimal extra cost once brought into a cache level. 
+</p>
 <!-- END_SECTION -->
 
-<p style="color:whitesmoke;">To address <strong>pipeline stalls</strong>, particularly arising from <strong>control hazards</strong>, <strong>branch prediction</strong> mechanisms are crucial. These mechanisms mitigate stalls by predicting branch outcomes:</p>
-
-<ul>
-  <li><p style="color:whitesmoke;"><strong>Branch Prediction:</strong> <strong>Static</strong> and <strong>dynamic predictors</strong> aim to minimize penalties. Static predictors rely on typical branch behavior, predicting loops as taken and other branches as not taken. Conversely, dynamic predictors use historical data, maintaining a <strong>Branch History Table</strong> for decisions.</p></li>
-</ul>
-
-<p style="color:whitesmoke;">Concepts like the <strong>1-bit predictor</strong> and <strong>2-bit predictor</strong> illustrate approaches to handle prediction challenges, such as inner loop mispredictions. As pipelines deepen, these mechanisms, alongside <strong>data forwarding</strong> and <strong>hazard detection units</strong>, form the backbone of modern MIPS pipeline architecture to achieve high throughput and efficient execution.</p>
+<p style="color:whitesmoke;">
+<strong>Cache memory</strong> is the nearest memory layer to the <strong>CPU</strong>. Its principal role is to store the most frequently or most recently accessed instructions and data to minimize the latency and frequency of slow memory access. The proximity and speed of cache memory allow it to serve requests with reduced delays compared to main memory or external storage.
+</p>
 <!-- END_SECTION -->
 
-<p style="color:whitesmoke;">The handling of <strong>cache misses</strong>—an integral aspect of efficient memory operation in MIPS pipelining—entails mechanisms like <strong>stall insertion</strong> and <strong>code scheduling</strong> to mitigate delays. Efficient handling ensures that cache performance aligns with pipeline operation, significantly enhancing throughput by reducing memory stalls and improving data access efficiency.</p>
+<p style="color:whitesmoke;">
+A <strong>cache hit</strong> occurs when requested data is available in the upper (closer) memory level, enabling immediate access without consulting a slower layer. A <strong>cache miss</strong> happens when the data is absent from that level, necessitating retrieval from a lower (slower, larger) hierarchy layer. The <strong>central aim</strong> of memory hierarchy and cache system design is to maximize the hit rate, thereby reducing average memory access times and boosting overall system performance.
+</p>
 <!-- END_SECTION -->

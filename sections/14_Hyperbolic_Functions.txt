@@ -1,0 +1,9 @@
+14: Hyperbolic Functions  
+- Definitions: sinh, cosh, tanh, sech, coth, csch  
+- Fundamental identities: \(\cosh^2(x) - \sinh^2(x) = 1\), etc.  
+- Derivatives and integrals of hyperbolic functions  
+- Inverse hyperbolic functions and their derivatives  
+- Verifying and deriving hyperbolic identities (e.g., \(\frac{d}{dx}(\coth x) = -\csch^2 x\))  
+- Application of exponentials to hyperbolic expressions  
+- Worked examples of solving for values using given hyperbolic conditions  
+- Use of hyperbolic functions in linearization and differentials

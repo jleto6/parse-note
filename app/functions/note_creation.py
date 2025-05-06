@@ -73,7 +73,7 @@ def note_creation(content):
     # RAG
     current_embedding = embed_file(content)
 
-    prior_context = "<strong>Heading Rule:</strong> You must insert exactly one <h2> heading at the beginning of the output to represent the main topic. There must be one and only one <h2> tag. Do not include multiple <h2> tags under any circumstances. You may optionally include one or two <h3> subheadings if absolutely necessary, but avoid them unless essential for clarity or structure. Treat the rest of the content as a single section under that heading."
+    prior_context = "<strong>Heading Rule:</strong> You must insert exactly one <h1> heading at the beginning of the output to represent the main topic. There must be one and only one <h1> tag. Do not include multiple <h1> tags under any circumstances. You may optionally include one or two <h3> subheadings if absolutely necessary, but avoid them unless essential for clarity or structure. Treat the rest of the content as a single section under that heading."
     
     # Try to open CSV file to compare current embedding to prior embeddings
     try:
@@ -97,12 +97,12 @@ def note_creation(content):
         print(top_chunk["score"].iloc[0])
 
 
-        if top_chunk["score"].iloc[0] < 0.6:
+        if top_chunk["score"].iloc[0] < 0.8:
             print("# Low similarity – create a new file")
             i += 1
             current_file = f"{COMPLETED_NOTES_INDEX}_{i}.txt"
 
-            prior_context = "<strong>Heading Rule:</strong> You must insert exactly one <h2> heading at the beginning of the output to represent the main topic. There must be one and only one <h2> tag. Do not include multiple <h2> tags under any circumstances. You may optionally include one or two <h3> subheadings if absolutely necessary, but avoid them unless essential for clarity or structure. Treat the rest of the content as a single section under that heading."
+            prior_context = "<strong>Heading Rule:</strong> You must insert exactly one <h1> heading at the beginning of the output to represent the main topic. There must be one and only one <h1> tag. Do not include multiple <h1> tags under any circumstances. You may optionally include one or two <h3> subheadings if absolutely necessary, but avoid them unless essential for clarity or structure. Treat the rest of the content as a single section under that heading."
 
         else:
             print(f"The most similar file to the current file is: {most_similar_file_name}")
@@ -120,7 +120,7 @@ def note_creation(content):
             Do not discard or reword its details—preserve everything. However, you must now expand it using the new raw content. 
             Do not simply append it to the end. Instead, intelligently merge the new material into the existing file in a way that flows naturally, 
             while preserving accuracy, logic, and formatting. You may revise transitions or slightly adjust the structure to unify them. 
-            The final output should contain exactly one <h2> heading, possibly renamed to better reflect the combined content, but never duplicated. 
+            The final output should contain exactly one <h1> heading, possibly renamed to better reflect the combined content, but never duplicated. 
             At most, use one or two <h3> subheadings only if necessary. Think of this like you’re evolving the document—not just adding on.
 
             The current content of the file is:
@@ -155,7 +155,8 @@ def note_creation(content):
     # GPT Call
     completion = openai_client.chat.completions.create(
 
-        model="gpt-4o",
+        # model="deepseek-chat",
+        model="gpt-4.1",
         messages=[
             {
                 "role": "system",
@@ -172,7 +173,7 @@ def note_creation(content):
         Write deeply detailed, structured documentation in valid HTML, intended for insertion into a Jinja template. Output raw HTML—no Markdown, code fences, or formatting artifacts. Use <p style="color:whitesmoke;"> for all body text. Bold all key terms using <strong>. All code or syntax references should use <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">.
 
         <strong>Structural Rules:</strong>  
-        - Use exactly one <h2> tag for the overall topic. Do not generate more than one.  
+        - Use exactly one <h1> tag for the overall topic. Do not generate more than one.  
         - Use at most one or two <h3> subheadings if essential for clarity.  
         - Use <ol> for any step-by-step processes, ordered procedures, or sequences—<strong>always</strong>.  
         - Use <ul> only if content clearly involves categories or non-ordered groupings.  
@@ -228,16 +229,20 @@ def note_creation(content):
     # Emit linebreaks at the end
     # socketio.emit("update_notes", {"notes" : "<br/><br/>"})
 
-    output_buffer = strip_html(output_buffer)
+    # Get genereated notes info
+    output_text = strip_html(output_buffer) # Strip the HTML content from the GPT output to get the text
+    current_file_name = os.path.basename(current_file) # Get the filename from the current file
+    embedded_notes = embed_text(output_buffer) # Embed what gpt just created
 
-    # Embed what gpt just created
-    embedded_notes = embed_text(output_buffer)
-    # Then, add the current_embedding to the CSV
-    file_exists = os.path.isfile(FILE_EMBEDDINGS)   # Check if the CSV already exists
+    # Create DataFrame from existing CSV, remove outdated row (if present), and add updated entry
+    if not(os.path.isfile(FILE_EMBEDDINGS)): # Check if the CSV doesnt exist 
+        df = pd.DataFrame(columns=["filename", "text", "embedding"]) # If it doesnt, write headers
+    else:
+        df = pd.read_csv(FILE_EMBEDDINGS) # If it does, open it
+
+    df = df[df["filename"] != current_file_name] # Remove any existing embedding for the current file to avoid duplicates
+    df.loc[len(df)] = [current_file_name, output_text, str(embedded_notes)] # Add the updated embedding for the current file
 
     # Append to the CSV
-    with open(FILE_EMBEDDINGS, "a", newline='', encoding="utf-8") as f:
-        writer = csv.writer(f)
-        if not file_exists:
-            writer.writerow(["filename", "text", "embedding"])
-        writer.writerow([os.path.basename(current_file), output_buffer, str(embedded_notes)])
+    df.to_csv(FILE_EMBEDDINGS, index=False) # Write the DF to CSV at location FILE_EMBEDDINGS
+        

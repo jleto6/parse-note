@@ -1,0 +1,96 @@
+<h1>IEEE 754 Floating Point Representation and Normalized Scientific Notation</h1>
+<p style="color:whitesmoke;">
+<strong>IEEE 754</strong> is the widely adopted standard for representing floating point numbers in computing systems. A <strong>floating-point number</strong> under this standard consists of three components: a <strong>sign bit</strong>, an <strong>exponent</strong>, and a <strong>mantissa</strong> (also referred to as the fraction). To improve storage efficiency and precision, IEEE 754 uses <strong>normalized form</strong>, which means the first digit before the binary point is always <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1</code>. This form can be mathematically described as <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1.xxx... * 2^y</code>, where <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">xxx...</code> is the binary fractional part and <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">y</code> is the exponent.
+</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+The first digit being always <strong>1</strong> is an invariant of normalized binary floating-point numbers; this enables the use of a <strong>hidden bit</strong> optimization. The <strong>hidden bit</strong> refers to the fact that, since the leading <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1</code> is guaranteed, IEEE 754-compliant hardware does not store this bit explicitly. Only the fractional part (following the hidden bit) is stored in the mantissa field. This savings in storage allows a floating-point number to utilize an additional bit of precision for the same amount of memory compared to explicit storage.
+</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+This approach differs from <strong>standard scientific notation</strong> (common in decimal arithmetic), where the leading digit is always stored, such as <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1.23 × 10^6</code>. IEEE 754’s use of normalization and the hidden bit provides greater representational efficiency and accuracy, both of which are critical in precise scientific computing and engineering applications, as floating-point precision directly impacts outcome validity.
+</p>
+<!-- END_SECTION -->
+
+<ul>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>Sign Bit (s):</strong> The <strong>sign bit</strong> determines the sign of the floating-point value. A <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">0</code> denotes a positive number and a <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1</code> denotes a negative number.
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>Exponent (e):</strong> The <strong>exponent</strong> field determines how far the binary point is shifted (i.e., the scale of the value). It is often stored in <strong>biased form</strong>: rather than storing positive and negative exponents directly, the exponent is encoded by adding a fixed bias to allow straightforward bitwise comparison and hardware implementation.
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>Mantissa or Fraction:</strong> The <strong>mantissa</strong> (also called the <strong>fraction</strong>) field holds the precision bits of the number—those after the binary point, following the implicit leading 1. Only the fractional portion is stored; the hidden leading bit reconstructs the significand during calculations.
+    </p>
+  </li>
+</ul>
+<!-- END_SECTION -->
+
+<h3>Exponential Notation and Scientific Equivalence</h3>
+<p style="color:whitesmoke;">
+<strong>Exponential notation</strong> is a way to express numbers in the form <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">n × 10^k</code> (base 10) or <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">m × 2^e</code> (base 2 for floating-point). The normalized scientific notation enforces the most significant digit's presence immediately before the decimal (or binary) point, following the pattern <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1.xxx ... × 2^e</code> (binary) or <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">d.ddd ... × 10^k</code> (decimal).</p>
+<ul>
+  <li>
+    <p style="color:whitesmoke;"><strong>Example: Equivalent Expressions for 1.234</strong></p>
+    <ul>
+      <li><p style="color:whitesmoke;"><strong>Scientific:</strong> <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1.234 × 10^0</code></p></li>
+      <li><p style="color:whitesmoke;"><strong>Exponential:</strong> <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">0.1234 × 10^1</code></p></li>
+    </ul>
+  </li>
+</ul>
+<!-- END_SECTION -->
+
+<h3>IEEE 754 Format Breakdown</h3>
+<ul>
+  <li>
+    <p style="color:whitesmoke;"><strong>Single Precision</strong> (<strong>32 bits</strong>):</p>
+    <ul>
+      <li><p style="color:whitesmoke;"><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1</code> sign bit</p></li>
+      <li><p style="color:whitesmoke;"><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">8</code> exponent bits</p></li>
+      <li><p style="color:whitesmoke;"><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">23</code> fraction (mantissa) bits</p></li>
+    </ul>
+  </li>
+  <li>
+    <p style="color:whitesmoke;"><strong>Double Precision</strong> (<strong>64 bits</strong>):</p>
+    <ul>
+      <li><p style="color:whitesmoke;"><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1</code> sign bit</p></li>
+      <li><p style="color:whitesmoke;"><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">11</code> exponent bits</p></li>
+      <li><p style="color:whitesmoke;"><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">52</code> fraction (mantissa) bits</p></li>
+    </ul>
+  </li>
+</ul>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+IEEE 754’s design, with its bit-wise allocation to the sign, exponent, and fraction, reflects a balance between <strong>dynamic range</strong> (how large and small a number can be represented) and <strong>precision</strong> (how many significant digits can be stored).
+</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+In summary, <strong>floating-point normalized scientific notation</strong> under IEEE 754: 
+<ul>
+  <li>
+    <p style="color:whitesmoke;">
+      Ensures the leading digit (“hidden bit”) is always <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1</code> for efficient storage.
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      Stores exponent in <strong>biased form</strong> for computational simplicity.
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      Allocates more mantissa bits to maximize precision within the constraints of the total bit width.
+    </p>
+  </li>
+</ul>
+</p>
+<!-- END_SECTION -->

@@ -78,12 +78,25 @@ def image_call(file_path):
 
 
 # LOGICALLY ORDER FILES
-def order_files(files):
-    # Format the list into a readable string for GPT
+def order_files(files, topic_summary):
+    # Format filenames as a bulleted list
     file_list_text = "\n".join(f"- {f}" for f in files)
 
+    # Build topic summaries matched to each file
+    topic_summaries = ""
+    for fname in files:
+        match = topic_summary[topic_summary["Filename"] == fname]
+        if not match.empty:
+            row = match.iloc[0]
+            topic_summaries += f"\nFilename: {fname}\nKeywords: {row['Keywords']}\nSnippet: {row['Representative_Snippet'][:300]}\n"
+
+    # Compose full prompt with both filename list and summaries
     content = f"""Here is a list of filenames:
     {file_list_text}
+
+    Each filename has an associated topic summary below. Use the keywords and snippet to better understand the topic meaning:
+
+    {topic_summaries}
 
     Ignore any numbers, prefixes, or similarities in filename style. Focus only on the topic meaning.
 
@@ -99,25 +112,21 @@ def order_files(files):
     **Return only the reordered list of original filenames, one per line, with no dashes, numbering, bullets, or extra symbols. Only the filenames exactly as they appear.**
     """
 
+    print(content)
+
     # Ask GPT to reorder the list conceptually
     response = openai_client.chat.completions.create(
         model="o4-mini",
         messages=[
-            {
-                "role": "user",
-                "content": content
-            }
+            {"role": "user", "content": content}
         ]
     )
 
-    # Extract and return the response text (assuming it's just a list)
+    # Extract filenames from output
     ordered_text = response.choices[0].message.content
-
-    # print(ordered_text)
-
     filenames_array = ordered_text.splitlines()
-    return filenames_array
 
+    return filenames_array
 
 
 

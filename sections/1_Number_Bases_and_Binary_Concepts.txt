@@ -1,0 +1,7 @@
+1: Number Bases and Binary Concepts  
+- Decimal (Base 10) representation and expansions  
+- General base \(b\) expansions and notation  
+- Binary (base 2) representations  
+- Understanding how numbers in any base are expanded  
+- Unique expression of numbers in base \(b\)  
+- Example: Converting binary numbers to decimal

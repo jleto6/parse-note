@@ -1,0 +1,81 @@
+through subsequent stages. This is typically done through the architecture.
+
+Challenges arise when instructions depend on accelerator, caching, double hazards. Pitfalls in pipeline usually came from memory hazards!! That is, when a program on CPU accessing pipelining harder to be issues like actual memory operand as architectures unexpectedly change registers, and instruction halt depend on memory.
+Block Diagram
+1 scan
+Combinatinal vs Sequential
+1 scan
+Block Diagram
+1 scan
+Combinatinal vs Sequential
+1 scan
+
+Logic Gates
+3 scans
+Adder
+4 scans
+Logic Gates
+3 scans
+Adder
+4 scans
+
+Sure, here's the transcription of the handwritten notes:
+
+---
+
+**Canonical Forms**
+
+Canonical forms are standardized ways to express Boolean functions, making it easier to build and simplify circuits. The 2 main types are Sum of Products (SOP) and Product of Sums (POS), which describe when a circuit should output a 1 or a 0.
+
+SOP expressions are built from minterms, which represent truth table rows where the output is 1, while POS expressions are built from maxterms, which represent rows where the output is 0.
+
+**Sum of Products:**
+- SOP uses minterms:
+  - Look at rows where F = 1 in the truth table
+  - Each 1 becomes an ANDed term (A'B'C)
+  - OR all AND terms together
+
+For example, if F = 1 at (A=0, B=1, C=0), the minterm is A'BC'.
+
+**Product of Sums:**
+- POS uses maxterms:
+  - Look at rows where F = 0 in the truth table
+  - Each 0 becomes an ORed term (A'+B+C)
+  - AND all the OR terms together
+
+For example, if F = 0 at (A=1, B=0, C=1), the maxterm is A'B+C'.
+
+---
+**CPU Performance**
+
+A clock cycle is a single tick of the CPU's internal clock, during which a basic instruction can be carried out. The CPU uses this regular pulse to synchronize and control the execution of instructions.
+
+- **Clock Period:** The time duration of one cycle
+- **Clock Frequency:** How many cycles occur per second
+
+**CPU Time = amount of CPU clock cycles x Clock Cycle Time (Period)**  
+or  
+**CPU Time = amount of CPU clock cycles / Clock Rate (Frequency)**
+
+Execution Time is further defined by instruction count, the total number of instructions a program executes, and Cycles Per Instruction (CPI). The CPI reflects how different instructions consume varied cycles, which reflects the CPU's design, and is affected by the instruction mix (proportion of different types of instructions).
+
+The composition of CPU performance includes the equation:
+
+**CPU Time = Instruction Count x CPI x Clock Cycle**
+
+This formula is important because it connects various core components of performance and insight into how efficiency can be optimized.
+
+Components of performance include:
+
+- **Instruction Count:** The number of instructions executed by the CPU.
+- **Clock Cycle:** Typical document is part of system specifications. It defines the duration of one cycle of each clock tick in the CPU.
+- **Cycles Per Instruction (CPI):** An average measurement reflecting the mean number of cycles taken for instructions of the program. This highlights which is the frequency and type combination of instructions being executed.
+
+CPI in more detail highlights the mixed queues where each instruction type frequency and cycle cost contributes to the overall CPI.
+
+---
+
+**CPI Example**
+
+- **Instruction Sequence:**
+  - Instruction 

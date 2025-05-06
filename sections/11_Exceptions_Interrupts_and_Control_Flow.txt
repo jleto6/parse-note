@@ -1,0 +1,6 @@
+11: Exceptions, Interrupts, and Control Flow  
+- Definitions and sources: exceptions vs interrupts  
+- MIPS and exception handling role (CP0, EPC, status register)  
+- Cause reading, handler transfer, corrective measures, and termination  
+- Pipeline exceptions and control hazards  
+- Challenges: memory hazards, architectural effects

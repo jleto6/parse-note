@@ -1,0 +1,55 @@
+Type: Load
+  - Instruction Count: 2
+- **CPI:** 2
+- **Clock Period:** 2 ns (nanoseconds)
+- **Overall time for execution:** 8 ns
+Certainly! Here is the transcription of the handwritten notes:
+
+---
+
+**Hazards**
+
+Hazards are situations that prevent the next instruction in the pipeline from executing in the next cycle.
+
+**Structure Hazards** arise when there is a conflict for the use of a resource. Load/Store operations require data access, causing the instruction fetch to stall until they complete.
+
+**Data Hazards** occur when an instruction depends on the completion of data access by a previous instruction. For example, if the instructions had `$t0, $t1` followed by `sb $t2, $t0($t3)`, the latter must wait for the former to complete.
+
+**Forwarding (Bypassing)** passes a computed result from one stage to another, avoiding the wait for register storage and reduces stalls.
+
+A load-use hazard occurs when an instruction depends on a value being loaded by a previous instruction before it is available. They can always be avoided by forwarding. For example, `lw $t0, 20($s1)` and `add $t2, $t0, $s3`. The second instruction must wait for the 1st unless resolved with forwarding.
+
+**Code Scheduling** involves reordering instructions to avoid the use of a load result in the subsequent instruction.
+
+**Stall on Branch:** To mitigate control hazards, waiting until the branch outcome is determined before fetching the instruction is an approach but it introduces stalls.
+
+**Branch Prediction** guesses the outcome of branch instructions, which helps decide whether to fetch the next instruction or branch target early.
+
+**Predict Taken** both taken reduces control hazard cost by assuming which is efficient when misprediction penalties are low.
+
+**Delayed Branch** all delayed branches are predicted as not branch, and branch delay slot is not taken.
+Here is the transcription of the handwritten text:
+
+---
+
+**Writing**
+
+A cache must manage how data is written. This involves deciding whether to update main memory immediately or delay a write, and how to handle write misses. These choices affect consistency, performance, and capacity.
+
+When the CPU performs a store instruction, it writes data to memory. With a cache in place, this raises the issue of whether the write goes to cache, main memory, or both. If data is only written to the cache, main memory may have a different value, causing inconsistency.
+
+**Write Strategy:**
+
+- Write-through updates both cache and main memory simultaneously. It’s simple but slow - a write buffer is often used to reduce stalls.
+- Write-back only updates the data in the cache during a write hit; main memory is not updated right away. Each block is tagged with a dirty bit to indicate if it has been modified since being loaded from memory. If a block is clean, it can be replaced without writing to memory. If a block is dirty, it must be written back to memory before being replaced.
+Direct Caching
+
+Associativity
+
+**Floating Point Arithmetic**
+
+Real numbers are called "float" values in computing. Floating point arithmetic is the method computers use to handle real numbers.
+
+Floats are represented using the IEEE 754 standard, which ensures accuracy, mostly by storing numbers using the principle of normalized scientific notation.
+
+**IEEE 754 represents floating-point numbers using 3 components**: a sign 

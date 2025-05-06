@@ -1,0 +1,5 @@
+9: Processor Datapath and Control  
+- Control signals in datapath  
+- Block diagrams (control with datapath examples)  
+- Difference between combinational and sequential logic circuits  
+- Overview of datapath operation

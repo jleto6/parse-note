@@ -1,0 +1,148 @@
+\frac{d}{dx} \, (4x) \cdot \frac{1}{\sqrt{}}
+\]
+
+---
+
+The equations involve differentiation of hyperbolic functions, logarithmic functions, and their applications.
+The image contains handwritten notes with mathematical expressions. Below is the transcription:
+
+---
+
+8) \[ \boxed{\text{continued}} \]
+
+\[ y' = \frac{-1}{\sqrt{1+9x}} \cdot y^2 \cdot 9 \]
+
+\[ y = -\frac{1}{\sqrt{1+9x}} \]
+
+\[ y' = \frac{9}{2\sqrt{1+9x}} \]
+
+\[ y' = \frac{2\sqrt{x}}{2\sqrt{x} \cdot (4-x)} \]
+
+\[ y' = \frac{2\sqrt{x}}{(4-x) \cdot \boxed{A}} \]
+
+---
+
+9) \[ y = (20 + 50) \tanh^{-1} (\Theta + 4) \]
+
+\[ \boxed{\text{product rule}} \]
+
+\[ \frac{d}{dx} \left[ \tanh^{-1} (hx) \right] = \frac{1}{1-(hx)^2} \cdot h(x) \]
+
+\[ f^1 = 20 + 50 \quad \mathcal{X} \quad g^2 = \tanh^{-1} (\Theta + 4) \]
+
+\[ f' = 20 + 55 \quad g' = \frac{1}{1-(\Theta + 4)^2} \cdot \frac{d}{d\Theta} \]
+
+\[ y' = (20 + 55) \tanh^{-1} (\Theta + 4) + \frac{\Theta + 50}{1-(\Theta+4)^2} = \]
+
+\[ y' = (20 + 55) \tanh^{-1} (\Theta + 4) + \frac{\Theta + 50}{-(1-80+16)} \]
+
+\[ \quad = (20 + 55) \]
+
+\[ \quad = (20 + 55) = [20 - 16] \]
+
+\[ \quad \Theta = 80 - 15 \]
+
+---
+The image contains handwritten notes. Here's the transcription:
+
+---
+
+9. **continued**
+
+\[ y' = (20+5) \tanh^{-1}(\theta + 4) + \frac{\Theta(10 + 5)}{(e)(\theta + 5)} \]
+
+\[ y' = (20+5) \tanh^{-1}(\theta + 4) + \frac{0 - -}{0 + 0} \]
+
+\[ \boxed{\text{B}} \]
+
+---
+
+10. \[ y = 9 \tanh^{-1}(\cos x) \]
+
+\[ \frac{d}{dx} \left( \tanh^{-1}(hx) \right) = \frac{1}{1-(hx)^2} \cdot h'(x) \]
+
+\[ y' = 9 \left( \frac{1 - (\cos x)^2}{\cdots} \right) \frac{d}{dx}(\cos x) \]
+
+\[ = -\sin x / -\sin x \]
+
+\[ y' = \left( \frac{-\sin x}{\cdots} \right) = \frac{-9 \sin x}{\sin x} \]
+
+\[ \boxed{\text{B}} \]
+
+---
+
+11. \[ \coth(x) = \frac{e^x + e^{-x}}{e^{x} - e^{-x}} \]
+
+**verify the identity**
+
+\[ \coth(x) = \frac{\cosh(x)}{\sinh(x)} = \frac{\frac{e^x + e^{-x}}{2}}{\frac{e^x-e^{-x}}{2}} \]
+
+\[ = \frac{e^x + e^{-x}}{e^x - e^{-x}} = \frac{e^x \cdot e^{-x} +}{e^x - e^{-x}} = \] 
+
+\[ = \frac{e^x \cdot e^{-x} +}{e^x - e^{-x}} = \frac{e^x \cdot e^{-x}}{e^x - e^{-x}} \]
+
+---
+Here is the transcription of the handwritten notes:
+
+---
+
+11. continued
+
+\[ e^x - e^{-x} = \frac{x}{1} = \frac{2x}{1} \]
+\[ e^x - e^{-x} = \frac{x}{e^x} \left(\text{highlighted box around} \frac{2x}{e^x}\right) \]
+
+---
+
+12. verify the identity
+
+\[ 1 - \tanh(x) = \text{sech}(x) \]
+
+\[ \frac{1 - \sinh(x)}{\cosh(x)} = \text{sech}(x) \]
+
+use \[ \cosh^2(x) - \sinh^2(x) = 1 \]
+
+\[ \cosh^2(x) - \sinh^2(x) = \text{sach}^2(x) \]
+
+\[ \frac{\cosh(x)}{\cosh(x)} \]
+
+\[ \frac{\cosh^2(x)}{\cosh^2(x)} = \text{sech}^2(x) \]
+
+---
+
+13. verify \[ \frac{d}{dx} \left( \coth(x) \right) = -\text{csch}^2(x) \]
+
+\[ \frac{d}{dx} \left( \frac{\cosh(x)}{\sinh(x)} \right) \] quotient rule \( \frac{f'g - gf'}{g^2} \)
+
+\[ f = \cosh(x) \quad g = \sinh(x) \]
+
+\[ f' = \sinh(x) \quad g' = \cosh(x) \]
+
+\[ \frac{\sinh(x) \times \sinh(x) - \cosh(x) \times \cosh(x)}{\sinh^2(x)} = \frac{-1}{\sinh^2(x)} \]
+
+\[ = -\text{csch}^2(x) \]
+
+---
+Here's a transcription of the handwritten notes:
+
+---
+
+**Find the linearization (tangent line approximation)**
+
+\( L(x) = f(a) + f'(a)(x-a) \)
+
+1. \((14)\)
+
+   \[
+   f(x) = 3x^2 + 4x + 1 \text{ with } a = 3
+   \]
+   \[
+   f'(x) = 6x + 4
+   \]
+   \[
+   f(3) = 3(3)^2 + 4(3) + 1 = 40
+   \]
+   \[
+   f'(3) = 6(3) + 4 = 22
+   \]
+   \[
+   L(x) = f(a) + 

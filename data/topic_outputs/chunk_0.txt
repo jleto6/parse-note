@@ -1,0 +1,34 @@
+**Binary Conversions**
+
+**In the modern world,** we use decimal, or base 10, notation to represent integers. We can represent numbers using any base b, where b is a positive integer greater than 1.
+
+**Base 10:**
+- When we write 965, this can be translated as: \(9 \cdot 10^2 + 6 \cdot 10^1 + 5 \cdot 10^0\)
+- More generally, \(n = a_k \cdot b^k + a_{k-1} \cdot b^{k-1} + ... + a_1 \cdot b^1 + a_0 \cdot b^0\), \(a_i, b, a_j, 0 \leq a_i < b\)
+
+**Base b:**
+- Let b be a positive integer greater than 1. Then if n is a positive integer, it can be expressed uniquely in the form \(a_k \cdot b^k + a_{k-1} \cdot b^{k-1} + ... + a_0 \cdot b^0\), where k is a nonnegative integer and \(a_k, a_{k-1}, ... , a_0\) are nonnegative integers less than b.
+- This expression of n is called the base b expansion of n and can be denoted by \((a_k a_{k-1} ... a_0)_b\).
+
+**Binary Operations**
+- Computers represent integers and do arithmetic with binary (base 2) expansions of integers. In these expansions, the digits used are 0 and 1.
+- Example: What is the decimal expansion of the integer that has 11011_2 as its binary expansion?
+- Solution: \( (11011)_2 = 1\cdot 2^4 + 1\cdot 2^3 + 0\cdot 2^2 + 1\cdot 2^1 + 1\cdot 2^0 \)
+  - \(= 16 + 8 + 0 + 2 + 1\)
+  - \(= 27\)
+
+**Base Conversion:**
+- To construct the base b expansion of the integer n, divide n by b to obtain a quotient and remainder: \(n = b \cdot q_0 + a_0\), where \(0 \leq a_0 < b\).
+  - The remainder, a_0, is the rightmost digit in the base b expansion of n.
+- Next, divide q_0 by b to obtain \(q_0 = b \cdot q_1 + a_1\), \(0 \leq a_1 < b\).
+  - a_1 is the second digit from the right in the base b expansion of n.
+- Continue by successively dividing the quotients by b, obtaining the digits in the base b expansion as the remainder. The process terminates when the quotient is 0.
+Cache Cache on hit ond mss A is” quick» bt miss con chs For exanpe, if the cache miss cote is ord the data cache mas rate is 47, wilh base CPI of 2 ond a mis of (00 we cam the mss as Glows = mar 0.02 +100=2 = D-cache mss Cth 36% oF loads and 6.0¢ = Total 346 Ths in 0 CPT of 5.44 2+ wis Tn an ideal with a cache (no mises), He CPU cn al the CPT of 2. the CPL ths He CPU veld be 2.72 fe te menny Tf we CPL by halt, the CPL beams 4.44. Menory remain a of the overall CPI, shoving how the CPL aloe
+
+The image contains typed notes about "Caches" in computing. Here is the transcription:
+
+---
+
+**Caches**
+
+In an ideal computing system there would be unlimited fast memory access. However such a system is not practically achievable. Instead a memory hierarchy provides the 

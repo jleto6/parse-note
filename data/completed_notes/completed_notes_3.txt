@@ -1,0 +1,82 @@
+<h1>Pipeline Hazards, Cache Writing Strategies, and Floating Point Representation</h1>
+<p style="color:whitesmoke;">
+<strong>Hazards</strong> are situations that prevent the next instruction in the instruction pipeline from executing during its designated clock cycle. Hazards introduce performance penalties by causing delays or stalls in the instruction pipeline, which is a sequence of stages that overlap the execution of multiple instructions to improve throughput.
+</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+There are distinct types of pipeline hazards, each with specific causes and implications:
+<ul>
+  <li><strong>Structural Hazards</strong> arise when hardware resources are insufficient to support all possible combinations of instructions simultaneously in the pipeline. For instance, if both a load/store operation and instruction fetch require access to memory or a register file at the same time, the processor must stall one of the operations, delaying pipeline flow.</li>
+  <li><strong>Data Hazards</strong> occur when one instruction depends on the result of a previous instruction that has not yet completed. For example, consider <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">$t0</code> being loaded by one instruction, then used as an address or data value in a subsequent instruction such as <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">sb $t2, $t0($t3)</code>. The second instruction cannot execute correctly until the first instruction’s result is available.</li>
+</ul>
+</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+<strong>Forwarding</strong> (also called <strong>bypassing</strong>) is a technique that passes computed values from one pipeline stage to another before they are written to the register file. This reduces the number of stalls due to data hazards, as dependent instructions can utilize results “forwarded” directly from execution stages. 
+</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+A specific situation, called a <strong>load-use hazard</strong>, occurs when an instruction immediately following a load depends on the value being loaded. For example:
+<ol>
+  <li><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">lw $t0, 20($s1)</code></li>
+  <li><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">add $t2, $t0, $s3</code></li>
+</ol>
+The result of the load in the first instruction is needed by the <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">add</code> in the next cycle, but may not be available until the memory stage completes. Forwarding allows the result to be used directly once available, but sometimes this still leads to one cycle of stalling.
+</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+<strong>Code Scheduling</strong> refers to reordering instructions in software so that dependent instructions do not immediately follow the instructions they depend on. Optimizing instruction order can reduce load-use hazards, improving overall throughput.
+</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+<strong>Control Hazards</strong> (not explicitly named above but contextually referenced) occur with the execution of branch instructions, where the next instruction depends on the result of a branch condition.
+<ul>
+  <li><strong>Stall on Branch</strong> means the pipeline waits for the branch resolution before fetching further instructions, introducing stalls.</li>
+  <li><strong>Branch Prediction</strong> is a technique that guesses the outcome of a branch instruction (taken or not-taken), so that the next instruction can be fetched speculatively. Efficient branch prediction minimizes the performance penalty from control hazards. </li>
+  <li><strong>Predict Taken</strong> (or not-taken) is a simple policy that always assumes branches follow a predictable pattern; this works well when misprediction penalties are not severe.</li>
+  <li><strong>Delayed Branch</strong> fills the “branch delay slot” with another instruction, typically under the assumption that the branch is not taken, to mitigate the performance impact.</li>
+</ul>
+The management of hazards is essential to maintain high instruction throughput in pipelined architectures.
+</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+<strong>Writing in Cache Architectures</strong> is governed by how data is managed when it is written, focusing on whether main memory is updated immediately or only under specific circumstances and how write misses are handled.
+</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+The <strong>write strategy</strong> is crucial to both performance and data consistency across cache and memory.
+<ul>
+  <li><strong>Write-through:</strong> Every write operation updates both the cache and main memory simultaneously. This method is straightforward but slower if all writes incur main memory latency. To optimize performance, a <strong>write buffer</strong> is employed to queue writes to memory and keep the pipeline moving.</li>
+  <li><strong>Write-back:</strong> On a write hit, the cache is updated, but main memory is not updated immediately. Each cache block is associated with a <strong>dirty bit</strong>, indicating whether it has been modified since being read from main memory. Only when a dirty block is evicted (replaced) does the cache write its data back to memory. <strong>Clean blocks</strong> may be replaced without writing to memory because the data matches main memory.</li>
+</ul>
+Efficient handling of writes is necessary for maintaining data consistency and optimal cache performance.
+</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+<strong>Floating Point Arithmetic</strong> refers to the representation and manipulation of real numbers, called <strong>floats</strong>, in computing systems.
+</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+Floating point numbers are standardized by the <strong>IEEE 754</strong> standard, which encodes real numbers in a binary representation that supports a wide dynamic range and precision. This format allows computers to represent very large and very small numbers in a fashion resembling normalized scientific notation.
+</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+A floating-point value in <strong>IEEE 754</strong> format consists of three parts:
+<ol>
+  <li><strong>Sign</strong>: A single bit indicating whether the number is positive (0) or negative (1).</li>
+  <li><strong>Exponent</strong>: Encoded with a bias, it scales the significand (mantissa) by a power of two, enabling the representation of both large and small magnitudes.</li>
+  <li><strong>Significand</strong> (or mantissa): The normalized base value, typically represented with an implied leading 1 (unless denormalized).</li>
+</ol>
+This structure encodes numbers in the form <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">(-1)^s \times 1.f \times 2^{e-bias}</code>, where <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">s</code> is the sign bit, <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">f</code> is the fractional significand, and <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">e</code> is the biased exponent.
+</p>
+<!-- END_SECTION -->

@@ -1,0 +1,7 @@
+8: Floating Point Arithmetic  
+- IEEE 754 representation: sign, exponent, mantissa  
+- Normalized scientific/form (hidden bit)  
+- Single precision (32-bit) and double precision (64-bit) layouts  
+- Floating point arithmetic and its difference from integer operations  
+- Normalized notation: why and how  
+- Example: representation and conversion

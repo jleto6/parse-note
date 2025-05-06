@@ -1,0 +1,44 @@
+bit, an exponent, and a mantissa. To store numbers efficiently, IEEE 754 defines normalized form, meaning the first digit before the decimal is always 1 in binary (1.xxx * 2^y).
+
+Since this leading 1 is always present, IEEE 754 does not store it explicitly. (This is called the hidden bit.) Instead, only the fractional part is stored, allowing the mantissa to hold more precision within the available bits.
+
+This differs from standard scientific notation where the leading digit is always explicitly written (e.g., 1.23 x 10^6 in decimal). By enforcing normalization and using a hidden bit, IEEE ensures efficient storage and greater accuracy in floating point precision.
+
+A floating-point number is always represented by:
+- 1 sign bit (s) : determines whether the number is positive (0) or negative (1).
+- Exponent (e) : determines how much to shift the binary point (stored using a biased form).
+- Mantissa or fraction: (with an assumed 1)
+
+### Exponential Notation
+
+- Ex: The following are equivalent representations of 1.234
+  - Scientific: 1.234 * 10^0
+  - Exponential: 0.1234 * 10^1
+
+### IEEE 754 Standard
+- Single precision (32 bits), consisting of:
+  - 1 sign bit
+  - 8 exponent bits
+  - 23 fraction bits
+- Double precision (64 bits), consisting of:
+  - 1 sign bit
+  - 11 exponent bits
+  - 52 fraction bits
+
+### Floating Point: Normalized Scientific Notation
+
+- Always results in the leading digit being 1
+- Stored with hidden form efficiency
+
+### Diagram Boxes (Visual Information)
+
+1. **IEEE 754 Standard Box**
+   - Describes bit allocation for single and double precision.
+
+2. **Floating Point: Normalized Scientific Notation Box**
+   - Explains hidden bit usage for efficient storage.
+
+This note covers the essential understanding of floating-point arithmetic in computing, emphasizing the IEEE 754 standard and normalized scientific notation.
+  MAC2311 Name: Linear Worksheet F Summary    ‘This worksheet is graded on completion, You must complete the entire worksheet to eam any credit. You ‘answers do not have to be correct. Of course, it is better i they are, but the purpose of the this workshect isthe you master the material, Ifyou arent sure about the mathematical steps, you can the process or support your solution by writing an explanation. [Avalue of sinh x or cosh xis given. Use the definitions and the identity find the value ofthe other indicated hyperbolic function,     4 (c_) 5 5 ag    Rewrite the expression in terms of exponentials and simplify the results.              | 4) (sinh x + cosh x)> ane | of ne Find the derivative ofy. (ry x8 — | Dp ol)   cosh D) 7x |    
+
+        (sinh 9x) 1 Find the derivative of y with respect to the appropriate variable. ofA 9 B y= (0 +4) » (8 +50 006 (04) | bd | ax |   1) Verify the identity using the definitions of hyperbolic functions. 1 

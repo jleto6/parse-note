@@ -1,9 +1,0 @@
-– hit ratio • Then accessed data supplied from upper level Cache Memory • Cache memory • The level of the memory hierarchy closest to the CPU • Given accesses X1, …, Xn–1, Xn How do we know if the data is present? Where do we look? Direct Mapped Cache
-
----
-
-of 2 Use low-order address bits Tags and Valid Bits • How do we know which particular block is stored in a cache location? • Store block address as well as the data • Only need the high-order bits • Called the tag • What if there is no data
-
----
-
-in a location? • Valid bit: 1 = present, 0 = not present • Initially 0 Cache Read • Reads are simpler because reads do not change the contents of the cache • Example: • 8-Block, Direct Mapped Cache • Addresses: • Binary Decimal Cache Block (address mod 8) •
