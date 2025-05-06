@@ -1,5 +1,0 @@
-8: Cache Writes, Allocation, and Performance
--Cache Write
--Write-Through
--Write-Back
--Write Allocation

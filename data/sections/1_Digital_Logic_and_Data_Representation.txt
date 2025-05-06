@@ -1,0 +1,5 @@
+1: Digital Logic and Data Representation
+- Signals: binary encoding, voltage levels, wire/bus conventions
+- Combinational circuits: definition and examples
+- Sequential circuits: concept of state, register file
+- Logic design review

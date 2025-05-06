@@ -1,0 +1,5 @@
+3: Processor Components and Datapath Elements
+- Datapath overview: memory, functional units, data flow
+- Registers and register file: organization and control
+- Basic combinational elements: multiplexers, ALU, adders
+- Sequential datapath elements

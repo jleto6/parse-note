@@ -1,21 +1,4 @@
-cost
-
-Pipelining
-• Pipelining is an implementation technique in which 
-multiple instructions are overlapped in execution.  
-• Pipelining is nearly universal.
-
-Analogy for Pipelining: Laundry
-• Nonpipelined approach:
-1.
-Place one dirty load of clothes in the washer.
-2.
-When the washer is finished, place the wet load in the dryer.
-3.
-When the dryer is finished, place the dry load on a table and fold.
-4.
-When folding is finished, put the clothes away.
-• When the clothes are put away, the next load can begin.
+away, the next load can begin.
 
 Analogy for Pipelining: Laundry
 • Pipelined approach:
@@ -165,4 +148,35 @@ Set MemWrite.
 Write back: 
 •
 Set MemtoReg:
-decides between sending the ALU result or the memory value 
+decides between sending the ALU result or the memory value to the register file
+•
+Set Reg-Write:
+specifies whether the register file can be written
+
+Pipelined Control
+RegDst
+ALUSrc
+ALUOp1
+ALUOp0
+Branch
+MemRead
+MemWrite
+MemtoReg
+Regwrite
+
+Pipelined Control
+
+Hazards
+• Situations that prevent starting the next instruction in the 
+next cycle
+• Structure hazard
+• A required resource is busy
+• Data hazard
+• Need to wait for previous instruction to complete its data read/write
+• Control hazard
+• Deciding on control action depends on previous instruction
+
+Structure Hazards
+• Conflict for use of a resource
+• In MIPS pipeline with a single memory
+• 

@@ -1,0 +1,147 @@
+<h1>MIPS Datapath Instruction Execution and Datapath Elements</h1>
+<p style="color:whitesmoke;"><strong>MIPS</strong> instructions utilize specific bit fields determined by the instruction format. For <strong>I-type</strong> instructions, the format employs an <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">op</code> (operation), <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">rs</code> (source register), <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">rt</code> (target register), and a 16-bit <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">immediate</code> value. In <strong>J-type</strong> instructions, a 26-bit <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">target address</code> is used. This field structure is crucial for correct interpretation and operation decoding by the processor.</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;"><strong>Instruction Execution</strong> involves a fixed set of phases applied to every instruction, ensuring systematic operation regardless of instruction type. The following sequence illustrates required steps for each instruction:</p>
+<ol>
+  <li>
+    <p style="color:whitesmoke;">Send the <strong>program counter (PC)</strong> value to the instruction memory, and <strong>fetch the instruction</strong> located at that address. The <strong>PC</strong> is a register holding the address of the current instruction and is automatically incremented or updated with control flow instructions.</p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">Read the necessary registers by extracting indices from the appropriate instruction fields. Most instructions require reading two registers, but some—such as load word (<code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">lw</code>)—only need one. This step uses the register file, which contains the processor's architectural registers, to provide operands for further processing.</p>
+  </li>
+</ol>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;"><strong>Fetch Phase:</strong> The processor obtains the next instruction at the address held in <strong>PC</strong>. This early stage sets up the entire instruction cycle, as all further steps depend on instruction retrieval.</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;"><strong>Decode Phase:</strong> The processor interprets the fetched instruction. The value in the <strong>opcode</strong> field (<code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">op</code>) determines the instruction type—such as arithmetic/logic, memory access, or control transfer (e.g., branch).</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;"><strong>PC Update Phase:</strong> The <strong>program counter</strong> is modified following instruction execution. If the instruction is a branch, the target address must be calculated; otherwise, <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">PC</code> increments by 4 to point to the next sequential instruction. This mechanism supports both linear execution and control flow changes.</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;"><strong>Execute Phase:</strong> Depending on the instruction's class:</p>
+<ul>
+  <li>
+    <p style="color:whitesmoke;">If arithmetic or logical, the <strong>ALU</strong> calculates the result.</p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">If load/store, the <strong>ALU</strong> computes an effective memory address for accessing data memory.</p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">If a branch, the <strong>ALU</strong> (and additional logic) determine the branch target address.</p>
+  </li>
+</ul>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">To implement register read/write operations, the <strong>register file</strong> is used. <strong>R-type</strong> instructions read two source registers and write to one destination register. <strong>Memory-reference</strong> instructions typically read one register and also access data memory for loads or stores. These distinctions are fundamental for designing datapath connectivity and control.</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;"><strong>Processor Overview:</strong> Data moves through the system by flowing via memory, combinational and sequential elements, and functional units. The connections and data movement in the <strong>datapath</strong> must be explicitly managed to ensure that correct operations occur at the appropriate time.</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">Direct wiring of datapath components often leads to complex and rigid architectures. To address this, <strong>multiplexers (MUX)</strong> are used. A <strong>multiplexer</strong> is a hardware component that selects one of several input signals based on selection signals—enabling controlled data-path steering.</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;"><strong>Multiplexers</strong> require <strong>control signals</strong>, which are binary selectors that determine data movement routes, operand sources, and operation modes throughout the datapath. The cohesive and efficient management of these control signals is vital to the correct execution of instructions.</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;"><strong>Signals</strong> are critical to the operation of digital systems like the processor datapath. Information is encoded in binary: low voltage is interpreted as <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">0</code> and high voltage as <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1</code>. Each bit of information is typically carried by a single wire, but multi-bit signals use <strong>buses</strong>—bundles of wires delivering an entire binary word or value simultaneously.</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;"><strong>Combinational Circuits</strong> are logic circuits whose outputs depend solely on their current inputs, with no memory of previous states. They perform direct data operations. For example, the <strong>ALU</strong> (Arithmetic Logic Unit) is a classic combinational circuit: for the same input data, it always yields the same output. This property is essential for predictable arithmetic and logic processing.</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;"><strong>Sequential Circuits</strong> possess state, meaning outputs depend on both inputs and the history of previous outputs. Registers are an example: the <strong>register file</strong> outputs depend on the current contents of its registers, which are changed over time by write operations. This state retention is essential for implementing processor storage and multi-cycle operations.</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;"><strong>MIPS Register File</strong> contains 32 registers, each 32-bits wide, supporting:</p>
+<ul>
+  <li>One write operation per cycle (<strong>write bus</strong>)</li>
+  <li>Two simultaneous read operations (<strong>read buses</strong>)</li>
+</ul>
+<p style="color:whitesmoke;">Selection inputs for the register file include:</p>
+<ul>
+  <li>
+    <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">RegWrite</code>: Write enable signal, controls if a write occurs.</li>
+  <li>
+    <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">Reg. Source A</code>: First register read address.</li>
+  <li>
+    <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">Reg. Source B</code>: Second register read address.</li>
+  <li>
+    <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">Reg. Destination</code>: Register write address.</li>
+</ul>
+<p style="color:whitesmoke;">These selection lines are typically derived from the instruction’s bit fields and control logic. The register file enables rapid access to operands and destinations for all MIPS instructions, directly impacting datapath efficiency.</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;"><strong>Write Control Signals</strong> are differentiated based on update frequency:</p>
+<ul>
+  <li>
+    <strong>Every Clock Cycle</strong>: State elements always updated on every clock edge do not require dedicated explicit write control signals in schematic diagrams. In MIPS hardware, the <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">Program Counter (PC)</code> typically falls into this category.
+  </li>
+  <li>
+    <strong>When Necessary</strong>: State elements only updated under certain conditions (e.g., the <strong>register file</strong>) require explicit write control signaling to prevent unintended overwrites or updates.
+  </li>
+</ul>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;"><strong>Datapath Elements:</strong> Most datapath components use 32-bit wide input and output buses, allowing transfer of a full MIPS register word per operation. Bus widths are commonly annotated in diagrams to clarify data sizes throughout the processor.</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;"><strong>Combinational Datapath Elements</strong> include:</p>
+<ul>
+  <li>
+    <strong>Multiplexer (MUX):</strong> Selects between multiple inputs. For a 2-to-1 MUX with inputs <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">I0</code>, <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">I1</code>, and select line <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">S</code>, output <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">Y = S ? I1 : I0</code>.
+  </li>
+  <li>
+    <strong>Adder:</strong> Computes the sum of two input values (<code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">Y = A + B</code>). Used for both address calculation and <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">PC</code> incrementing.
+  </li>
+  <li>
+    <strong>Arithmetic Logic Unit (ALU):</strong> Performs arithmetic and logical operations (<code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">Y = F(A, B)</code>, where <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">F</code> denotes the operation function).
+  </li>
+</ul>
+<p style="color:whitesmoke;">These combinational elements form the core of datapath manipulation for instruction processing.</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;"><strong>Sequential Datapath Elements</strong> are necessary for storing the processor’s intermediate and persistent state between instructions or cycles, such as registers and memory arrays.</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;"><strong>Fetch Elements</strong> that support instruction reading include:</p>
+<ul>
+  <li>
+    <strong>Memory Unit:</strong> Instruction memory stores and supplies instructions when given an address.</li>
+  <li>
+    <strong>Program Counter (PC):</strong> Points to the current instruction’s memory address, incrementing or updating with each instruction cycle.</li>
+  <li>
+    <strong>Adder:</strong> Increments PC by adding a constant (typically 4, as instructions are 4 bytes each), unless modified by control flow instructions.</li>
+</ul>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;"><strong>R-Type Instructions</strong> execution follows a specific pattern:</p>
+<ul>
+  <li>Read two register operands.</li>
+  <li>Conduct the specified arithmetic or logical operation via the ALU.</li>
+  <li>Write the result back to the specified destination register.</li>
+</ul>
+<p style="color:whitesmoke;">As an example, <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">add $t1, $t2, $t3</code> results in:</p>
+<ul>
+  <li>
+    <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">RW = 9</code> (destination <code>$t1</code>)
+  </li>
+  <li>
+    <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">RA = 10</code> (source <code>$t2</code>)
+  </li>
+  <li>
+    <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">RB = 11</code> (source <code>$t3</code>)
+  </li>
+  <li>
+    <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">ALUop = "add"</code>
+  </li>
+</ul>
+<p style="color:whitesmoke;">The datapath supports reading, ALU computation, and register writing in a coordinated manner controlled by control signals.</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;"><strong>I-Type Instructions</strong> differ by using a 16-bit <strong>immediate</strong> value instead of one read register, shift amount, and function fields. Since the <strong>ALU</strong> requires 32-bit operands, the immediate value is <strong>sign-extended</strong>—filling with zeros if positive and ones if negative—to match operand width. The datapath must select between using the second register read or the sign-extended immediate as the second ALU input, typically via a multiplexer controlled by an <strong>ALUSrc</strong> control signal. This alteration enables immediate arithmetic and address calculation for operations such as load, store, and add immediate.</p>
+<!-- END_SECTION -->

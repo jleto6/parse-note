@@ -1,8 +1,0 @@
-6: Memory Hierarchy and Cache Fundamentals
--Memory Hierarchy Levels
--Caches
--Cache Memory
--Block: unit of copying
--Address Subdivision
--Principle of Locality
--Smaller, faster memory is closer to the processor

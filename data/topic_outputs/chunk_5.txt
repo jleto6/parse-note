@@ -8,43 +8,37 @@ increases
 • Reduce transfer time component of miss penalty
 • Add another level of cache
 
-The image is a block diagram of a datapath used in computer architecture. Here is a detailed analysis:
+The image is a diagram labeled "Datapath." Here's an analysis of it:
 
 ### Layout Description:
+- **Main Components:** 
+  - **Instruction Memory:** Positioned on the left, labeled "Instruction memory."
+  - **Registers Block:** In the center, showing registers for storing data.
+  - **ALU (Arithmetic Logic Unit):** Central component performing operations.
+  - **Data Memory:** Placed on the right for data storage operations.
+  - **Multiplexers (MUX):** Multiple instances are labeled "MUX" to select data paths.
 
-1. **Major Components:**
-   - **PC (Program Counter):** Represents the address of the current instruction.
-   - **Instruction Memory:** Reads the instruction based on the address from the PC.
-   - **Registers:** Contains Read register 1, Read register 2, Write register, and Write data.
-   - **ALU (Arithmetic Logic Unit):** Performs calculations and logical operations.
-   - **Data Memory:** Handles read and write operations.
-
-2. **Control Signals:**
-   - **RegWrite, MemWrite, MemRead:** Controls writing and reading operations.
-   - **ALUSrc, MemtoReg, PCSrc:** Various multiplexer control signals.
-   - **ALU operation:** Determines the operation performed by the ALU.
-
-3. **Data Flow:**
-   - Data is fetched from instruction memory based on the PC.
-   - Instruction is decoded, and operands are fetched from the registers.
-   - ALU performs operations based on control signals.
-   - Results can be stored back in registers or written to data memory.
-
-### Data Flow Description:
-
-- The **PC** provides an address to the **Instruction Memory** which fetches the instruction.
-- The **Registers** block splits into registering reads and writes, with retrieved values entering the ALU.
-- The **ALU** performs the required operations, influenced by control inputs, such as immediate calculation or data memory addressing.
-- Results from ALU can go to **Data Memory** if required and are again used in a write-back stage to store results in the registers.
-- Multiplexers (MUX) are used to select between different data paths based on control signals, altering the flow of data based on operation needs.
+### Detailed Elements:
+- **Instruction Path:** Begins with reading the address from the "PC" (Program Counter). The address is directed to the "Instruction memory."
+- **Controllers and Data Flow:**
+  - "Read address" to "Instruction memory" to get instructions.
+  - "Registers" block shows "Register 1" and "Register 2" for inputs, with an option to write data.
+  - "Sign-extend" block is used to handle immediate values.
+- **ALU Path:** 
+  - Receives inputs from "Register 1" and the result of a "MUX" that selects either "Register 2" data or a "Sign-extend" output.
+  - ALU performs operations defined by "ALU operation."
+- **Data Memory:**
+  - Data from ALU or to be written/read is processed through "Data memory," directed by "MemWrite" and "MemRead" controls.
+- **Controls and Multiplexers:**
+  - "MUX" instances at various points to control the flow using signals like "PCSrc," "ALUSrc," and paths for ALU results or memory data.
 
 ### Insights:
-- The diagram represents a typical processor data path capable of handling immediate values, arithmetic operations, and memory instructions.
-- By adjusting control signals, the data path can perform various operations, making it essential for execution in the instruction cycle.
-- The presence of multiplexers indicates flexibility in data handling, providing multiple operation pathways based on control requirements.
-- The simplicity implies a basic or educational example of computer architecture, suitable for explaining fundamental concepts.
+- **Sequential Process:** The datapath is designed to facilitate the flow of instructions and data through the CPU.
+- **Control Signals:** Various control signals manage the reading, writing, and operation commands.
+- **ALU Operations:** Highlights how different paths are selected for execution based on instructions and control inputs.
+- **Memory Interaction:** Data and instructions are read from separate memories and controlled precisely through multiplexers.
 
-This diagram serves as a foundational representation of how data flows through a simplified CPU during command execution, reflecting the crucial role of control signals in directing operations.
+This diagram represents a typical CPU datapath used in computer architecture to process instructions and handle data manipulation effectively.
 PROCESSOR 
 DATAPATH
 
@@ -79,4 +73,73 @@ target address
 0
 26
 31
-6 
+6 bits
+26 bits
+op
+rs
+rt
+rd
+shamt
+funct
+0
+6
+11
+16
+21
+26
+31
+6 bits
+6 bits
+5 bits
+5 bits
+5 bits
+5 bits
+op
+rs
+rt
+immediate
+0
+16
+21
+26
+31
+6 bits
+16 bits
+5 bits
+5 bits
+
+MIPS Subset
+• Add, Subtract, AND, OR, SLT
+• add rd, rs, rt
+• sub rd, rs, rt
+• and rd, rs, rt
+• or rd, rs, rt
+• slt rd, rs, rt
+• ADD Immediate
+• addi  rt, rs, imm16
+• Load, Store
+• lw rt, rs, imm16
+• sw rt, rs, imm16
+• BRANCH
+• beq rs, rt, imm16
+• JUMP:
+• j  target
+op
+rs
+rt
+rd
+shamt
+funct
+0
+6
+11
+16
+21
+26
+31
+6 bits
+6 bits
+5 bits
+5 bits
+5 bits
+5 

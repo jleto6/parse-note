@@ -98,6 +98,8 @@ def create_outline(file_path, section_count):
         title = lines[0].strip()
         text = "\n".join(lines[1:]).strip()
         embedding = get_embedding(sec)
+        filename = f"{re.sub(r'[^a-zA-Z0-9]+', '_', title)[:50]}.txt"
+
         data.append({
             "filename": filename,
             "text": text,

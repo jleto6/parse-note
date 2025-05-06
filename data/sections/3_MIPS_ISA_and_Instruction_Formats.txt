@@ -1,6 +1,0 @@
-3: MIPS ISA and Instruction Formats
--Introduction
--MIPS ISA
--3 Instruction Types
--Instruction Format Review
--MIPS Subset

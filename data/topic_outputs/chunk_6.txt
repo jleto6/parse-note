@@ -1,73 +1,4 @@
 bits
-26 bits
-op
-rs
-rt
-rd
-shamt
-funct
-0
-6
-11
-16
-21
-26
-31
-6 bits
-6 bits
-5 bits
-5 bits
-5 bits
-5 bits
-op
-rs
-rt
-immediate
-0
-16
-21
-26
-31
-6 bits
-16 bits
-5 bits
-5 bits
-
-MIPS Subset
-• Add, Subtract, AND, OR, SLT
-• add rd, rs, rt
-• sub rd, rs, rt
-• and rd, rs, rt
-• or rd, rs, rt
-• slt rd, rs, rt
-• ADD Immediate
-• addi  rt, rs, imm16
-• Load, Store
-• lw rt, rs, imm16
-• sw rt, rs, imm16
-• BRANCH
-• beq rs, rt, imm16
-• JUMP:
-• j  target
-op
-rs
-rt
-rd
-shamt
-funct
-0
-6
-11
-16
-21
-26
-31
-6 bits
-6 bits
-5 bits
-5 bits
-5 bits
-5 bits
 op
 rs
 rt
@@ -233,4 +164,24 @@ Fetch Elements
 
 R-Type Instructions
 • Read two register operands
-• Perform arithmetic/logical 
+• Perform arithmetic/logical operation
+• Write register result
+
+R-Type Instructions
+add $t1, $t2, $t3
+• RW = 9
+• RA = 10
+• RB = 11
+• ALUop = “add”
+
+Datapath: R-Type Instructions
+
+I-Type Instructions
+• Replace one read register, shamt, and funct with 16 bit 
+constant
+• ALU requires 32-bit inputs
+• Sign-extend the 16 bit immediate
+• Fill with 0s if the constant is positive
+• Fill with 1s if the constant is negative
+• Choose between the second read registers 
+and the sign extended 

@@ -1,7 +1,7 @@
 4: Instruction Execution Cycle
--Instruction Execution
--Fetch:
--Decode:
--Execute:
--Update PC:
--To read and write registers, we need a register file
+- Fetching instructions using the PC
+- Instruction decode and register read
+- Execute stage: ALU operations, address calculation
+- Memory access stage: data memory operations
+- Write back stage: register writes
+- Instruction sequencing and PC updates

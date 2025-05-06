@@ -1,24 +1,4 @@
-operation
-• Write register result
-
-R-Type Instructions
-add $t1, $t2, $t3
-• RW = 9
-• RA = 10
-• RB = 11
-• ALUop = “add”
-
-Datapath: R-Type Instructions
-
-I-Type Instructions
-• Replace one read register, shamt, and funct with 16 bit 
-constant
-• ALU requires 32-bit inputs
-• Sign-extend the 16 bit immediate
-• Fill with 0s if the constant is positive
-• Fill with 1s if the constant is negative
-• Choose between the second read registers 
-and the sign extended constant.
+constant.
 
 Datapath: I-Type Instructions
 
@@ -318,4 +298,15 @@ fields, at positions 25:21 and 20:16. This is true for the R-type
 instructions, branch equal, and for store. 
 • The base register for load and store instructions is always in bit 
 positions 25:21 (rs). 
-• The 16-bit offset for branch equal, load, and 
+• The 16-bit offset for branch equal, load, and store is always in 
+positions 15:0. 
+• The destination register is in one of two places. 
+• For a load it is in bit positions 20:16 (rt)
+• For an R-type instruction it is in bit positions 15:11 (rd)
+• We will need to add a multiplexor to select which field of the instruction is used 
+to indicate the register number to be written.
+
+Datapath with ALU Control
+
+Control Signals – Register Destination
+• 
