@@ -1,31 +1,4 @@
-constant.
-
-Datapath: I-Type Instructions
-
-Load/Store Instructions
-• lw 
-$t1, offset($t2)
-• sw 
-$t1, offset($t2)
-• Compute memory address: $t2 + offset
-• Since offset is 16 bits, it needs to be extended to 32 bits
-
-Load/Store Instructions
-• Load: Read memory and update register
-• Store: Write register value to memory
-• Elements: 
-• Register file
-• Sign extension unit
-• Data memory unit
-
-Datapath: Load Instruction
-
-Datapath: Store Instruction
-
-Branch Instructions
-beq
-$t1, $t2, offset
-• Read register operands
+Read register operands
 • Compare operands
 • Use ALU, subtract and check Zero output
 • Calculate target address
@@ -309,4 +282,15 @@ to indicate the register number to be written.
 Datapath with ALU Control
 
 Control Signals – Register Destination
-• 
+• RegDst
+• Deasserted: the register destination number for the write register 
+comes from the rt field (bits 20:16)
+• Asserted: the register destination number for the write register 
+comes from the rd field (bits 15:11)
+
+Control Signals – Register Write
+• RegWrite
+• Asserted: the register destination specified by the write register 
+input is written with the value from the write data input
+
+Control Signals 

@@ -1,0 +1,60 @@
+<h1>Processor Pipelining: Hazards, Stalls, and Control Flow</h1>
+<p style="color:whitesmoke;">
+<strong>Forwarding</strong> is an essential technique used to pass results directly from an earlier instruction’s execution stage to a later instruction without waiting for the register write-back. This mechanism requires additional datapath connections. However, <strong>load-use data hazards</strong> occur when an instruction needs a value being loaded from memory before the load instruction completes; such hazards cannot always be resolved through forwarding alone.
+</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+When a hazard cannot be resolved immediately, a <strong>pipeline stall</strong> (also called a <strong>pipeline bubble</strong>) is introduced. This is implemented as a <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">nop</code> (“no operation”) instruction, effectively disabling the control signals in the <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">ID/EX</code> register for one or more cycles to prevent erroneous updates or accesses.
+</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+Visualizing stalls in the pipeline, the insertion point of the stall depends on the stage where the hazard occurs. Alternate representations, with or without explicit nops, demonstrate how instruction issue and advancement are delayed appropriately. These bubbles preserve correctness by ensuring data becomes available before dependent instructions proceed.
+</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+<strong>Code scheduling</strong> can mitigate pipeline stalls by reordering instructions to avoid immediate dependencies. For example, consider the sequence involving loads, adds, and stores:
+</p>
+<ul>
+  <li><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">lw $t1, 0($t0)</code></li>
+  <li><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">lw $t2, 4($t0)</code></li>
+  <li><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">add $t3, $t1, $t2</code></li>
+  <li><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">sw $t3, 12($t0)</code></li>
+  <li><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">lw $t4, 8($t0)</code></li>
+  <li><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">add $t5, $t1, $t4</code></li>
+  <li><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">sw $t5, 16($t0)</code></li>
+</ul>
+<p style="color:whitesmoke;">
+By reordering such that loads are grouped before dependents, certain stalls can be avoided, reducing cycles from 13 to 11 in the provided C computation scenario.
+</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+<strong>Control hazards</strong> arise primarily from branch instructions. Because the outcome of a branch affects which instruction should be fetched next, the pipeline may not always be able to determine the correct path immediately, especially if the branch condition is resolved later in the pipeline. If the branch outcome is unknown, the processor may have to stall until resolution.
+</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+<strong>Branch prediction</strong> techniques address the potentially excessive stall penalties of waiting on branch outcomes. By <strong>predicting</strong> the probable outcome, the pipeline proceeds along the predicted path and only incurs a penalty if the guess proves incorrect. Common strategies include always predicting branches as not taken, allowing instructions after the branch to be fetched immediately so long as this prediction is conservative and inexpensive to correct.
+</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+In the <strong>Predict Branch Not Taken</strong> approach, if a branch is realized as taken (in the <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">MEM</code> stage, for example), incorrectly fetched instructions are flushed by setting their control values to zero—a process called “flushing instructions”. This method reduces the average branch penalty when predictions are often correct.
+</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+Static <strong>branch prediction</strong> relies on typical code behavior. For instance, loop-back (backward) branches are usually taken, while conditional (forward) branches are often not taken. This generalization is implemented simply but does not adapt to program-specific behavior.
+</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+For more accuracy, <strong>dynamic branch prediction</strong> employs a <strong>Branch History Table</strong>. This hardware table records recent outcomes of branch instructions using part of the branch address as an index. At execution, the predicted path is fetched based on prior outcomes; if the guess is wrong, the hardware flushes and retries on the alternate path, also updating the prediction in the table.
+</p>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+The <strong>1-bit predictor</strong> records only the last outcome, but, as seen with nested loops, this leads to two mispredictions per loop: once at loop exit (predict taken when it's not), and once for the first iteration (predict not taken when it is). The <strong

@@ -1,15 +1,4 @@
-RegDst
-• Deasserted: the register destination number for the write register 
-comes from the rt field (bits 20:16)
-• Asserted: the register destination number for the write register 
-comes from the rd field (bits 15:11)
-
-Control Signals – Register Write
-• RegWrite
-• Asserted: the register destination specified by the write register 
-input is written with the value from the write data input
-
-Control Signals – ALU Source
+– ALU Source
 • ALUSrc
 • Deasserted: The second ALU operand comes from the second 
 register file output
@@ -254,4 +243,15 @@ When the washer is finished, place the wet load in the dryer.
 When the dryer is finished, place the dry load on a table and fold.
 4.
 When folding is finished, put the clothes away.
-• When the clothes are put 
+• When the clothes are put away, the next load can begin.
+
+Analogy for Pipelining: Laundry
+• Pipelined approach:
+1.
+Place one dirty load (load A) of clothes in the washer. 
+2.
+When the washer is finished, place load A in the dryer and start a 
+new load (load B) in the washer.
+3.
+When the dryer is finished, place load A on the table to fold, 
+place load B in the 

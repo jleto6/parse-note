@@ -1,15 +1,4 @@
-away, the next load can begin.
-
-Analogy for Pipelining: Laundry
-• Pipelined approach:
-1.
-Place one dirty load (load A) of clothes in the washer. 
-2.
-When the washer is finished, place load A in the dryer and start a 
-new load (load B) in the washer.
-3.
-When the dryer is finished, place load A on the table to fold, 
-place load B in the dryer, and start a new load (load C) in the 
+dryer, and start a new load (load C) in the 
 washer.
 4.
 When folding is finished, put away load A, fold load B, place load 
@@ -179,4 +168,19 @@ next cycle
 Structure Hazards
 • Conflict for use of a resource
 • In MIPS pipeline with a single memory
-• 
+• Load/store requires data access
+• Instruction fetch would have to stall for that cycle
+• Would cause a pipeline “bubble”
+• Hence, pipelined datapaths require separate 
+instruction/data memories
+• Or separate instruction/data caches
+
+Data Hazards
+• An instruction depends on completion of data access by a 
+previous instruction
+• add$s0, $t0, $t1
+• sub$t2, $s0, $t3
+
+Forwarding (aka Bypassing)
+• Use result when it is computed
+• Don’t wait for 

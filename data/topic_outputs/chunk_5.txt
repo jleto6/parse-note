@@ -8,37 +8,25 @@ increases
 • Reduce transfer time component of miss penalty
 • Add another level of cache
 
-The image is a diagram labeled "Datapath." Here's an analysis of it:
+The image is a diagram of a computer datapath.
 
-### Layout Description:
-- **Main Components:** 
-  - **Instruction Memory:** Positioned on the left, labeled "Instruction memory."
-  - **Registers Block:** In the center, showing registers for storing data.
-  - **ALU (Arithmetic Logic Unit):** Central component performing operations.
-  - **Data Memory:** Placed on the right for data storage operations.
-  - **Multiplexers (MUX):** Multiple instances are labeled "MUX" to select data paths.
-
-### Detailed Elements:
-- **Instruction Path:** Begins with reading the address from the "PC" (Program Counter). The address is directed to the "Instruction memory."
-- **Controllers and Data Flow:**
-  - "Read address" to "Instruction memory" to get instructions.
-  - "Registers" block shows "Register 1" and "Register 2" for inputs, with an option to write data.
-  - "Sign-extend" block is used to handle immediate values.
-- **ALU Path:** 
-  - Receives inputs from "Register 1" and the result of a "MUX" that selects either "Register 2" data or a "Sign-extend" output.
-  - ALU performs operations defined by "ALU operation."
-- **Data Memory:**
-  - Data from ALU or to be written/read is processed through "Data memory," directed by "MemWrite" and "MemRead" controls.
-- **Controls and Multiplexers:**
-  - "MUX" instances at various points to control the flow using signals like "PCSrc," "ALUSrc," and paths for ALU results or memory data.
+### Layout and Components:
+- **Instruction Memory:** Located at the bottom left, where instructions are fetched from the memory using a program counter (PC) and read address.
+- **Add and MUX Components:** There are several MUXs and Add components for directing data flow.
+- **Registers:** Two registers (Read register 1 and Read register 2) are used for storing operands.
+- **ALU (Arithmetic Logic Unit):** Performs operations on data, with inputs from the MUX and output labeled ALU result.
+- **Data Memory:** Reads or writes data based on ALU results and MemRead/MemWrite signals.
+- **Sign-extend and Shift left:** Used for processing instruction fields for calculations in the ALU.
+- **Control Signals:** Labels like RegWrite, ALUSrc, MemtoReg, MemRead, and MemWrite indicate control signals for data flow and operations.
 
 ### Insights:
-- **Sequential Process:** The datapath is designed to facilitate the flow of instructions and data through the CPU.
-- **Control Signals:** Various control signals manage the reading, writing, and operation commands.
-- **ALU Operations:** Highlights how different paths are selected for execution based on instructions and control inputs.
-- **Memory Interaction:** Data and instructions are read from separate memories and controlled precisely through multiplexers.
+- The diagram illustrates a single-cycle datapath typical of a processor, showing how data flows through the system when executing instructions.
+- **PCSrc and ALUSrc MUXs** are used to select between different inputs based on control signals, influencing how the next address is determined.
+- **Zero Output from ALU** is used to decide branch outcomes, which influences the PC update.
+- **Sign-extend** and **shift left 2** help in preparing immediate values for ALU operations, particularly in branching and address calculations.
+- **Control Signals** such as MemWrite and RegWrite highlight key control points for writing operations in either data memory or registers.
 
-This diagram represents a typical CPU datapath used in computer architecture to process instructions and handle data manipulation effectively.
+Overall, understanding this datapath is crucial for comprehending how a processor executes instructions and manages data flow across various components.
 PROCESSOR 
 DATAPATH
 
@@ -142,4 +130,34 @@ funct
 5 bits
 5 bits
 5 bits
-5 
+5 bits
+op
+rs
+rt
+immediate
+0
+16
+21
+26
+31
+6 bits
+16 bits
+5 bits
+5 bits
+op
+target address
+0
+26
+31
+6 bits
+26 bits
+
+Instruction Execution
+• For every instruction:
+1.
+Send the program counter (PC) to the memory that contains the 
+code and fetch the instruction from that memory.
+1.
+Read one or two registers, using fields of the instruction to select 
+the registers to read. For the load word instruction, we need to 
+read only one register, but most 

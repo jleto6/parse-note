@@ -1,19 +1,4 @@
-Load/store requires data access
-• Instruction fetch would have to stall for that cycle
-• Would cause a pipeline “bubble”
-• Hence, pipelined datapaths require separate 
-instruction/data memories
-• Or separate instruction/data caches
-
-Data Hazards
-• An instruction depends on completion of data access by a 
-previous instruction
-• add$s0, $t0, $t1
-• sub$t2, $s0, $t3
-
-Forwarding (aka Bypassing)
-• Use result when it is computed
-• Don’t wait for it to be stored in a register
+it to be stored in a register
 • Requires extra connections in the datapath
 
 Forwarding

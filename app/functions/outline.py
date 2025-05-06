@@ -3,12 +3,15 @@ import os
 import re
 import pandas as pd
 import time
+import math
 
 from config import COMPLETED_NOTES
 
 
 # Set your OpenAI API key
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) # Use OpenAI
+openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) # Use OpenAI
+deepseek_client = OpenAI(api_key=os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com/v1"  ) # Use Deepseek
+
 
 # File deleter
 def clear_output(folder_path):
@@ -19,10 +22,11 @@ def clear_output(folder_path):
 
 
 def get_embedding(text, model="text-embedding-3-small"):
-    return client.embeddings.create(input=[text], model=model).data[0].embedding
+    return openai_client.embeddings.create(input=[text], model=model).data[0].embedding
 
 def create_outline(file_path, section_count):
 
+    print(section_count)
 
     # Read input text from a file
     with open(file_path, "r", encoding="utf-8") as f:
@@ -30,34 +34,42 @@ def create_outline(file_path, section_count):
     
     # Prompt for GPT to create an outline
     outline_prompt = f"""
-    You are helping organize raw, out-of-order technical notes into a coherent teaching sequence.
+    You are helping organize raw, out-of-order technical notes into a coherent teaching sequence optimized for Retrieval-Augmented Generation (RAG) systems.
 
     The original content is likely jumbled. Do **not** preserve its order.
 
-    Your goal is to extract and organize the topics into a structured outline that reflects how a learner would progress through the material:
-    - Begin with the most foundational concepts that do not rely on prior knowledge.
-    - Then, introduce concepts that build directly on those foundations.
-    - End with advanced topics that depend on earlier ones for full understanding.
+    Your goal is to extract and organize topics into a clearly structured outline that reflects how a learner would progress through the material:
+    - Start with foundational topics requiring no prior knowledge.
+    - Progress to intermediate concepts that build on those foundations.
+    - End with advanced ideas requiring deeper understanding.
 
-    You must create exactly **{section_count}** top-level sections.
+    Only include distinct top-level sections. Each section must represent a clearly non-overlapping concept or skill. Do not split a topic across multiple sections. Only create separate sections when topics are fundamentally different in purpose or function. Closely related subtopics — like variations of the same concept (e.g., cache types or policies) — must be grouped together into a single, comprehensive section for that concept. Do not create multiple sections for different configurations or options of the same system.
 
-    Do not summarize or rephrase the input.
+    There are {section_count} content chunks. You must generate **no more than {math.floor(section_count/2.5)} sections**. Fewer sections are allowed if and only if merging results in highly distinct and semantically strong groupings. Exceeding {section_count} sections will break alignment with chunk-based retrieval and is not allowed.
+
+    Each section must:
+    - Use a specific, keyword-rich title that would match real-world technical search queries.
+    - Contain 2–4 bullet points with detailed, descriptive language.
+    - Repeat or reinforce key terminology from the section title and chunk contents.
+    - Be semantically focused — each section should be easy to embed and retrieve on its own.
+
+    Do **not** summarize or rephrase the raw content. Focus entirely on extracting structure and topics.
     Only output a clean outline in this format:
 
-    1: [Title]
-    -[Subtopic]
-    -[Subtopic]
-    2: [Title]
+    1: [Section Title with keywords]
+    - Bullet point with relevant terminology
+    - Another bullet point with concepts or phrases that would be searched
+    2: [Next Section Title]
     ...
 
-    Assume the goal is clarity, progression, and dependency-based ordering — not clustering by keyword or preserving the original structure.
+    Do not cluster by keyword or follow the original order. Optimize purely for clarity, distinctiveness, teaching progression, and RAG-friendly retrieval alignment.
 
     Raw Content:
     {text_input}
     """
 
     # Send to GPT
-    completion = client.chat.completions.create(
+    completion = openai_client.chat.completions.create(
         model="gpt-4.1",
         messages=[
             {"role": "system", "content": "You are a curriculum designer trained to organize raw technical content into a structured, teachable format. Your goal is to extract core topics, group related ideas, and order them in a clear learning progression from foundational to advanced concepts. Avoid following the input order. Instead, infer which concepts must be introduced early to support understanding of later ideas."},

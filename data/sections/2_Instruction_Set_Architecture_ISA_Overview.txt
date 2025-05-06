@@ -1,5 +1,0 @@
-2: Instruction Set Architecture (ISA) Overview
-- MIPS ISA introduction
-- Instruction types: R-type, I-type, J-type
-- Instruction format fields and layout
-- Supported instruction subset

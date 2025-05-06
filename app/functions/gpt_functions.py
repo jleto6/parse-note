@@ -18,7 +18,7 @@ def end_section(string_buffer):
     from app import socketio
     if "<!-- END_SECTION -->" in string_buffer:
         string_buffer = markdown.markdown(string_buffer) # Convert to HTML
-        socketio.emit("update_notes", {"notes": string_buffer, "refresh": True})
+        # socketio.emit("update_notes", {"notes": string_buffer, "refresh": True})
 
 def end_answer(answer_buffer):
     from app import socketio

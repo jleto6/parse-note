@@ -72,8 +72,6 @@ def note_creation(content, outline_df):
 
     # RAG
     current_embedding = embed_file(content)
-
-    prior_context = "<strong>Heading Rule:</strong> You must insert exactly one <h1> heading at the beginning of the output to represent the main topic. There must be one and only one <h1> tag. Do not include multiple <h1> tags under any circumstances. You may optionally include one or two <h3> subheadings if absolutely necessary, but avoid them unless essential for clarity or structure. Treat the rest of the content as a single section under that heading."
     
     # outline_df['embedding'] = outline_df['embedding'].apply(ast.literal_eval) # Convert the embedding column from a string back into a list of floats
 
@@ -86,6 +84,8 @@ def note_creation(content, outline_df):
         lambda file_embedding: similarity_score(file_embedding, current_embedding) # Get a similarity score for each
     )
 
+    # print(file)
+
     top_chunk = outline_df.sort_values("score", ascending=False).head(1) # sort the DataFrame by similarity score in descending order
     # print(top_chunk)
     most_similar_file_text = top_chunk["text"].iloc[0] # Get the text of the top_chunk
@@ -96,71 +96,6 @@ def note_creation(content, outline_df):
 
     print(top_chunk["score"].iloc[0], end =" ") 
     print(f"The most similar file to the current file is: {most_similar_file_name}")
-
-
-
-    # # Try to open CSV file to compare current embedding to prior embeddings
-    # try:
-    #     # Load the saved CSV file as a pandas DataFrame
-    #     corpus_df = pd.read_csv(FILE_EMBEDDINGS)
-    #     corpus_df['embedding'] = corpus_df['embedding'].apply(ast.literal_eval) # Convert the embedding column from a string back into a list of floats
-
-    #     # Function to compare two vectors similarity
-    #     def similarity_score(page_embedding, question_embedding):
-    #         return np.dot(page_embedding, question_embedding) # Return their dot product (similarity score)
-
-    #     # Compute similarity scores for each chunk
-    #     corpus_df["score"] = corpus_df["embedding"].apply( # Create a new 'score' column for each chunk
-    #         lambda file_embedding: similarity_score(file_embedding, current_embedding) # Get a similarity score for each
-    #     )
-    #     top_chunk = corpus_df.sort_values("score", ascending=False).head(1) # sort the DataFrame by similarity score in descending order
-    #     # print(top_chunk)
-    #     most_similar_file_text = top_chunk["text"].iloc[0] # Get the text of the top_chunk
-    #     most_similar_file_name = top_chunk["filename"].iloc[0] # Get the filename the top_chunk came from
-
-    #     print(top_chunk["score"].iloc[0])
-
-
-    #     if top_chunk["score"].iloc[0] < 0.8:
-    #         print("# Low similarity – create a new file")
-    #         i += 1
-    #         current_file = f"{COMPLETED_NOTES_INDEX}_{i}.txt"
-
-    #         prior_context = "<strong>Heading Rule:</strong> You must insert exactly one <h1> heading at the beginning of the output to represent the main topic. There must be one and only one <h1> tag. Do not include multiple <h1> tags under any circumstances. You may optionally include one or two <h3> subheadings if absolutely necessary, but avoid them unless essential for clarity or structure. Treat the rest of the content as a single section under that heading."
-
-    #     else:
-    #         print(f"The most similar file to the current file is: {most_similar_file_name}")
-
-    #         similar_file_dir = (f"{COMPLETED_NOTES_FILE}/{most_similar_file_name}")
-
-    #         # Read the content of the current file
-    #         with open(similar_file_dir, "r") as file:
-    #             similar_file_content = file.read()
-
-    #         current_file = os.path.join(COMPLETED_NOTES_FILE, most_similar_file_name)
-
-    #         prior_context = f"""
-    #         You are continuing work in an existing file. Below is the current content of that file. 
-    #         Do not discard or reword its details—preserve everything. However, you must now expand it using the new raw content. 
-    #         Do not simply append it to the end. Instead, intelligently merge the new material into the existing file in a way that flows naturally, 
-    #         while preserving accuracy, logic, and formatting. You may revise transitions or slightly adjust the structure to unify them. 
-    #         The final output should contain exactly one <h1> heading, possibly renamed to better reflect the combined content, but never duplicated. 
-    #         At most, use one or two <h3> subheadings only if necessary. Think of this like you’re evolving the document—not just adding on.
-
-    #         The current content of the file is:
-    #         {similar_file_content}
-    #         """
-
-    # except Exception as e:
-    #     print(e)
-    #     # No CSV file to compare to yet
-    #     print("No CSV file to compare to yet")
-    #     current_file = f"{COMPLETED_NOTES_INDEX}_{i}.txt"
-    #     pass
-
-    # print(prior_context)
-
-    # GPT
 
     global previous_content
     # Read the content of the current file
@@ -192,34 +127,47 @@ def note_creation(content, outline_df):
             {
             "role": "user",
             "content": f"""
-        Write deeply detailed, structured documentation in valid HTML, intended for insertion into a Jinja template. Output raw HTML—no Markdown, code fences, or formatting artifacts. Use <p style="color:whitesmoke;"> for all body text. Bold all key terms using <strong>. All code or syntax references should use <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">.
+            Write deeply detailed, structured documentation in valid HTML, intended for insertion into a Jinja template. Output raw HTML—no Markdown, code fences, or formatting artifacts. Use <p style="color:whitesmoke;"> for all body text. Bold all key terms using <strong>. All code or syntax references should use <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">.
 
-        <strong>Structural Rules:</strong>  
-        - Use exactly one <h1> tag for the overall topic. Do not generate more than one.  
-        - Use at most one or two <h3> subheadings if essential for clarity.  
-        - Use <ol> for any step-by-step processes, ordered procedures, or sequences—<strong>always</strong>.  
-        - Use <ul> only if content clearly involves categories or non-ordered groupings.  
-        - Avoid excessive lists—favor <p> for general explanation.  
-        - Insert '<!-- END_SECTION -->' after every HTML block.
+            <strong>Structural Rules:</strong>  
+            - Use exactly one <h1> tag for the overall topic. Do not generate more than one.  
+            - Use at most one or two <h3> subheadings if essential for clarity.  
+            - Use <ol> for any step-by-step processes, ordered procedures, or sequences—<strong>always</strong>.  
+            - Use <ul> only if content clearly involves categories or non-ordered groupings.  
+            - Avoid excessive lists—favor <p> for general explanation.  
+            - Insert '<!-- END_SECTION -->' after every HTML block.
 
-        <strong>Clarity & Integration Rules:</strong>  
-        - When a new concept or term appears, briefly define it and explain its role or relevance within the system or topic.  
-        - If content contains examples, scenarios, or data, include them—they may replace long explanations if they clarify the point.  
-        - Seamlessly insert brief (1–2 sentence) insights only when needed to explain:  
-        1. Why a concept matters  
-        2. How it fits into the system  
-        3. How it builds on prior content  
+            <strong>Clarity & Integration Rules:</strong>  
+            - When a new concept or term appears, briefly define it and explain its role or relevance within the system or topic.  
+            - If content contains examples, scenarios, or data, include them—they may replace long explanations if they clarify the point.  
+            - Seamlessly insert brief (1–2 sentence) insights only when needed to explain:  
+            1. Why a concept matters  
+            2. How it fits into the system  
+            3. How it builds on prior content  
 
-        Do not introduce or summarize. Do not address the reader. Avoid filler or framing statements.
+            Do not introduce or summarize. Do not address the reader. Avoid filler or framing statements.
 
-        {prior_context}
+            <strong>Heading Rule:</strong> You must insert exactly one <h1> heading at the beginning of the output to represent the main topic. There must be one and only one <h1> tag. Do not include multiple <h1> tags under any circumstances. You may optionally include one or two <h3> subheadings if absolutely necessary, but avoid them unless essential for clarity or structure. Treat the rest of the content as a single section under that heading.
 
-        The following is a summary of previously covered material (for context only—do not repeat it):
-        {previous_content}
+            The following is a summary of previously covered material (for context only—do not repeat it):
+            {previous_content}
 
-        Now expand upon this new content with structured, accurate, and conceptually faithful output:
-        {file_content}
-        """
+            Use the structure of the most similar file as a guide for how to organize this section. Do not copy its content, but follow its general flow and topic segmentation when possible. If parts of the structure don’t apply, skip them. If new topics appear in the new material, insert them logically where they fit best.
+
+            Here is the structural reference you may loosely follow:
+            {most_similar_file_text}
+
+            You are updating the existing generated notes below to incorporate new material.  
+            The goal is to append and integrate the new content meaningfully—not to rewrite the previous content.  
+            Preserve the structure, wording, and HTML of what has already been written as much as possible.  
+            Use the new content to improve or clarify earlier explanations if needed, but do not discard or simplify them.
+
+            Append and integrate this new content:
+            {content}
+
+            The existing content is:
+            {file_content}
+            """
         },
         ],
         stream=True
@@ -237,8 +185,6 @@ def note_creation(content, outline_df):
             if content:
                 string_buffer += content
                 output_buffer += content
-                # Stream notes to backend via websockets
-                # socketio.emit("update_notes", {"notes": content})d
                 with open(current_file, "a", encoding="utf-8") as f:
                     f.write(content)
                     f.flush()
@@ -248,8 +194,7 @@ def note_creation(content, outline_df):
             print(f"Chunk type: {type(chunk)}")
             print(f"Chunk content: {chunk}")
 
-    # Emit linebreaks at the end
-    # socketio.emit("update_notes", {"notes" : "<br/><br/>"})
+    socketio.emit("update_notes", {"notes" : "<br/><br/>"})  # Emit linebreaks at the end
 
     # Get genereated notes info
     output_text = strip_html(output_buffer) # Strip the HTML content from the GPT output to get the text

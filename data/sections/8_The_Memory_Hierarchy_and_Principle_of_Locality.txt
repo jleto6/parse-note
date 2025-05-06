@@ -1,6 +1,0 @@
-8: The Memory Hierarchy and Principle of Locality
-- Idealized fast, large-memory systems
-- Memory hierarchy concept and organization
-- Temporal and spatial locality principles
-- Block/unit of copying
-- Basic memory hierarchy levels
