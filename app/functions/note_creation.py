@@ -11,7 +11,7 @@ import ast
 import re
 
 from functions.gpt_functions import end_answer, end_section
-from config import COMPLETED_NOTES_INDEX, FILE_EMBEDDINGS, COMPLETED_NOTES_FILE
+from config import COMPLETED_NOTES_INDEX, FILE_EMBEDDINGS, COMPLETED_NOTES_FILE, COMPLETED_NOTES
 
 
 def strip_html(text):
@@ -60,7 +60,7 @@ def embed_text(content):
 # GENERATE THE NOTES
 # -----------------------------------------------
 
-def note_creation(content):
+def note_creation(content, outline_df):
 
     output_buffer = ""
 
@@ -75,67 +75,89 @@ def note_creation(content):
 
     prior_context = "<strong>Heading Rule:</strong> You must insert exactly one <h1> heading at the beginning of the output to represent the main topic. There must be one and only one <h1> tag. Do not include multiple <h1> tags under any circumstances. You may optionally include one or two <h3> subheadings if absolutely necessary, but avoid them unless essential for clarity or structure. Treat the rest of the content as a single section under that heading."
     
-    # Try to open CSV file to compare current embedding to prior embeddings
-    try:
-        # Load the saved CSV file as a pandas DataFrame
-        corpus_df = pd.read_csv(FILE_EMBEDDINGS)
-        corpus_df['embedding'] = corpus_df['embedding'].apply(ast.literal_eval) # Convert the embedding column from a string back into a list of floats
+    # outline_df['embedding'] = outline_df['embedding'].apply(ast.literal_eval) # Convert the embedding column from a string back into a list of floats
 
-        # Function to compare two vectors similarity
-        def similarity_score(page_embedding, question_embedding):
-            return np.dot(page_embedding, question_embedding) # Return their dot product (similarity score)
-
-        # Compute similarity scores for each chunk
-        corpus_df["score"] = corpus_df["embedding"].apply( # Create a new 'score' column for each chunk
-            lambda file_embedding: similarity_score(file_embedding, current_embedding) # Get a similarity score for each
-        )
-        top_chunk = corpus_df.sort_values("score", ascending=False).head(1) # sort the DataFrame by similarity score in descending order
-        # print(top_chunk)
-        most_similar_file_text = top_chunk["text"].iloc[0] # Get the text of the top_chunk
-        most_similar_file_name = top_chunk["filename"].iloc[0] # Get the filename the top_chunk came from
-
-        print(top_chunk["score"].iloc[0])
-
-
-        if top_chunk["score"].iloc[0] < 0.8:
-            print("# Low similarity – create a new file")
-            i += 1
-            current_file = f"{COMPLETED_NOTES_INDEX}_{i}.txt"
-
-            prior_context = "<strong>Heading Rule:</strong> You must insert exactly one <h1> heading at the beginning of the output to represent the main topic. There must be one and only one <h1> tag. Do not include multiple <h1> tags under any circumstances. You may optionally include one or two <h3> subheadings if absolutely necessary, but avoid them unless essential for clarity or structure. Treat the rest of the content as a single section under that heading."
-
-        else:
-            print(f"The most similar file to the current file is: {most_similar_file_name}")
-
-            similar_file_dir = (f"{COMPLETED_NOTES_FILE}/{most_similar_file_name}")
-
-            # Read the content of the current file
-            with open(similar_file_dir, "r") as file:
-                similar_file_content = file.read()
-
-            current_file = os.path.join(COMPLETED_NOTES_FILE, most_similar_file_name)
-
-            prior_context = f"""
-            You are continuing work in an existing file. Below is the current content of that file. 
-            Do not discard or reword its details—preserve everything. However, you must now expand it using the new raw content. 
-            Do not simply append it to the end. Instead, intelligently merge the new material into the existing file in a way that flows naturally, 
-            while preserving accuracy, logic, and formatting. You may revise transitions or slightly adjust the structure to unify them. 
-            The final output should contain exactly one <h1> heading, possibly renamed to better reflect the combined content, but never duplicated. 
-            At most, use one or two <h3> subheadings only if necessary. Think of this like you’re evolving the document—not just adding on.
-
-            The current content of the file is:
-            {similar_file_content}
-            """
-
-
-    except Exception as e:
-        print(e)
-        # No CSV file to compare to yet
-        print("No CSV file to compare to yet")
-        current_file = f"{COMPLETED_NOTES_INDEX}_{i}.txt"
-        pass
-
+    # Function to compare two vectors similarity
+    def similarity_score(page_embedding, question_embedding):
+        return np.dot(page_embedding, question_embedding) # Return their dot product (similarity score)
     
+    # Compute similarity scores for each chunk
+    outline_df["score"] = outline_df["embedding"].apply( # Create a new 'score' column for each chunk
+        lambda file_embedding: similarity_score(file_embedding, current_embedding) # Get a similarity score for each
+    )
+
+    top_chunk = outline_df.sort_values("score", ascending=False).head(1) # sort the DataFrame by similarity score in descending order
+    # print(top_chunk)
+    most_similar_file_text = top_chunk["text"].iloc[0] # Get the text of the top_chunk
+    most_similar_file_name = top_chunk["filename"].iloc[0] # Get the filename the top_chunk came from
+    
+
+    current_file = os.path.join(COMPLETED_NOTES, most_similar_file_name)
+
+    print(top_chunk["score"].iloc[0], end =" ") 
+    print(f"The most similar file to the current file is: {most_similar_file_name}")
+
+
+
+    # # Try to open CSV file to compare current embedding to prior embeddings
+    # try:
+    #     # Load the saved CSV file as a pandas DataFrame
+    #     corpus_df = pd.read_csv(FILE_EMBEDDINGS)
+    #     corpus_df['embedding'] = corpus_df['embedding'].apply(ast.literal_eval) # Convert the embedding column from a string back into a list of floats
+
+    #     # Function to compare two vectors similarity
+    #     def similarity_score(page_embedding, question_embedding):
+    #         return np.dot(page_embedding, question_embedding) # Return their dot product (similarity score)
+
+    #     # Compute similarity scores for each chunk
+    #     corpus_df["score"] = corpus_df["embedding"].apply( # Create a new 'score' column for each chunk
+    #         lambda file_embedding: similarity_score(file_embedding, current_embedding) # Get a similarity score for each
+    #     )
+    #     top_chunk = corpus_df.sort_values("score", ascending=False).head(1) # sort the DataFrame by similarity score in descending order
+    #     # print(top_chunk)
+    #     most_similar_file_text = top_chunk["text"].iloc[0] # Get the text of the top_chunk
+    #     most_similar_file_name = top_chunk["filename"].iloc[0] # Get the filename the top_chunk came from
+
+    #     print(top_chunk["score"].iloc[0])
+
+
+    #     if top_chunk["score"].iloc[0] < 0.8:
+    #         print("# Low similarity – create a new file")
+    #         i += 1
+    #         current_file = f"{COMPLETED_NOTES_INDEX}_{i}.txt"
+
+    #         prior_context = "<strong>Heading Rule:</strong> You must insert exactly one <h1> heading at the beginning of the output to represent the main topic. There must be one and only one <h1> tag. Do not include multiple <h1> tags under any circumstances. You may optionally include one or two <h3> subheadings if absolutely necessary, but avoid them unless essential for clarity or structure. Treat the rest of the content as a single section under that heading."
+
+    #     else:
+    #         print(f"The most similar file to the current file is: {most_similar_file_name}")
+
+    #         similar_file_dir = (f"{COMPLETED_NOTES_FILE}/{most_similar_file_name}")
+
+    #         # Read the content of the current file
+    #         with open(similar_file_dir, "r") as file:
+    #             similar_file_content = file.read()
+
+    #         current_file = os.path.join(COMPLETED_NOTES_FILE, most_similar_file_name)
+
+    #         prior_context = f"""
+    #         You are continuing work in an existing file. Below is the current content of that file. 
+    #         Do not discard or reword its details—preserve everything. However, you must now expand it using the new raw content. 
+    #         Do not simply append it to the end. Instead, intelligently merge the new material into the existing file in a way that flows naturally, 
+    #         while preserving accuracy, logic, and formatting. You may revise transitions or slightly adjust the structure to unify them. 
+    #         The final output should contain exactly one <h1> heading, possibly renamed to better reflect the combined content, but never duplicated. 
+    #         At most, use one or two <h3> subheadings only if necessary. Think of this like you’re evolving the document—not just adding on.
+
+    #         The current content of the file is:
+    #         {similar_file_content}
+    #         """
+
+    # except Exception as e:
+    #     print(e)
+    #     # No CSV file to compare to yet
+    #     print("No CSV file to compare to yet")
+    #     current_file = f"{COMPLETED_NOTES_INDEX}_{i}.txt"
+    #     pass
+
     # print(prior_context)
 
     # GPT

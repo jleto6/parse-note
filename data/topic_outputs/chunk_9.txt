@@ -1,0 +1,168 @@
+cost
+
+Pipelining
+• Pipelining is an implementation technique in which 
+multiple instructions are overlapped in execution.  
+• Pipelining is nearly universal.
+
+Analogy for Pipelining: Laundry
+• Nonpipelined approach:
+1.
+Place one dirty load of clothes in the washer.
+2.
+When the washer is finished, place the wet load in the dryer.
+3.
+When the dryer is finished, place the dry load on a table and fold.
+4.
+When folding is finished, put the clothes away.
+• When the clothes are put away, the next load can begin.
+
+Analogy for Pipelining: Laundry
+• Pipelined approach:
+1.
+Place one dirty load (load A) of clothes in the washer. 
+2.
+When the washer is finished, place load A in the dryer and start a 
+new load (load B) in the washer.
+3.
+When the dryer is finished, place load A on the table to fold, 
+place load B in the dryer, and start a new load (load C) in the 
+washer.
+4.
+When folding is finished, put away load A, fold load B, place load 
+C in the dryer, start load D in the washer.
+
+Analogy for Pipelining: Laundry
+
+Pipelining Paradox
+• One load of laundry still takes the same amount of time.
+• The amount of time it takes to do many loads of laundry is 
+shorter with pipelining.
+• Pipelining improves throughput.
+
+Pipelining Speedup
+• If all the stages take about the same amount of time and 
+there is enough work to do, then the speedup due to 
+pipelining is roughly equal to the number of stages in the 
+pipeline.
+• Laundry Analogy: 
+• 4 stages (washing, drying, folding, putting away)
+• 20 loads pipelined would take about 5 times as long as 1 load
+• 20 loads of sequential laundry takes 20 times as long as 1 load
+
+MIPS Pipeline
+1.
+Fetch instruction from 
+memory.
+1.
+Read registers while 
+decoding the instruction. 
+1.
+Execute the operation or 
+calculate an address.
+1.
+Access an operand in data 
+memory.
+1.
+Write the result into a register.
+• Instruction Fetch
+(IF)
+• Instruction Decode
+(ID)
+• Execution
+(EX)
+• Memory Access
+(MEM)
+• Write Back
+(WB)
+
+Pipeline Speedup
+• If all stages are balanced
+• i.e., all take the same time
+• Time between instructionspipelined
+=
+Time between instructionsnonpipelined
+Number of stages
+• If not balanced, speedup is less
+• Speedup due to increased throughput
+• Latency (time for each instruction) does not decrease
+• Programs execute billions of instructions – throughput is important!
+
+Pipelining and ISA Design
+• MIPS ISA designed for pipelining
+• All instructions are 32-bits
+• Easier to fetch and decode
+• Few and regular instruction formats
+• Can decode and read registers in one step
+• Load/store addressing
+• Can calculate address in 3rd stage, access memory in 4th stage
+• Alignment of memory operands
+• Memory access takes only one cycle
+
+MIPS Pipelined Datapath
+WB
+Branch
+
+Pipelined Execution
+
+Pipeline registers
+• Need registers between stages
+• To hold information produced in previous cycle
+
+IF for Load
+
+ID for Load
+
+EX for Load
+
+MEM for Load
+
+WB for Load
+Wrong
+register
+number
+
+Corrected Datapath for Load
+
+Pipelined Control
+
+Pipelined Control
+•
+Instruction fetch: 
+•
+PC written on every clock cycle
+•
+Instruction memory read on every clock cycle
+•
+no optional control lines
+•
+Instruction decode/register file read
+•
+Register file read on every clock cycle
+•
+no optional control lines
+•
+Execution:
+•
+Set RegDst:
+select the Result register
+•
+Set ALUOp:
+select the ALU operation
+•
+Set ALUSrc. 
+select either Read data 2 or a sign-extended immediate for the ALU.
+•
+Memory access: 
+•
+Set Branch:
+affects PCSrc
+•
+Set MemRead
+•
+Set MemWrite. 
+•
+Write back: 
+•
+Set MemtoReg:
+decides between sending the ALU result or the memory value 

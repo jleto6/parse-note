@@ -58,12 +58,12 @@ def get_notes():
 def handle_connect():
 
     # Generated Notes
-    folder = COMPLETED_NOTES_FILE
+    folder = COMPLETED_NOTES
     files = sorted(os.listdir(folder), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
 
     notes_buffer = ""
     for file in files: 
-        with open(f"{COMPLETED_NOTES_FILE}/{file}", "r") as f:
+        with open(f"{COMPLETED_NOTES}/{file}", "r") as f:
             stored_notes = f.read()
             stored_notes = markdown.markdown(stored_notes) # Convert to HTML
             notes_buffer += stored_notes

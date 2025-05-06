@@ -1,0 +1,6 @@
+2: Processor and Memory Hierarchy Basics
+-MEMORY
+-Introduction
+-Memory Hierarchy
+-Memory Hierarchy: Caches
+-Principle of Locality

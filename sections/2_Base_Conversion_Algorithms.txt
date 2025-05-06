@@ -1,4 +1,0 @@
-2: Base Conversion Algorithms  
-- Division and remainder method for constructing base \(b\) expansion  
-- Stepwise process of converting from decimal to another base  
-- Repeated division and recording remainders

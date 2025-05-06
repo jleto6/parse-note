@@ -1,9 +1,0 @@
-10: Pipeline Hazards and Performance  
-- Hazard definitions:  
-  - Structure hazards  
-  - Data hazards  
-  - Load-use hazards  
-- Forwarding/bypassing for pipeline hazards  
-- Code scheduling to resolve hazards  
-- Stall on branch, control hazards, and impact on pipeline  
-- Branch prediction, predict taken, delayed branch techniques

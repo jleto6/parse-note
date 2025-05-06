@@ -1,7 +1,0 @@
-5: Basics of Computer Organization  
-- Memory hierarchy overview  
-- Cache and its function in computer systems  
-- Hit and miss definitions  
-- Data movement across levels: from storage to processor  
-- Principle of locality: temporal and spatial locality  
-- Design impact of locality on caches and system performance

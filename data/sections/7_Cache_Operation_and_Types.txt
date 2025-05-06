@@ -1,0 +1,19 @@
+7: Cache Operation and Types
+-Direct Mapped Cache
+-Tags and Valid Bits
+-Cache Read
+-Cache Example
+-Cache Hit
+-Cache Misses
+-Cache Miss (Instruction Memory)
+-Cache Miss
+-Cache Organizations
+-Fully Associative
+-N-way Set Associative
+-Associative Cache Example
+-Associativity
+-Spectrum of Associativity
+-Set Associative Cache Organization
+-Replacement Policy
+-Associativity Example
+-How Much Associativity

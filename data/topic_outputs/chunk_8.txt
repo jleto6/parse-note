@@ -1,0 +1,251 @@
+store is always in 
+positions 15:0. 
+• The destination register is in one of two places. 
+• For a load it is in bit positions 20:16 (rt)
+• For an R-type instruction it is in bit positions 15:11 (rd)
+• We will need to add a multiplexor to select which field of the instruction is used 
+to indicate the register number to be written.
+
+Datapath with ALU Control
+
+Control Signals – Register Destination
+• RegDst
+• Deasserted: the register destination number for the write register 
+comes from the rt field (bits 20:16)
+• Asserted: the register destination number for the write register 
+comes from the rd field (bits 15:11)
+
+Control Signals – Register Write
+• RegWrite
+• Asserted: the register destination specified by the write register 
+input is written with the value from the write data input
+
+Control Signals – ALU Source
+• ALUSrc
+• Deasserted: The second ALU operand comes from the second 
+register file output
+• Asserted: The second ALU operand is the sign-extended lower 16 
+bits of the instruction
+
+Control Signals - PCSrc
+• Program Counter Source
+• Deasserted: The PC is replaced by PC + 4
+• Asserted: The PC is replaced by a branch target address
+
+Control Signals – Memory Read
+• MemRead
+• Asserted: Data memory contents designated by the address input 
+are put on the read data output.
+
+Control Signals – Memory Write
+• MemWrite
+• Asserted: Data memory contents designated by the address input 
+are replaced by the value on the write data input.
+
+Control Signals – Memory to Register
+• MemtoReg
+• Deasserted: The value fed to the register write data input comes 
+from the ALU
+• Asserted: The value fed to the register write data input comes from 
+the data memory.
+
+Control Signals
+• All but one signal can be set based only on the opcode
+• PCSrc is the exception
+• Relies on the result of a branch
+• PCSrc should be set if the instruction is beq and the zero output of 
+the ALU is asserted
+
+Datapath With Control
+
+Opcode to Control
+Instruction
+RegDst
+ALUSrc
+MemtoReg
+RegWrite
+R-Format
+1
+0
+0
+1
+Lw
+0
+1
+1
+1
+Sw
+X
+1
+X
+0
+Beq
+X
+0
+X
+0
+Instruction
+MemRead
+MemWrite
+Branch
+ALUOp1
+ALUOp0
+R-Format
+0
+0
+0
+1
+0
+Lw
+1
+0
+0
+0
+0
+Sw
+0
+1
+0
+0
+0
+Beq
+0
+0
+1
+0
+1
+
+R-Type Instruction
+
+Load Instruction
+
+Branch-on-Equal Instruction
+
+Opcode to Control
+In/Out 
+Signal
+R-Format
+Lw
+Sw
+Beq
+Inputs
+Op5
+0
+1
+1
+0
+Op4
+0
+0
+0
+0
+Op3
+0
+0
+1
+0
+Op2
+0
+0
+0
+1
+Op1
+0
+1
+1
+0
+Op0
+0
+1
+1
+0
+Outputs
+RegDst
+1
+0
+X
+X
+ALUSrc
+0
+1
+1
+0
+MemToReg
+0
+1
+X
+X
+RegWrite
+1
+1
+0
+0
+MemRead
+0
+1
+0
+0
+MemWrite
+0
+0
+1
+0
+Branch
+0
+0
+0
+1
+ALUOp1
+1
+0
+0
+0
+ALUOp0
+0
+0
+0
+1
+
+Implementing Jumps
+• Jump uses word address
+• Update PC with concatenation of
+• Top 4 bits of old PC
+• 26-bit jump address
+• 00
+• Need an extra control signal decoded from opcode
+2
+address
+31:26
+25:0
+Jump
+
+Datapath With Jumps Added
+
+Single-Cycle Implementation
+• Every instruction begins execution on one clock edge and 
+completes execution on the next clock edge.
+• Clock cycle time must be at least as long as the longest 
+instruction (load word).
+• Cycle time = 
+PC’s propagation time + 
+Instruction Memory Access Time +
+Register File Access Time  +
+ALU Delay (address calculation)  +
+Data Memory Access Time  +
+Register File Setup Time  +
+Clock Skew
+
+Single-Cycle Implementation
+• Every instruction begins execution on one clock edge and 
+completes execution on the next clock edge.
+• Clock cycle time must be at least as long as the longest 
+instruction (load word).
+• The cycle time for load is much longer than any other instruction
+
+Single-Cycle Implementation
+• Single-Cycle implementation is not practical
+• Unable to implement more complex instructions
+• Cannot make improves that will speed up the system unless those 
+improvements are to load
+• Violates the design principle of making the common case fast
+• Some functional units must be duplicated, increasing hardware 

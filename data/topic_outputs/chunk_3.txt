@@ -1,55 +1,127 @@
-Type: Load
-  - Instruction Count: 2
-- **CPI:** 2
-- **Clock Period:** 2 ns (nanoseconds)
-- **Overall time for execution:** 8 ns
-Certainly! Here is the transcription of the handwritten notes:
+on a write miss?
+• Alternatives for write-through
+• Allocate on miss: fetch the block
+• Write around: don’t fetch the block
+• Since programs often write a whole block before reading it (e.g., initialization)
+• For write-back
+• Usually fetch the block
 
----
+Performance
+• The time to service hits and misses affects the CPU time.
+• Hit time
+• time required to access the cache
+• includes time to determine if it’s a hit or a miss
+• Miss penalty
+• time required to fetch a block from the next lowest level
+• Hit time < Miss penalty
 
-**Hazards**
+Measuring Cache Performance
+• Components of CPU time
+• Program execution cycles
+• Includes cache hit time
+• Memory stall cycles
+• Mainly from cache misses
+• CPU time = (CPU cycles + Memory-stall cycles) * Clock cycle time
+• Memory-stall cycles = Read-stall cycles + Write-stall cycles
+• Read-stall cycles = Reads/Program * Read miss rate * Read miss penalty
+• Write-stall cycles = (Writes/Program * write miss rate * write miss penalty) + Write buffer stalls
 
-Hazards are situations that prevent the next instruction in the pipeline from executing in the next cycle.
+Measuring Cache Performance
+• Components of CPU time
+• Program execution cycles
+• Includes cache hit time
+• Memory stall cycles
+• Mainly from cache misses
+penalty
+ 
+Miss
+n
+Instructio
+Misses
+Program
+ns
+Instructio
+penalty
+ 
+Miss
+rate
+ 
+Miss
+Program
+accesses
+Memory 
+cycles
+ 
+stall
+Memory 
+  
+
+
+=
+
+
+=
 
-**Structure Hazards** arise when there is a conflict for the use of a resource. Load/Store operations require data access, causing the instruction fetch to stall until they complete.
+Cache Performance Example
+• Assume an instruction cache miss rate for a program is 2% and a data cache 
+miss rate is 4%. If a processor has a CPI of 2 without any memory stalls and 
+the miss penalty is 100 cycles for all misses, determine how much faster a 
+processor would run with a perfect cache that never missed.  Assume the 
+frequency of all loads and stores is 36%.
 
-**Data Hazards** occur when an instruction depends on the completion of data access by a previous instruction. For example, if the instructions had `$t0, $t1` followed by `sb $t2, $t0($t3)`, the latter must wait for the former to complete.
+Cache Performance Example
+• Given
+• I-cache miss rate = 2%
+• D-cache miss rate = 4%
+• Base CPI (ideal cache) = 2
+• Miss penalty = 100 cycles
+• Load & stores are 36% of instructions
 
-**Forwarding (Bypassing)** passes a computed result from one stage to another, avoiding the wait for register storage and reduces stalls.
+Cache Performance Example
+• Given
+• I-cache miss rate = 2%
+• D-cache miss rate = 4%
+• Base CPI (ideal cache) = 2
+• Miss penalty = 100 cycles
+• Load & stores are 36% of instructions
+• Determine miss cycles per instruction
+• I-cache: 
+0.02 × 100 = 2
+• D-cache: 
+0.36 × 0.04 × 100 = 1.44
+• Memory miss cycles = 2 + 1.44 = 3.44
 
-A load-use hazard occurs when an instruction depends on a value being loaded by a previous instruction before it is available. They can always be avoided by forwarding. For example, `lw $t0, 20($s1)` and `add $t2, $t0, $s3`. The second instruction must wait for the 1st unless resolved with forwarding.
+Cache Performance Example
+• Given
+• I-cache miss rate = 2%
+• D-cache miss rate = 4%
+• Base CPI (ideal cache) = 2
+• Miss penalty = 100 cycles
+• Load & stores are 36% of instructions
+• Determine miss cycles per instruction
+• I-cache: 
+0.02 × 100 = 2
+• D-cache: 
+0.36 × 0.04 × 100 = 1.44
+• Memory miss cycles = 2 + 1.44 = 3.44
+• Actual CPI = 2 + 3.44 = 5.44
 
-**Code Scheduling** involves reordering instructions to avoid the use of a load result in the subsequent instruction.
+Cache Performance Example
+• Given
+• I-cache miss rate = 2%
+• D-cache miss rate = 4%
+• Base CPI (ideal cache) = 2
+• Miss penalty = 100 cycles
+• Load & stores are 36% of instructions
+• Determine miss cycles per instruction
+• I-cache: 
+0.02 × 100 = 2
+• D-cache: 
+0.36 × 0.04 × 100 = 1.44
+• Memory miss cycles = 2 + 1.44 = 3.44
+• Actual CPI = 2 + 3.44 = 5.44
+• Ideal CPU is 5.44/2 =2.72 times faster
 
-**Stall on Branch:** To mitigate control hazards, waiting until the branch outcome is determined before fetching the instruction is an approach but it introduces stalls.
-
-**Branch Prediction** guesses the outcome of branch instructions, which helps decide whether to fetch the next instruction or branch target early.
-
-**Predict Taken** both taken reduces control hazard cost by assuming which is efficient when misprediction penalties are low.
-
-**Delayed Branch** all delayed branches are predicted as not branch, and branch delay slot is not taken.
-Here is the transcription of the handwritten text:
-
----
-
-**Writing**
-
-A cache must manage how data is written. This involves deciding whether to update main memory immediately or delay a write, and how to handle write misses. These choices affect consistency, performance, and capacity.
-
-When the CPU performs a store instruction, it writes data to memory. With a cache in place, this raises the issue of whether the write goes to cache, main memory, or both. If data is only written to the cache, main memory may have a different value, causing inconsistency.
-
-**Write Strategy:**
-
-- Write-through updates both cache and main memory simultaneously. It’s simple but slow - a write buffer is often used to reduce stalls.
-- Write-back only updates the data in the cache during a write hit; main memory is not updated right away. Each block is tagged with a dirty bit to indicate if it has been modified since being loaded from memory. If a block is clean, it can be replaced without writing to memory. If a block is dirty, it must be written back to memory before being replaced.
-Direct Caching
-
-Associativity
-
-**Floating Point Arithmetic**
-
-Real numbers are called "float" values in computing. Floating point arithmetic is the method computers use to handle real numbers.
-
-Floats are represented using the IEEE 754 standard, which ensures accuracy, mostly by storing numbers using the principle of normalized scientific notation.
-
-**IEEE 754 represents floating-point numbers using 3 components**: a sign 
+Performance Considerations
+• What happens if the processor is made faster, but the memory system is not?  
+• The amount 

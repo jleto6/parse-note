@@ -4,6 +4,9 @@ import re
 import pandas as pd
 import time
 
+from config import COMPLETED_NOTES
+
+
 # Set your OpenAI API key
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) # Use OpenAI
 
@@ -18,7 +21,7 @@ def clear_output(folder_path):
 def get_embedding(text, model="text-embedding-3-small"):
     return client.embeddings.create(input=[text], model=model).data[0].embedding
 
-def create_outline(file_path):
+def create_outline(file_path, section_count):
 
 
     # Read input text from a file
@@ -35,6 +38,8 @@ def create_outline(file_path):
     - Begin with the most foundational concepts that do not rely on prior knowledge.
     - Then, introduce concepts that build directly on those foundations.
     - End with advanced topics that depend on earlier ones for full understanding.
+
+    You must create exactly **{section_count}** top-level sections.
 
     Do not summarize or rephrase the input.
     Only output a clean outline in this format:
@@ -66,18 +71,14 @@ def create_outline(file_path):
     # print(outline)
 
     # Create an output directory
-    os.makedirs("sections", exist_ok=True)
-    clear_output("sections")
+    os.makedirs(COMPLETED_NOTES, exist_ok=True)
 
     # Split the outline by top-level sections (e.g., "1.", "2.", etc.)
     sections = re.split(r'\n(?=\d+:\s)', outline.strip())
 
-    for sec in sections:
-        print(sec)
-        print("--")
-
-    # Make a folder to store the sections
-    os.makedirs("sections", exist_ok=True)
+    # for sec in sections:
+    #     print(sec)
+    #     print("--")
 
     for sec in sections:
         lines = sec.strip().split('\n')
@@ -87,7 +88,7 @@ def create_outline(file_path):
         # Make filename safe
         filename = f"{re.sub(r'[^a-zA-Z0-9]+', '_', title)[:50]}.txt"
         
-        with open(os.path.join("sections", filename), "w", encoding="utf-8") as f:
+        with open(os.path.join(COMPLETED_NOTES, filename), "w", encoding="utf-8") as f:
             f.write(content)
 
     # Build rows: each section gets its title and its block of content
@@ -95,18 +96,16 @@ def create_outline(file_path):
     for sec in sections:
         lines = sec.strip().split('\n')
         title = lines[0].strip()
-        content = "\n".join(lines[1:]).strip()
+        text = "\n".join(lines[1:]).strip()
         embedding = get_embedding(sec)
         data.append({
             "filename": filename,
-            "content": content,
+            "text": text,
             "embedding": embedding  # Placeholder
         })
 
     # Convert to DataFrame
     df = pd.DataFrame(data)
+    df.to_csv("debug_output.csv", index=False)
 
     return df
-
-df = create_outline("raw_text.txt")
-print(df)

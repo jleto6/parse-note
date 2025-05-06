@@ -1,5 +1,0 @@
-12: Calculus: Derivatives and Differentials  
-- Basic derivative concepts: dy/dx, small changes dy and dx  
-- Chain rule and product rule applications to various functions  
-- Examples: differentiation of algebraic, hyperbolic, and transcendental functions  
-- Approximating functions using differentials and derivatives

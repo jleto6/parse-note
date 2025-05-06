@@ -18,7 +18,7 @@ COMPLETED_NOTES_FILE = os.path.join(DATA_DIR, 'completed_notes')
 COMPLETED_NOTES_INDEX = os.path.join(COMPLETED_NOTES_FILE, 'completed_notes') # add .txt manually
 
 
-COMPLETED_NOTES = os.path.join(DATA_DIR, 'completed_notes.txt')
+COMPLETED_NOTES = os.path.join(DATA_DIR, 'sections')
 
 ANSWERS = os.path.join(DATA_DIR, 'answers.txt')
 EMBEDDINGS = os.path.join(DATA_DIR, 'embeddings.csv') # entire embdeded doc

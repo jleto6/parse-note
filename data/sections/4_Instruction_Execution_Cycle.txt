@@ -1,0 +1,7 @@
+4: Instruction Execution Cycle
+-Instruction Execution
+-Fetch:
+-Decode:
+-Execute:
+-Update PC:
+-To read and write registers, we need a register file

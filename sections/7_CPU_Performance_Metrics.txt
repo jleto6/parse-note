@@ -1,8 +1,0 @@
-7: CPU Performance Metrics  
-- Clock cycles, clock period, and clock frequency  
-- Instruction count  
-- Cycles per instruction (CPI)  
-- CPU Time calculations:  
-  - CPU Time = Instruction Count x CPI x Clock Cycle  
-  - Effects of instruction mix on CPI  
-- Examples illustrating calculation of execution and overall CPU time

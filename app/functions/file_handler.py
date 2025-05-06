@@ -41,10 +41,14 @@ def split_text(filename, split_size):
         if file_ctr == 0:
             # No full chunks were made, so create first file
             with open(f"{TOPIC_OUTPUTS_DIR}/chunk_0.txt", 'w', encoding='utf-8') as f:
+                file_ctr = 1
                 f.write(chunk)
         else:
             with open(f"{TOPIC_OUTPUTS_DIR}/chunk_{file_ctr-1}.txt", 'a', encoding='utf-8') as f:
                     f.write(chunk)
+
+    return file_ctr
+
 
 # File deleter
 def clear_output(folder_path):

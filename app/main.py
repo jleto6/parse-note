@@ -55,7 +55,8 @@ def main():
     # Clear old outputs
     clear_output(TOPIC_OUTPUTS_DIR)
     clear_output(RAW_TEXT)
-    clear_output(COMPLETED_NOTES_FILE)
+    clear_output(COMPLETED_NOTES)
+
 
     try: 
         clear_output(FILE_EMBEDDINGS)
@@ -105,9 +106,6 @@ def main():
 
     time.sleep(3)
 
-    # Creata an outline from the raw text and return a df with info
-    df = create_outline(RAW_TEXT)
-
     # Embed the extracted RAW TEXT
     embed_corpus(RAW_TEXT)
 
@@ -117,8 +115,12 @@ def main():
     timer_thread.join()
 
     # Chunk sequentially
-    split_text(RAW_TEXT, 500)
+    chunk_count = split_text(RAW_TEXT, 500)
+    print(chunk_count)
     ordered_files = sorted(os.listdir(TOPIC_OUTPUTS_DIR), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
+
+    # Creata an outline from the raw text and return a df with info
+    df = create_outline(RAW_TEXT, chunk_count)
 
     # # If only one file, no topic modelling needed
     # if file_flag:
@@ -152,10 +154,10 @@ def main():
     for file in ordered_files:
         note_creation(f"{TOPIC_OUTPUTS_DIR}/{file}", df) # Send topics GPT to make notes on
 
-    # Read the content of the notes file
-    with open(COMPLETED_NOTES, "r") as file:
-        notes = file.read()
-        notes = notes.replace("\n", "<br/>") # Replace new lines with line break element
+    # # Read the content of the notes file
+    # with open(COMPLETED_NOTES, "r") as file:
+    #     notes = file.read()
+    #     notes = notes.replace("\n", "<br/>") # Replace new lines with line break element
 
 if __name__ == "__main__":
     main()

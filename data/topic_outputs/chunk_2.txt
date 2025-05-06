@@ -1,81 +1,308 @@
-through subsequent stages. This is typically done through the architecture.
+Direct mapped, 2-way set associative, fully associative
+• Block access sequence: 0, 8, 0, 6, 8
+• Direct mapped
+• 5 misses
+Block 
+address
+Cache 
+index
+Hit/miss
+Cache content after access
+0
+1
+2
+3
+0
+0
+miss
+Mem[0]
+8
+0
+miss
+Mem[8]
+0
+0
+miss
+Mem[0]
+6
+2
+miss
+Mem[0]
+Mem[6]
+8
+0
+miss
+Mem[8]
+Mem[6]
 
-Challenges arise when instructions depend on accelerator, caching, double hazards. Pitfalls in pipeline usually came from memory hazards!! That is, when a program on CPU accessing pipelining harder to be issues like actual memory operand as architectures unexpectedly change registers, and instruction halt depend on memory.
-Block Diagram
-1 scan
-Combinatinal vs Sequential
-1 scan
-Block Diagram
-1 scan
-Combinatinal vs Sequential
-1 scan
+Associativity Example
+• Compare 4-block caches
+• Direct mapped, 2-way set associative, fully associative
+• Block access sequence: 0, 8, 0, 6, 8
+• 2-way set associative
+Block 
+address
+Cache 
+index
+Hit/miss
+Cache content after access
+Set 0
+Set 1
 
-Logic Gates
-3 scans
-Adder
-4 scans
-Logic Gates
-3 scans
-Adder
-4 scans
+Associativity Example
+• Compare 4-block caches
+• Direct mapped, 2-way set associative, fully associative
+• Block access sequence: 0, 8, 0, 6, 8
+• 2-way set associative
+Block 
+address
+Cache 
+index
+Hit/miss
+Cache content after access
+Set 0
+Set 1
+0
+0
+miss
+Mem[0]
 
-Sure, here's the transcription of the handwritten notes:
+Associativity Example
+• Compare 4-block caches
+• Direct mapped, 2-way set associative, fully associative
+• Block access sequence: 0, 8, 0, 6, 8
+• 2-way set associative
+Block 
+address
+Cache 
+index
+Hit/miss
+Cache content after access
+Set 0
+Set 1
+0
+0
+miss
+Mem[0]
+8
+0
+miss
+Mem[0]
+Mem[8]
 
----
+Associativity Example
+• Compare 4-block caches
+• Direct mapped, 2-way set associative, fully associative
+• Block access sequence: 0, 8, 0, 6, 8
+• 2-way set associative
+Block 
+address
+Cache 
+index
+Hit/miss
+Cache content after access
+Set 0
+Set 1
+0
+0
+miss
+Mem[0]
+8
+0
+miss
+Mem[0]
+Mem[8]
+0
+0
+hit
+Mem[0]
+Mem[8]
 
-**Canonical Forms**
+Associativity Example
+• Compare 4-block caches
+• Direct mapped, 2-way set associative, fully associative
+• Block access sequence: 0, 8, 0, 6, 8
+• 2-way set associative
+Block 
+address
+Cache 
+index
+Hit/miss
+Cache content after access
+Set 0
+Set 1
+0
+0
+miss
+Mem[0]
+8
+0
+miss
+Mem[0]
+Mem[8]
+0
+0
+hit
+Mem[0]
+Mem[8]
+6
+0
+miss
+Mem[0]
+Mem[6]
 
-Canonical forms are standardized ways to express Boolean functions, making it easier to build and simplify circuits. The 2 main types are Sum of Products (SOP) and Product of Sums (POS), which describe when a circuit should output a 1 or a 0.
+Associativity Example
+• Compare 4-block caches
+• Direct mapped, 2-way set associative, fully associative
+• Block access sequence: 0, 8, 0, 6, 8
+• 2-way set associative
+Block 
+address
+Cache 
+index
+Hit/miss
+Cache content after access
+Set 0
+Set 1
+0
+0
+miss
+Mem[0]
+8
+0
+miss
+Mem[0]
+Mem[8]
+0
+0
+hit
+Mem[0]
+Mem[8]
+6
+0
+miss
+Mem[0]
+Mem[6]
+8
+0
+miss
+Mem[8]
+Mem[6]
 
-SOP expressions are built from minterms, which represent truth table rows where the output is 1, while POS expressions are built from maxterms, which represent rows where the output is 0.
+Associativity Example
+• Compare 4-block caches
+• Direct mapped, 2-way set associative, fully associative
+• Block access sequence: 0, 8, 0, 6, 8
+• 2-way set associative
+• 4 misses
+Block 
+address
+Cache 
+index
+Hit/miss
+Cache content after access
+Set 0
+Set 1
+0
+0
+miss
+Mem[0]
+8
+0
+miss
+Mem[0]
+Mem[8]
+0
+0
+hit
+Mem[0]
+Mem[8]
+6
+0
+miss
+Mem[0]
+Mem[6]
+8
+0
+miss
+Mem[8]
+Mem[6]
 
-**Sum of Products:**
-- SOP uses minterms:
-  - Look at rows where F = 1 in the truth table
-  - Each 1 becomes an ANDed term (A'B'C)
-  - OR all AND terms together
+Associativity Example
+• Compare 4-block caches
+• Direct mapped, 2-way set associative, fully associative
+• Block access sequence: 0, 8, 0, 6, 8
+• Fully associative
+• 3 misses
+Block 
+address
+Hit/miss
+Cache content after access
+0
+miss
+Mem[0]
+8
+miss
+Mem[0]
+Mem[8]
+0
+hit
+Mem[0]
+Mem[8]
+6
+miss
+Mem[0]
+Mem[8]
+Mem[6]
+8
+hit
+Mem[0]
+Mem[8]
+Mem[6]
 
-For example, if F = 1 at (A=0, B=1, C=0), the minterm is A'BC'.
+How Much Associativity
+• Increased associativity decreases miss rate
+• But with diminishing returns
+• Simulation of a system with 64KB cache, 16-word blocks
+• 1-way: 10.3%
+• 2-way: 8.6%
+• 4-way: 8.3%
+• 8-way: 8.1%
 
-**Product of Sums:**
-- POS uses maxterms:
-  - Look at rows where F = 0 in the truth table
-  - Each 0 becomes an ORed term (A'+B+C)
-  - AND all the OR terms together
+Cache Write
+• If we replace the data memory in our datapath with a cache, what happens on 
+a store word instruction?
+• If we wrote the data into only the data cache without changing main memory; 
+then main memory would have a different value from that in the cache. 
+• In such a case, the cache and memory are said to be inconsistent.
 
-For example, if F = 0 at (A=1, B=0, C=1), the maxterm is A'B+C'.
+Write-Through
+• Whenever changes are made to the data in the cache, also change 
+the data in main memory.
 
----
-**CPU Performance**
+Write-Through
+• Whenever changes are made to the data in the cache, also change 
+the data in main memory.
+• Writes take longer
+• Suppose 10% of instructions are stores and write to memory takes 100 
+cycles
+• If base CPI = 1, then effective CPI = 1 + 0.1×100 = 11
 
-A clock cycle is a single tick of the CPU's internal clock, during which a basic instruction can be carried out. The CPU uses this regular pulse to synchronize and control the execution of instructions.
+Write-Through
+• Whenever changes are made to the data in the cache, also change 
+the data in main memory.
+• Writes take longer
+• Solution: write buffer
+• Holds data waiting to be written to memory
+• CPU continues immediately
+• Only stalls on write if write buffer is already full
 
-- **Clock Period:** The time duration of one cycle
-- **Clock Frequency:** How many cycles occur per second
+Write-Back
+• On data-write hit, just update the block in cache
+• Keep track of whether each block is “clean” or “dirty”
+• When a dirty block is replaced
+• Write it back to memory
+• Can use a write buffer to allow replacing block to be read first
 
-**CPU Time = amount of CPU clock cycles x Clock Cycle Time (Period)**  
-or  
-**CPU Time = amount of CPU clock cycles / Clock Rate (Frequency)**
-
-Execution Time is further defined by instruction count, the total number of instructions a program executes, and Cycles Per Instruction (CPI). The CPI reflects how different instructions consume varied cycles, which reflects the CPU's design, and is affected by the instruction mix (proportion of different types of instructions).
-
-The composition of CPU performance includes the equation:
-
-**CPU Time = Instruction Count x CPI x Clock Cycle**
-
-This formula is important because it connects various core components of performance and insight into how efficiency can be optimized.
-
-Components of performance include:
-
-- **Instruction Count:** The number of instructions executed by the CPU.
-- **Clock Cycle:** Typical document is part of system specifications. It defines the duration of one cycle of each clock tick in the CPU.
-- **Cycles Per Instruction (CPI):** An average measurement reflecting the mean number of cycles taken for instructions of the program. This highlights which is the frequency and type combination of instructions being executed.
-
-CPI in more detail highlights the mixed queues where each instruction type frequency and cycle cost contributes to the overall CPI.
-
----
-
-**CPI Example**
-
-- **Instruction Sequence:**
-  - Instruction 
+Write Allocation
+• What should happen 

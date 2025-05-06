@@ -1,44 +1,100 @@
-bit, an exponent, and a mantissa. To store numbers efficiently, IEEE 754 defines normalized form, meaning the first digit before the decimal is always 1 in binary (1.xxx * 2^y).
+of time spent on memory stalls will take up an increasing fraction of the 
+execution time
+• Amdahl’s law
 
-Since this leading 1 is always present, IEEE 754 does not store it explicitly. (This is called the hidden bit.) Instead, only the fractional part is stored, allowing the mantissa to hold more precision within the available bits.
+Cache Performance Example Revisit
+• Suppose we speed up the system by reducing its CPI from 2 to 1 without 
+changing the clock rate.  
+• Actual CPI = 1 + 3.44 = 4.44
+• Ideal CPU is 4.44/1 = 4.44 times faster
+• Amount of time spent on memory stalls increases:
+• Before: 
+3.44/5.44 = 63%
+• Now:
+3.44/4.44 = 77%
 
-This differs from standard scientific notation where the leading digit is always explicitly written (e.g., 1.23 x 10^6 in decimal). By enforcing normalization and using a hidden bit, IEEE ensures efficient storage and greater accuracy in floating point precision.
+Performance Considerations
+• Increasing clock rate without changing the memory system also increases the 
+performance lost due to cache misses. 
+• Memory stalls account for more CPU cycles
 
-A floating-point number is always represented by:
-- 1 sign bit (s) : determines whether the number is positive (0) or negative (1).
-- Exponent (e) : determines how much to shift the binary point (stored using a biased form).
-- Mantissa or fraction: (with an assumed 1)
+Performance Considerations
+• Hit Access Time
+• If the hit time increases, the total time to access a word from the memory system will 
+increase.
+• Affect by:
+• Cache size
+• Number of pipeline stages
+• Cache organization
 
-### Exponential Notation
+Multilevel Caches
+• Primary cache attached to CPU
+• Small, but fast
+• Level-2 cache services misses from primary cache
+• Larger, slower, but still faster than main memory
+• Main memory services L-2 cache misses
+• Some high-end systems include L-3 cache
 
-- Ex: The following are equivalent representations of 1.234
-  - Scientific: 1.234 * 10^0
-  - Exponential: 0.1234 * 10^1
+Multilevel Cache Example
+• Suppose we have a processor with a base CPI of 1.0, assuming all references 
+hit in the primary cache, and a clock rate of 5 GHz. Assume a main memory 
+access time of 100 ns, including all the miss handling. Suppose the miss rate 
+per instruction at the primary cache is 2%. 
+• How much faster will the processor be if we add a secondary cache that has a 
+5 ns access time for either a hit or a miss and is large enough to reduce the 
+miss rate to main memory to 0.5%?
 
-### IEEE 754 Standard
-- Single precision (32 bits), consisting of:
-  - 1 sign bit
-  - 8 exponent bits
-  - 23 fraction bits
-- Double precision (64 bits), consisting of:
-  - 1 sign bit
-  - 11 exponent bits
-  - 52 fraction bits
+Multilevel Cache Example
+• Given
+• CPU base CPI = 1
+• CPU clock rate = 5 GHz
+• Miss rate/instruction = 2%
+• Main memory access time = 100ns
 
-### Floating Point: Normalized Scientific Notation
+Multilevel Cache Example
+• Given
+• CPU base CPI = 1
+• CPU clock rate = 5 GHz
+• Miss rate/instruction = 2%
+• Main memory access time = 100ns
+• With just primary cache
+• Miss penalty = 100ns/0.2ns = 500 cycles
+• Effective CPI = 1 + 0.02 × 500 = 11
 
-- Always results in the leading digit being 1
-- Stored with hidden form efficiency
+Multilevel Cache Example
+• Now add L-2 cache
+• Access time = 5ns
+• Global miss rate to main memory = 0.5%
+• Primary miss with L-2 hit
+• Penalty = 5ns/0.2ns = 25 cycles
+• Primary miss with L-2 miss
+• Extra penalty = 500 cycles
+• CPI = 1 + 0.02 × 25 + 0.005 × 500 =4
+• Performance ratio = 11/4 = 2.8
 
-### Diagram Boxes (Visual Information)
+Multilevel Cache Considerations
+• Primary cache
+• Focus on minimal hit time
+• L-2 cache
+• Focus on low miss rate to avoid main memory access
+• Hit time has less overall impact
+• Results
+• L-1 cache usually smaller than a single cache
+• L-1 block size smaller than L-2 block size
 
-1. **IEEE 754 Standard Box**
-   - Describes bit allocation for single and double precision.
+Summary
+• Cost/Performance tradeoff in memory technologies
+• Create an illusion of large amounts of fast memory with a hierarchy
+• Uses caches close to the processor
+• Cache Details
+• Organization: direct mapped, set associative, fully associative
+• Write policy: write-through vs. write-back
+• Replacement policy: direct, LRU, random
 
-2. **Floating Point: Normalized Scientific Notation Box**
-   - Explains hidden bit usage for efficient storage.
-
-This note covers the essential understanding of floating-point arithmetic in computing, emphasizing the IEEE 754 standard and normalized scientific notation.
-  MAC2311 Name: Linear Worksheet F Summary    ‘This worksheet is graded on completion, You must complete the entire worksheet to eam any credit. You ‘answers do not have to be correct. Of course, it is better i they are, but the purpose of the this workshect isthe you master the material, Ifyou arent sure about the mathematical steps, you can the process or support your solution by writing an explanation. [Avalue of sinh x or cosh xis given. Use the definitions and the identity find the value ofthe other indicated hyperbolic function,     4 (c_) 5 5 ag    Rewrite the expression in terms of exponentials and simplify the results.              | 4) (sinh x + cosh x)> ane | of ne Find the derivative ofy. (ry x8 — | Dp ol)   cosh D) 7x |    
-
-        (sinh 9x) 1 Find the derivative of y with respect to the appropriate variable. ofA 9 B y= (0 +4) » (8 +50 006 (04) | bd | ax |   1) Verify the identity using the definitions of hyperbolic functions. 1 
+Summary
+• Tradeoffs to Improve Cache Performance:
+• Use better technology
+• Use faster RAMs
+• Cost and availability are limitations
+• Decrease Hit Time
+• Make cache smaller, but miss rate 

@@ -1,41 +1,236 @@
-illusion of large amount of fast memory by organizing different types of storage to optimize speed and access.
+process a miss
+• Creates a stall in the pipeline
 
-The principal of locality refers to the observation that programs tend to access only a small portion of their address space at any given time, which is crucial to optimizing the memory hierarchy. There are 2 main types of locality: 
+Cache Miss (Instruction Memory)
+1. Send the original PC value (current PC – 4) to the memory.
+2. Instruct main memory to perform a read and wait for the memory to 
+complete its access.
+3. Write the cache entry, putting the data from memory in the data portion of 
+the entry, writing the upper bits of the address (from the ALU) into the tag 
+field, and turning the valid bit on.
+4. Restart the instruction execution at the first step, which will refetch the 
+instruction, this time finding it in the cache.
 
-1. **Temporal locality**: Refers to the tendency of programs to access the same memory locations repeatedly within a short period. For example, instructions in loops and function variables.
+Cache Miss
+• Stall until the data is fetched from memory
+• Instruction cache miss
+• Restart instruction fetch
+• Data cache miss
+• Complete data access
 
-2. **Spatial locality**: Denotes the likelihood of accessing memory locations close to those recently accessed. This occurs in sequential instruction access and accessing array data.
+Cache Miss
+• Misses are classified into three different types
+• Compulsory (cold start)
+• First access to a piece of data
+• Cannot be avoided
+• Capacity
+• Working set of program is larger than cache size
+• Not enough room to cache a locality
+• Conflict
+• collisions, multiple blocks competing for the same space
+• Misses may be reduced by changing the associativity of the cache
 
-Understanding these principals helps in designing cache systems and hardware to enhance performance.
+Cache Organizations
+• Direct mapped
+• Set associative
+• Fully associative
 
-**Memory Hierarchy Levels**
+Fully Associative
+• A block in memory may be associated with any entry in the cache
+• Requires all entries to be searched at once
+• Comparator per entry (expensive)
 
-- Cache levels include smaller, faster memory that is closer to the processor.
-- **Data** moves through the levels — from input and secondary storage to memory and through to the processor — from permanent storage (like SSD or HDD) to main memory (DRAM), and then to smaller, faster cache (SRAM) near the CPU.
-- Data is moved between levels in blocks, which may be multiple words wide. This is a key concept in managing memory transitions.
-- Caches are used to store frequently accessed data closer to the processor, minimizing access times and improving speed.
+N-way Set Associative
+• Each block may go to n locations
+• Each set contains n entries
+• Block number determines which set
+• (Block number) modulo (#Sets in cache)
+• Search all entries in a given set at once
+• n comparators (less expensive)
 
-Cache memory is the closest level of memory hierarchy to the CPU. It serves to satisfy either the most frequently or recently accessed data.
+Associative Cache Example
 
-A hit occurs when accessed data is present in the upper memory level, and a miss occurs when it is not. The task of a memory hierarchy and cache system is to maximize hit rates.
+Associativity
+• All cache organizations are a variation of set associativity.
+• Direct mapped: 1-way set associative
+• Fully associative: m-way associative where m is the number of blocks in the 
+cache
 
----
+Spectrum of Associativity
+• For a cache with 8 entries
 
-These notes describe the importance of memory hierarchy, the principle of locality, types of locality, and how caches function in computing systems to improve performance.
-The image is blank, containing no visible content. If you intended to upload or describe an image with content such as a diagram, chart, graph, or handwritten notes, please try again.
-Control Signals
+Set Associative Cache Organization
 
-Datapath with Control 
-Examples
+Replacement Policy
+• Direct mapped: no choice
+• Set associative
+• Prefer non-valid entry, if there is one
+• Otherwise, choose among entries in the set
+• Least-recently used (LRU)
+• Choose the one unused for the longest time
+• Simple for 2-way, manageable for 4-way, too hard beyond that
+• Random
+• Gives approximately the same performance as LRU for high associativity
 
-Control Signal Overview
+Associativity Example
+• Compare 4-block caches
+• Direct mapped, 2-way set associative, fully associative
+• Block access sequence: 0, 8, 0, 6, 8
+• Direct mapped
+Block 
+address
+Cache 
+index
+Hit/miss
+Cache content after access
+0
+1
+2
+3
 
-**Exceptions and Interrupts**
+Associativity Example
+• Compare 4-block caches
+• Direct mapped, 2-way set associative, fully associative
+• Block access sequence: 0, 8, 0, 6, 8
+• Direct mapped
+Block 
+address
+Cache 
+index
+Hit/miss
+Cache content after access
+0
+1
+2
+3
+0
+0
+miss
+Mem[0]
 
-"Unexpected" events such as exceptions and interrupts require altering control flow. Exceptions occur within the CPU, e.g., undefined opcodes or overflows, while interrupts arise from external I/O controllers. For example, an I/O controller might send an interrupt when a disk finish reading data, prompting the CPU to switch context to a waiting process.
+Associativity Example
+• Compare 4-block caches
+• Direct mapped, 2-way set associative, fully associative
+• Block access sequence: 0, 8, 0, 6, 8
+• Direct mapped
+Block 
+address
+Cache 
+index
+Hit/miss
+Cache content after access
+0
+1
+2
+3
+0
+0
+miss
+Mem[0]
+8
+0
+miss
+Mem[8]
 
-In MIPS, exceptions are handled by the System Control Coprocessor (CP0), saving the program counter in the Exception Program Counter (EPC), indicating problems in the status register.
+Associativity Example
+• Compare 4-block caches
+• Direct mapped, 2-way set associative, fully associative
+• Block access sequence: 0, 8, 0, 6, 8
+• Direct mapped
+Block 
+address
+Cache 
+index
+Hit/miss
+Cache content after access
+0
+1
+2
+3
+0
+0
+miss
+Mem[0]
+8
+0
+miss
+Mem[8]
+0
+0
+miss
+Mem[0]
 
-The exception handling process involves reading the cause, transferring control to the appropriate handler, and determining required actions. If resolvable, corrective measures are taken; otherwise, the program is terminated, using the EPC to correct errors.
+Associativity Example
+• Compare 4-block caches
+• Direct mapped, 2-way set associative, fully associative
+• Block access sequence: 0, 8, 0, 6, 8
+• Direct mapped
+Block 
+address
+Cache 
+index
+Hit/miss
+Cache content after access
+0
+1
+2
+3
+0
+0
+miss
+Mem[0]
+8
+0
+miss
+Mem[8]
+0
+0
+miss
+Mem[0]
+6
+2
+miss
+Mem[0]
+Mem[6]
 
-Pipeline exceptions introduce another form of control hazard. For example, overflow during the execution stage requests premature register overwrite. Delays in handling instructions and instructing the control of the handler. This approach is similar to handling mispredictions. The PC holds the instruction, requiring  in pipeline, simulating execution in parallel as a speculative address anticipation 
+Associativity Example
+• Compare 4-block caches
+• Direct mapped, 2-way set associative, fully associative
+• Block access sequence: 0, 8, 0, 6, 8
+• Direct mapped
+Block 
+address
+Cache 
+index
+Hit/miss
+Cache content after access
+0
+1
+2
+3
+0
+0
+miss
+Mem[0]
+8
+0
+miss
+Mem[8]
+0
+0
+miss
+Mem[0]
+6
+2
+miss
+Mem[0]
+Mem[6]
+8
+0
+miss
+Mem[8]
+Mem[6]
+
+Associativity Example
+• Compare 4-block caches
+• 
