@@ -7,6 +7,7 @@ import io
 import wave
 import fitz
 import json
+import shutil
 
 from vosk import Model
 from vosk import KaldiRecognizer
@@ -15,6 +16,10 @@ SetLogLevel(-1)
 
 from config import NOTE_INPUTS_DIR, RAW_TEXT, TOPIC_OUTPUTS_DIR
 from functions.ocr import do_ocr
+
+if not os.path.exists(RAW_TEXT):
+    with open(RAW_TEXT, "w") as f:
+        pass  # Just creates the file, does nothing else
 
 # Text Splitter
 def split_text(filename, split_size):
@@ -37,10 +42,14 @@ def split_text(filename, split_size):
         if file_ctr == 0:
             # No full chunks were made, so create first file
             with open(f"{TOPIC_OUTPUTS_DIR}/chunk_0.txt", 'w', encoding='utf-8') as f:
+                file_ctr = 1
                 f.write(chunk)
         else:
             with open(f"{TOPIC_OUTPUTS_DIR}/chunk_{file_ctr-1}.txt", 'a', encoding='utf-8') as f:
                     f.write(chunk)
+
+    return file_ctr
+
 
 # File deleter
 def clear_output(folder_path):
@@ -51,6 +60,14 @@ def clear_output(folder_path):
                 os.remove(item_path)
     except:
         os.remove(folder_path)
+        
+# File mover
+def move_file(folder_path, folder_dst):
+    for item in os.listdir(folder_path):
+        item_path = os.path.join(folder_path, item)
+        if os.path.isfile(item_path):
+            dst_path = os.path.join(folder_dst, item)
+            shutil.move(item_path, dst_path)
 
 # Uploaded Files
 folder = NOTE_INPUTS_DIR
@@ -98,8 +115,8 @@ def handle_pdf(file, file_path):
                 
 
 # Handle Videos
-model = Model("data/en_model")  # Load the model
 def handle_video(file, file_path):
+    model = Model("data/en_model")  # Load the model
     # Convert file to wav
     process = subprocess.run(
     ["ffmpeg", "-i", file_path, "-f", "wav", "-ac", "1", "-ar", "16000", "pipe:1"],

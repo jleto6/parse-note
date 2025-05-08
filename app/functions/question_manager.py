@@ -67,6 +67,9 @@ previous_content = ""
 # Text File to Store GPT Question Conversations 
 open(ANSWERS, "w").close()  # Ensure the file exists by creating it if it doesnt
 
+
+embed_corpus(RAW_TEXT)
+
 # GPT QUESTION CALL 
 def question_call(question, selection):
     from app import socketio
@@ -91,10 +94,11 @@ def question_call(question, selection):
     # print(top_chunk)
     context = "\n".join(top_chunk["text"].tolist()) # Get a string of top_chunk(s) 
 
-
-
     # GPT Call
     global previous_content
+
+    print(f"Asking question: {question}\n context used: {context}")
+
 
     completion = openai_client.chat.completions.create(
         model="gpt-4o",
@@ -105,7 +109,7 @@ def question_call(question, selection):
                     "You're a knowledgeable expert in a one-on-one conversation. Respond in a natural, ongoing tone—like you're continuing a discussion with someone asking thoughtful follow-ups. "
                     "Format your response as clean, valid HTML for a Jinja template: use <p style='color:whitesmoke; font-size:16px;'> for paragraphs, <strong> for emphasis, "
                     "<code style='color:#00aaff; font-family: Menlo, Monaco, Courier New, monospace;'> for inline code, <ol> for steps, and <ul> for unordered lists. "
-                    "After every paragraph or list item, append '<!-- END_ANSWER -->'."
+                    "Do not include triple backticks or markdown formatting—only raw HTML. After every paragraph or list item, append '<!-- END_ANSWER -->'."
                 )
             },
             {

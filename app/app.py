@@ -5,8 +5,9 @@ from flask_wtf import FlaskForm
 from wtforms import FileField, SubmitField
 from werkzeug.utils import secure_filename
 import os
+import re
 import markdown
-from config import COMPLETED_NOTES, ANSWERS
+from config import COMPLETED_NOTES, ANSWERS, COMPLETED_NOTES_FILE, NOTE_INPUTS_DIR
 from functions.question_manager import question_call
 
 app = Flask(__name__)
@@ -29,8 +30,7 @@ def get_notes():
         if request.content_type.startswith("multipart/form-data"):
             if form.validate_on_submit():
                 file = form.file.data # Grab the file
-                file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Then save the file
-        # JSON Requests
+                file.save(os.path.join(NOTE_INPUTS_DIR, secure_filename(file.filename)))        # JSON Requests
         elif request.content_type == "application/json":
             data = request.get_json()
             action_type = data.get("type")
@@ -56,13 +56,21 @@ def get_notes():
 @socketio.on('connect')
 def handle_connect():
 
-    with open(COMPLETED_NOTES, "r") as file:
-        stored_notes = file.read()
-        stored_notes = markdown.markdown(stored_notes) # Convert to HTML
-    socketio.emit("update_notes", {"notes": stored_notes, "refresh": True})
+    # Generated Notes
+    folder = COMPLETED_NOTES
+    files = sorted(os.listdir(folder), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
 
-    with open(ANSWERS, "r") as file:
-        stored_answers = file.read()
+    notes_buffer = ""
+    for file in files: 
+        with open(f"{COMPLETED_NOTES}/{file}", "r") as f:
+            stored_notes = f.read()
+            stored_notes = markdown.markdown(stored_notes) # Convert to HTML
+            notes_buffer += stored_notes
+
+    socketio.emit("update_notes", {"notes": notes_buffer, "refresh": True})
+
+    with open(ANSWERS, "r") as f:
+        stored_answers = f.read()
         stored_answers = markdown.markdown(stored_answers) # Convert to HTML
     socketio.emit("answers", {"answer": stored_answers, "refresh": True})
 
