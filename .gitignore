@@ -7,7 +7,9 @@ __pycache__/
 *.code-workspace
 
 .DS_Store
-testing/da
+
+data/testing/
+data/testing/
 
 # Ignore contents of data/current_inputs but keep the folder
 data/current_inputs/*
