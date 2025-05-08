@@ -9,7 +9,7 @@ __pycache__/
 .DS_Store
 
 data/testing/
-data/testing/
+testing/
 
 # Ignore contents of data/current_inputs but keep the folder
 data/current_inputs/*
