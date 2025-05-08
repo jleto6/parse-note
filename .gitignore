@@ -7,4 +7,16 @@ __pycache__/
 *.code-workspace
 
 .DS_Store
-testing/
+testing/da
+
+# Ignore contents of data/current_inputs but keep the folder
+data/current_inputs/*
+!data/current_inputs/.gitkeep
+
+# Ignore contents of data/previous_inputs but keep the folder
+data/previous_inputs/*
+!data/previous_inputs/.gitkeep
+
+# Ignore contents of data/sections but keep the folder
+data/sections/*
+!data/sections/.gitkeep
