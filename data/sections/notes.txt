@@ -1,0 +1,174 @@
+<h1>Binary Conversions and Base Systems</h1>
+<p style="color:whitesmoke;"><strong>Decimal notation</strong> uses base 10 to express numbers, where each digit's position represents a power of 10. For instance, the number <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">965</code> is represented as <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">9·10^2 + 6·10^1 + 5·10^0</code>, showing how each digit is weighted by a corresponding power.</p>
+<p style="color:whitesmoke;"><strong>Base b expansion</strong> generalizes this idea to any base <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">b</code>, where <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">b</code> is a positive integer greater than 1. Any positive integer <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">n</code> can be uniquely written as <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">n = a_k b^k + a_{k-1} b^{k-1} + ... + a_0 b^0</code>, where each coefficient <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">a_i</code> satisfies <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">0 ≤ a_i < b</code>. This sequence of digits forms the <strong>base b expansion</strong> of <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">n</code>, notated as <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">a_k a_{k-1}...a_0</code><sub><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">b</code></sub>.</p>
+<p style="color:whitesmoke;">A <strong>binary expansion</strong> is a base 2 expansion, where the only digits possible are 0 and 1. This is the core way computers represent numbers, impacting how digital systems store and process integer values. As an example, to determine the decimal value of a binary number, the positions correspond to increasing powers of 2.</p>
+<p style="color:whitesmoke;">Example: The binary number <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">11011</code><sub>2</sub> is evaluated as:</p>
+<ul>
+  <li>
+    <p style="color:whitesmoke;"><code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">1·2^4 + 1·2^3 + 0·2^2 + 1·2^1 + 1·2^0 = 16 + 8 + 0 + 2 + 1 = 27</code></p>
+  </li>
+</ul>
+<p style="color:whitesmoke;"><strong>Base conversion</strong> is the method used to express a number in another base, often performed by iterative division and tracking remainders. This approach guarantees a unique sequence of digits in the new base, which is essential for reliable digital representation and communication.</p>
+<ol>
+  <li>
+    <p style="color:whitesmoke;">Given a positive integer <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">n</code> and a base <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">b > 1</code>, divide <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">n</code> by <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">b</code> to obtain<br>
+<code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">n = bq_0 + a_0</code> where <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">0 ≤ a_0 &lt; b</code>.</p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">Record the remainder <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">a_0</code>, which is the rightmost digit (least significant digit) of the base <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">b</code> expansion.</p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">Replace <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">n</code> with <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">q_0</code> and repeat the division: <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">q_0 = bq_1 + a_1</code> where <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">0 ≤ a_1 &lt; b</code>.</p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">Continue dividing each new quotient by <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">b</code>, at each step recording the remainder as the next digit, until the quotient becomes zero.</p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">The base <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">b</code> expansion of <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">n</code> is the sequence of remainders read in reverse order (from last computed to first): <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">a_k a_{k-1} ... a_1 a_0</code>.</p>
+  </li>
+</ol>
+<p style="color:whitesmoke;">Repeating this division and remainder process ensures that every step produces a digit of the answer in the new base, and the process ends when the remaining quotient is zero, ensuring completeness and uniqueness of the representation.</p>
+<!-- END_SECTION --><h1>MIPS Instruction Formats and Operations</h1>
+<p style="color:whitesmoke;">
+<strong>MIPS</strong> (Microprocessor without Interlocked Pipeline Stages) is a reduced instruction set computer (RISC) architecture that organizes instructions using well-defined types and fields. Understanding the structure and intent of each instruction format clarifies how operations are specified, how operands are provided, and how computation or memory access is achieved at the hardware level. MIPS instructions can be classified into three primary types: <strong>R-type</strong>, <strong>I-type</strong>, and <strong>J-type</strong>.
+</p>
+<!-- END_SECTION -->
+
+<h3>Instruction Types and Fields</h3>
+<p style="color:whitesmoke;">
+<strong>R-type</strong> (Register type) instructions are used for arithmetic, logic, and shift operations where all operands are registers. <strong>I-type</strong> (Immediate type) instructions are used for memory access (such as <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">lw</code> for load word and <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">sw</code> for store word), arithmetic with a constant, and certain control transfers. <strong>J-type</strong> (Jump type) instructions handle unconditional jumps by specifying the jump target in an encoded field.
+</p>
+<p style="color:whitesmoke;">
+Each instruction is described by a combination of fields specifying the operation, the registers involved, and, where applicable, immediate values or jump targets. These fields include:
+</p>
+<ul>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>op</strong>: The <em>operation code</em>—a 6-bit field indicating the general function of the instruction.
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>rs</strong>: <em>Source register</em>—identifies one input register.
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>rt</strong>: <em>Second source register or destination register</em>—used for a second input or for outputs in certain formats.
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>rd</strong>: <em>Destination register</em>—for outputs of R-type operations.
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>shamt</strong>: <em>Shift amount</em>—used in shift instructions to detail how many bit positions to move.
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>funct</strong>: <em>Function code</em>—differentiates the specific variant or operation within the “op” field for R-type instructions.
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>immediate/address</strong>: <em>Immediate value or address offset</em>—utilized in I-type for constants and address calculations.
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>target address</strong>: <em>Jump target</em>—used in J-type to indicate the 26 most significant bits of the target address.
+    </p>
+  </li>
+</ul>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+The three main instruction formats structure these fields as follows:
+</p>
+<ul>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>R-type</strong>: <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">op (6 bits) | rs (5 bits) | rt (5 bits) | rd (5 bits) | shamt (5 bits) | funct (6 bits)</code>
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>I-type</strong>: <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">op (6 bits) | rs (5 bits) | rt (5 bits) | immediate (16 bits)</code>
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>J-type</strong>: <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">op (6 bits) | address (26 bits)</code>
+    </p>
+  </li>
+</ul>
+<!-- END_SECTION -->
+
+<h3>MIPS Instruction Set Subset and Example Encodings</h3>
+<p style="color:whitesmoke;">
+The core MIPS instruction subset includes both <strong>arithmetic/logical operations</strong> and <strong>memory access</strong> or <strong>control flow</strong> instructions. Representative operations are described below using their standard assembly format and encoding:
+</p>
+<ul>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>Addition</strong>: <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">add rd, rs, rt</code><br>
+      This <strong>R-type</strong> instruction adds contents of <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">rs</code> and <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">rt</code> registers and stores the result in <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">rd</code>.
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>Subtraction</strong>: <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">sub rd, rs, rt</code>
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>Bitwise AND</strong>: <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">and rd, rs, rt</code>
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>Bitwise OR</strong>: <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">or rd, rs, rt</code>
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>Set Less Than</strong>: <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">slt rd, rs, rt</code>
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>Add Immediate</strong>: <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">addi rt, rs, imm16</code><br>
+      An <strong>I-type</strong> instruction that adds a 16-bit constant (<code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">imm16</code>) to the contents of <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">rs</code>, storing the result in <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">rt</code>.
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>Load Word</strong>: <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">lw rt, offset(rs)</code>
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>Store Word</strong>: <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">sw rt, offset(rs)</code>
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>Branch Equal</strong>: <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">beq rs, rt, imm16</code>
+    </p>
+  </li>
+  <li>
+    <p style="color:whitesmoke;">
+      <strong>Jump</strong>: <code style="color:#00aaff; font-family: Menlo, Monaco, 'Courier New', monospace;">j target</code><br>
+      This <strong>J-type</strong> encodes jump targets using a 26-bit field for the target address.
+    </p>
+  </li>
+</ul>
+<!-- END_SECTION -->
+
+<p style="color:whitesmoke;">
+Integrating these instruction formats into a datapath is fundamental in hardware organization, as each field in the instruction directly maps to the corresponding inputs and controls for register files, ALU operations, selection of destination registers, and memory access. Recognizing instruction formats enables efficient decoding and execution by a pipeline or control unit.
+</p>
+<!-- END_SECTION -->

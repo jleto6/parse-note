@@ -13,7 +13,9 @@ import warnings
 
 import time
 
-from config import TOPIC_OUTPUTS_DIR, RAW_TEXT
+from config import RAW_TEXT
+# from config import TOPIC_OUTPUTS_DIR, RAW_TEXT
+
 
 warnings.filterwarnings("ignore")
 os.environ["TOKENIZERS_PARALLELISM"] = "false"

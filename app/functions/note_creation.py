@@ -25,7 +25,10 @@ string_buffer = ""
 answer_buffer = ""
 i = 0
 
+print("-------")
 print(previous_content)
+print("-------")
+
 
 
 def get_embedding(text, model="text-embedding-3-small"):
@@ -40,6 +43,17 @@ def embed_file(content_path):
     # Generate embedding for the full text
     response = openai_client.embeddings.create(
         input=[full_text],
+        model="text-embedding-3-small"
+    )
+    embedding = response.data[0].embedding
+
+    return embedding
+
+# Function To Embed text
+def embed_text(content):
+    # Generate embedding for the content
+    response = openai_client.embeddings.create(
+        input=[content],
         model="text-embedding-3-small"
     )
     embedding = response.data[0].embedding
@@ -65,18 +79,17 @@ def embed_text(content):
 
 def note_creation(content, outline_df=None):
 
-    file_content = ""
-
     output_buffer = ""
 
     print("Calling GPT (Creating Notes)")
 
     global i
+    global previous_content
 
     from app import socketio
 
     # RAG
-    current_embedding = embed_file(content)
+    current_embedding = embed_text(content)
     
     # outline_df['embedding'] = outline_df['embedding'].apply(ast.literal_eval) # Convert the embedding column from a string back into a list of floats
 
@@ -103,27 +116,12 @@ def note_creation(content, outline_df=None):
         print(top_chunk["score"].iloc[0], end =" ") 
         print(f"The most similar file to the current file is: {most_similar_file_name}")
 
-        global previous_content
-        # Read the content of the current file
-        with open(content, "r") as file:
-            file_content = file.read()
+ 
 
     # If only one file (no df)
     else:
-
-        # Read the content of the current file
-        with open(content, "r") as file:
-            file_content = file.read()
-
         current_file = os.path.join(COMPLETED_NOTES, "notes.txt")
         most_similar_file_text = "None"
-
-        # print("===============================")
-        # print(file_content)
-        # print("===============================")
-
-    previous_content += file_content # Store all read files in memory so GPT knows whats covered
-
 
 
     # GPT Call
@@ -166,7 +164,7 @@ def note_creation(content, outline_df=None):
 
             <strong>Heading Rule:</strong> You must insert exactly one <h1> heading at the beginning of the output to represent the main topic. There must be one and only one <h1> tag. Do not include multiple <h1> tags under any circumstances. You may optionally include one or two <h3> subheadings if absolutely necessary, but avoid them unless essential for clarity or structure. Treat the rest of the content as a single section under that heading.
 
-            The following is a summary of previously covered material (for context only—do not repeat it, it should help you keep flow going):
+            The following is previously covered material (for context only—do not repeat it, youre appending to the notes generated from this, it should help you keep flow going):
             {previous_content}
 
             Use the structure of the most similar file as a guide for how to organize this section. Do not copy its content, but follow its general flow and topic segmentation when possible. If parts of the structure don’t apply, skip them. If new topics appear in the new material, insert them logically where they fit best.
@@ -180,10 +178,7 @@ def note_creation(content, outline_df=None):
             Use the new content to improve or clarify earlier explanations if needed, but do not discard or simplify them.
 
             Append and integrate this new content:
-            {content}
-
-            The existing content is:
-            {file_content}
+            {content}        
             """
         },
         ],
@@ -197,13 +192,13 @@ def note_creation(content, outline_df=None):
     for chunk in completion:
         try:
             delta = chunk.choices[0].delta
-            content = delta.content if delta and hasattr(delta, "content") else None
+            write_content = delta.content if delta and hasattr(delta, "content") else None
 
             if content:
-                string_buffer += content
-                output_buffer += content
+                string_buffer += write_content
+                output_buffer += write_content
                 with open(current_file, "a", encoding="utf-8") as f:
-                    f.write(content)
+                    f.write(write_content)
                     f.flush()
                 end_section(string_buffer)
         except Exception as e:
@@ -213,7 +208,11 @@ def note_creation(content, outline_df=None):
 
     socketio.emit("update_notes", {"notes" : "<br/><br/>"})  # Emit linebreaks at the end
 
+    print("-------")
+    previous_content += content
     print(previous_content)
+    print("-------")
+
 
     # # Get genereated notes info
     # output_text = strip_html(output_buffer) # Strip the HTML content from the GPT output to get the text

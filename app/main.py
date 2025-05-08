@@ -19,7 +19,7 @@ from app import socketio, app
 from threading import Thread
 import threading
 
-from config import TOPIC_OUTPUTS_DIR, NOTE_INPUTS_DIR, RAW_TEXT, COMPLETED_NOTES, FILE_EMBEDDINGS, COMPLETED_NOTES_FILE, PREVIOUS_INPUTS
+from config import NOTE_INPUTS_DIR, RAW_TEXT, COMPLETED_NOTES, FILE_EMBEDDINGS, COMPLETED_NOTES_FILE, PREVIOUS_INPUTS
 
 import logging
 log = logging.getLogger('werkzeug')
@@ -49,13 +49,9 @@ def timer():
 
 def main():
 
-    # Clear old outputs
-    clear_output(TOPIC_OUTPUTS_DIR)
-    # clear_output(RAW_TEXT)
+    # Clear old outputs 
     clear_output(COMPLETED_NOTES)
-    
-    move_file(NOTE_INPUTS_DIR, PREVIOUS_INPUTS)
-
+    # move_file(NOTE_INPUTS_DIR, PREVIOUS_INPUTS) # Move old inputs
     try: 
         clear_output(FILE_EMBEDDINGS)
     except:
@@ -79,8 +75,7 @@ def main():
             files = [
                 f for f in sorted(os.listdir(folder),
                 key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
-                if not f.startswith('.') and os.path.isfile(os.path.join(folder, f))
-            ]
+                if not f.startswith('.') and os.path.isfile(os.path.join(folder, f))]
     else:
         print("Files found:", files)
         file_flag = False
@@ -88,7 +83,7 @@ def main():
             file_flag = True
     print("")
 
-    open(RAW_TEXT, 'w', encoding="utf-8")
+    open(RAW_TEXT, 'w', encoding="utf-8") # Open raw text file
 
     # Start the timer thread (starting processing)
     timer_thread = threading.Thread(target=timer)
@@ -97,12 +92,9 @@ def main():
     # Work with the available files
     time.sleep(3)
     for file in files:
-     
         file_path, file_type = get_file_type(file)
-
         valid_video_types = {"MP4", "AVI", "MKV", "MOV", "WMV", "FLV", "WEBM", "MPEG", "MPG", "OGV", "3GP", "MTS"}
         valid_image_types = {"PNG", "JPEG", "JPG", "BMP", "GIF", "TIFF", "WEBP"}
-
         try:
             # For Images
             if file_type in valid_image_types:
@@ -116,21 +108,17 @@ def main():
 
         except Exception as e:
             print(f"Invalid file {e}")
-
     time.sleep(3)
 
     # Embed the extracted RAW TEXT
     embed_corpus(RAW_TEXT)
 
-    # Signal the timer thread to stop (processing done)
-    stop_timer.set()
-    # Wait for the timer thread to finish
-    timer_thread.join()
+    stop_timer.set()    # Signal the timer thread to stop (processing done)
+    timer_thread.join()    # Wait for the timer thread to finish
 
     # Chunk sequentially
-    chunk_count = split_text(RAW_TEXT, 300)
-    print(chunk_count)
-    ordered_files = sorted(os.listdir(TOPIC_OUTPUTS_DIR), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
+    chunk_count, chunk_list = split_text(RAW_TEXT, 300)
+    # print(chunk_list)
 
     # Creata an outline from the raw text and return a df with info
     df = None
@@ -141,18 +129,12 @@ def main():
     print("Creating Notes")
     print("--------------")
 
-
-    # Create notes on files
-    for file in ordered_files:
+    # Create notes on chunks
+    for chunk in chunk_list:
         try: 
-            note_creation(f"{TOPIC_OUTPUTS_DIR}/{file}", df) # Send topics GPT to make notes on
+            note_creation(chunk, df) # Send topics GPT to make notes on
         except:
-            note_creation(f"{TOPIC_OUTPUTS_DIR}/{file}") # Send topics GPT to make notes on
-
-    # # Read the content of the notes file
-    # with open(COMPLETED_NOTES, "r") as file:
-    #     notes = file.read()
-    #     notes = notes.replace("\n", "<br/>") # Replace new lines with line break element
+            note_creation(chunk) # Send topics GPT to make notes on
 
     print("--------------")
     print("Notes Completed")

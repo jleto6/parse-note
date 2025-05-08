@@ -9,7 +9,7 @@ PROJECT_ROOT = os.path.abspath(os.path.join(BASE_DIR, '..'))
 # Now build DATA_DIR off of the project root
 DATA_DIR = os.path.join(PROJECT_ROOT, 'data')
 
-TOPIC_OUTPUTS_DIR = os.path.join(DATA_DIR, 'raw_chunks')
+# TOPIC_OUTPUTS_DIR = os.path.join(DATA_DIR, 'topic_outputs') # For topic modeling
 
 RAW_TEXT = os.path.join(DATA_DIR, 'raw_text.txt')
 COMPLETED_NOTES_FILE = os.path.join(DATA_DIR, 'completed_notes')

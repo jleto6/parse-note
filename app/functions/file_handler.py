@@ -14,7 +14,7 @@ from vosk import KaldiRecognizer
 from vosk import SetLogLevel
 SetLogLevel(-1)
 
-from config import NOTE_INPUTS_DIR, RAW_TEXT, TOPIC_OUTPUTS_DIR
+from config import NOTE_INPUTS_DIR, RAW_TEXT
 from functions.ocr import do_ocr
 
 if not os.path.exists(RAW_TEXT):
@@ -23,6 +23,9 @@ if not os.path.exists(RAW_TEXT):
 
 # Text Splitter
 def split_text(filename, split_size):
+
+    chunk_list = []
+
     text = open(filename, 'r', encoding='utf-8').read()
     space_ctr = 0
     file_ctr = 0
@@ -32,8 +35,10 @@ def split_text(filename, split_size):
         if char == " ":
             space_ctr += 1
         if space_ctr >= split_size:
-            with open(f"{TOPIC_OUTPUTS_DIR}/chunk_{file_ctr}.txt", 'w', encoding='utf-8') as f:
-                f.write(chunk)
+            # with open(f"{TOPIC_OUTPUTS_DIR}/chunk_{file_ctr}.txt", 'w', encoding='utf-8') as f:
+            #     f.write(chunk)
+            chunk_list.append(chunk)
+
             file_ctr += 1
             chunk = ''
             space_ctr = 0
@@ -41,14 +46,16 @@ def split_text(filename, split_size):
     if chunk:
         if file_ctr == 0:
             # No full chunks were made, so create first file
-            with open(f"{TOPIC_OUTPUTS_DIR}/chunk_0.txt", 'w', encoding='utf-8') as f:
-                file_ctr = 1
-                f.write(chunk)
+            # with open(f"{TOPIC_OUTPUTS_DIR}/chunk_0.txt", 'w', encoding='utf-8') as f:
+            #     f.write(chunk)
+            chunk_list.append(chunk)
+            file_ctr = 1
         else:
-            with open(f"{TOPIC_OUTPUTS_DIR}/chunk_{file_ctr-1}.txt", 'a', encoding='utf-8') as f:
-                    f.write(chunk)
+            # with open(f"{TOPIC_OUTPUTS_DIR}/chunk_{file_ctr-1}.txt", 'a', encoding='utf-8') as f:
+            #         f.write(chunk)
+            chunk_list.append(chunk)
 
-    return file_ctr
+    return file_ctr, chunk_list
 
 
 # File deleter
