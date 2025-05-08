@@ -8,7 +8,7 @@ This project applies real AI workflows including LLMs, retrieval-augmented gener
 
 ## Planned Development
 
-The long-term goal is to develop this into a full-scale web application with user accounts, version history, structured note organization, and interactive features built on top of advanced AI processing.
+The long-term goal is to develop this into a full-scale web application with user accounts, version history, structured note organization, and interactive tools, all built on continually advancing and refining the underlying AI processing.
 
 ## How to Use
 
