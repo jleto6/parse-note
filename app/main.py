@@ -51,7 +51,7 @@ def main():
 
     # Clear old outputs 
     clear_output(COMPLETED_NOTES)
-    # move_file(NOTE_INPUTS_DIR, PREVIOUS_INPUTS) # Move old inputs
+    move_file(NOTE_INPUTS_DIR, PREVIOUS_INPUTS) # Move old inputs
     try: 
         clear_output(FILE_EMBEDDINGS)
     except:

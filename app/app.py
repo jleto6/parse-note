@@ -2,7 +2,7 @@ from flask import Flask, request, render_template
 from flask_socketio import SocketIO
 from flask import jsonify, Response
 from flask_wtf import FlaskForm
-from wtforms import FileField, SubmitField
+from wtforms import FileField, SubmitField, MultipleFileField
 from werkzeug.utils import secure_filename
 import os
 import re
@@ -17,8 +17,8 @@ socketio = SocketIO(app)  # Initialize Socket.IO
 app.config['UPLOAD_FOLDER'] = 'static/files'
 
 class UploadFileForm(FlaskForm):
-    file = FileField("File")
-    submit = SubmitField("Upload File")
+    files = MultipleFileField("Select Files")
+    submit = SubmitField("Upload & Run")
 
 @app.route("/", methods=["GET", "POST"])
 def get_notes():
@@ -29,8 +29,9 @@ def get_notes():
         # File Uploads
         if request.content_type.startswith("multipart/form-data"):
             if form.validate_on_submit():
-                file = form.file.data # Grab the file
-                file.save(os.path.join(NOTE_INPUTS_DIR, secure_filename(file.filename)))        # JSON Requests
+                for file in form.files.data:
+                    filename = secure_filename(file.filename)
+                    file.save(os.path.join(NOTE_INPUTS_DIR, filename))
         elif request.content_type == "application/json":
             data = request.get_json()
             action_type = data.get("type")

@@ -1,39 +1,79 @@
-**Transcription of Handwritten Notes:**
+Here is the transcription of the handwritten notes:
 
 ---
 
+Writing
+
+A cache must manage how data is written. This involves deciding whether update main memory immediately or delay a write, and how to handle write miss. These choices affect consistency, performance, and capacity.
+
+When the CPU performs a store instruction, it writes data to memory. With a cache in place, this raises the issue of whether the write goes to cache, main memory, or both. If data is only written to the cache, main memory may have a different value, causing inconsistency.
+
+Write Strategies:
+- Write through updates both cache and main memory simultaneously. It's simple but slow. A write buffer is often used to reduce stalls.
+- Write back only updates the data in the cache during a write hit; main memory is not updated right away. Each block is tagged with a dirty bit to indicate if it has been modified since being loaded from memory. If a block is clean, it can be replaced without writing to memory. If a block is dirty, it must be written back to memory before being replaced.
+
+---
+Direct Caching
+
+Associativity
+
+**Canonical Forms**
+
+Canonical forms are standardized ways to express Boolean functions, making it easier to build and simplify circuits. The 2 main types are Sum of Products (SOP) and Product of Sums (POS), which describe where an output should output a 1 or a 0.
+
+SOP expressions are built from minterms, which represent truth table rows where the output is 1, while POS expressions are built from maxterms, which represent rows where the output is 0.
+
+**Sum of Products:**
+- SOP uses minterms.
+- Look at rows where F=1 in the truth table.
+- Each 1 becomes an ANDed term (A'B'C).
+- OR all AND terms together.
+  - For example, if F=1 at (A=0, B=1, C=0), the minterm is A'B'C'.
+
+**Product of Sums:**
+- POS uses maxterms.
+- Look at rows where F=0 in the truth table.
+- Each 0 becomes an ORed term (A'B'C').
+- AND all the OR terms together.
+  - For example, if F=0 at (A=1, B=0, C=1), the maxterm is A'B'C.
 **Binary Conversions**
 
 In the modern world, we use decimal, or base 10, notation to represent integers. We can represent numbers using any base b, where b is a positive integer greater than 1.
 
-**Base 10**:  
-When we write 965, this can be translated as : 9·10^2 + 6·10^1 + 5·10^0
+**Base 10:**
 
-**Base b**:  
-- let b be a positive integer greater than 1. Then if n is a positive integer, it can be expressed uniquely in the form, where k is a nonnegative integer and a_k,a_(k-1),...,a_0 are nonnegative integers less than b.  
-This expression of n is called the base b expansion of n and can be denoted by a_k a_(k-1)... a_0 b
+- For example, we write 965, this can be translated as \(9 \cdot 10^2 + 6 \cdot 10^1 + 5 \cdot 10^0\).
 
-**Binary Expansions**  
-Computers represent integers and do arithmetic with binary (base 2) expansions of integers. In these expansions, the digits are 0 and 1.  
-Example: What is the decimal expansion of the integer that has (11011)2 as its binary expansion?  
-Solution: (11011)2  
-= 1·2^4 + 1·2^3 + 0·2^2 + 1·2^1 + 1·2^0  
-= 16 + 8 + 0 + 2 + 1  
-= 27
+**Base b:**
 
-**Base Conversion**:  
-- To construct the base b expansion of the integer n, divide n by b to obtain a quotient and remainder: n = bq_0 + a_0, 0 ≤ a_0 < b.  
-The remainder, a_0, is the rightmost digit in the base b expansion of n.  
-Next divide q_0 by b to get: q_0 = bq_1 + a_1, 0 ≤ a_1 < b.  
-Continue until the quotient is 0.  
-The base b expansion of n is then the digits a_k a_(k-1)... a_2 a_1 a_0, where a_k is the leftmost digit and a_0 is the rightmost digit. This is the base b expansion of n.  
-Continue by successively dividing the quotient by b, obtaining the remainder as the next digit, and the new quotient to divide.  
-Obtaining the sequence of digits as the remainder. The process terminates when the quotient is 0.
+- Let b be a positive integer greater than 1. Then, if n is a positive integer, it can be expressed uniquely in the form \((a_k a_{k-1} \ldots a_0)_b\), where k is a nonnegative integer and \(a_k a_{k-1} \ldots a_0\) are nonnegative integers less than b.
 
----
-Introduction MIPS ISA 3 Instruction Types R-type, I-type, J-type » Datapath and Control Unit Simplified Pipelined Simple subset » Memory reference: Iw, sw Arithmetic/logical: add, addi, sub, and, or, slit Control transfer: j
+- This representation of n is called the base b expansion of n and can be denoted by \((a_k a_{k-1} \ldots a_0)_b\) as
 
-Instruction Format Review Three instruction formats 6 6 Retype [ rs [ rt funct_| 48 5 bits, 5 Sbits Sbits 6     » Sbits 16 bits J-type 4 re 6 bits 26 bits » Fields: op: operation of the instruction » rs, rt, rd: source/destination register specifiers shamt: shift amount » funct: selects variant of the operation in the “op” field address/immediate: address offset or immediate value target address: target address of the jump instruction
+\[ a_k \cdot b^k + a_{k-1} \cdot b^{k-1} + \ldots a_0 \]
 
-MIPS Subset Add, Subtract, AND, OR, SLT » add rd, rs, rt       rt 31 26 21 16 1 6 0 and rs rt rd 6bits Sbits 6 bits orrd, rs, rt sitrd, rs, rt ADD Immediate addi rt, rs, imm16 31 26 21 16 0 + Load, Store T rs [ rt | immediate rs, imm16 6bits 16 bits swrt, rs, imm16 » BRANCH » beqrs, rt, imm16 31 26 0 JUMP: op target address target 6 bits 26 bits
+**Binary exp[ansions]:**
+
+Computers represent integers and do arithmetic with binary (base 2) expansions of integers. In these expansions, the digits are 0 and 1.
+
+- Example: What is the decimal expansion of the integer that has \( (11011)_2 \) as its binary expansion? 
+
+Solution: \( (11011)_2 \)
+
+\[ 1 \cdot 2^4 + 1 \cdot 2^3 + 0 \cdot 2^2 + 1 \cdot 2^1 + 1 \cdot 2^0 \]
+
+\[ 16 + 8 + 0 + 2 + 1 \]
+
+\[ 27 \]
+
+**Base Conversion:**
+
+- To construct the base b expansion of the integer n, divide n by b to obtain a quotient and remainder: \( n = b \cdot q_0 + a_0 \), where \( 0 \leq a_0 < b \). The remainder, \( a_0 \), is the rightmost digit in the base b expansion of n.
+
+- Next, divide \( q_0 \) by b to obtain: \( q_0 = b \cdot q_1 + a_1, \) where \( 0 \leq a_1 < b \).
+
+- Continue this process, finding the quotient and remainder at each step. The procedure terminates when the quotient is 0.
+
+- Continued by successively dividing the quotient by b, obtaining the subsequent remainders as the base b expansion digits until the quotient is 0.
+Cache Cache on hit ond mss A is” quick» bt miss con chs For exanpe, if the cache miss cote is ord the data cache mas rate is 47, wilh base CPI of 2 ond a mis of (00 we cam the mss as Glows = mar 0.02 +100=2 = D-cache mss Cth 36% oF loads and 6.0¢ = Total 346 Ths in 0 CPT of 5.44 2+ wis Tn an ideal with a cache (no mises), He CPU cn al the CPT of 2. the CPL ths He CPU veld be 2.72 fe te menny Tf we CPL by halt, the CPL beams 4.44. Menory remain a of the overall CPI, shoving how the CPL aloe
 
