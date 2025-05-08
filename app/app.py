@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 import os
 import re
 import markdown
-from config import COMPLETED_NOTES, ANSWERS, COMPLETED_NOTES_FILE
+from config import COMPLETED_NOTES, ANSWERS, COMPLETED_NOTES_FILE, NOTE_INPUTS_DIR
 from functions.question_manager import question_call
 
 app = Flask(__name__)
@@ -30,8 +30,7 @@ def get_notes():
         if request.content_type.startswith("multipart/form-data"):
             if form.validate_on_submit():
                 file = form.file.data # Grab the file
-                file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Then save the file
-        # JSON Requests
+                file.save(os.path.join(NOTE_INPUTS_DIR, secure_filename(file.filename)))        # JSON Requests
         elif request.content_type == "application/json":
             data = request.get_json()
             action_type = data.get("type")

@@ -7,6 +7,7 @@ import io
 import wave
 import fitz
 import json
+import shutil
 
 from vosk import Model
 from vosk import KaldiRecognizer
@@ -59,6 +60,14 @@ def clear_output(folder_path):
                 os.remove(item_path)
     except:
         os.remove(folder_path)
+        
+# File mover
+def move_file(folder_path, folder_dst):
+    for item in os.listdir(folder_path):
+        item_path = os.path.join(folder_path, item)
+        if os.path.isfile(item_path):
+            dst_path = os.path.join(folder_dst, item)
+            shutil.move(item_path, dst_path)
 
 # Uploaded Files
 folder = NOTE_INPUTS_DIR

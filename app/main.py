@@ -10,7 +10,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph
 
 from functions.gpt_functions import order_files
 from functions.note_creation import note_creation
-from functions.file_handler import handle_image, handle_pdf, get_file_type, handle_video, clear_output, split_text
+from functions.file_handler import handle_image, handle_pdf, get_file_type, handle_video, clear_output, split_text, move_file
 from functions.topic_modelling import nlp
 from functions.question_manager import embed_corpus
 from functions.outline import create_outline
@@ -19,7 +19,7 @@ from app import socketio, app
 from threading import Thread
 import threading
 
-from config import TOPIC_OUTPUTS_DIR, NOTE_INPUTS_DIR, RAW_TEXT, COMPLETED_NOTES, FILE_EMBEDDINGS, COMPLETED_NOTES_FILE
+from config import TOPIC_OUTPUTS_DIR, NOTE_INPUTS_DIR, RAW_TEXT, COMPLETED_NOTES, FILE_EMBEDDINGS, COMPLETED_NOTES_FILE, PREVIOUS_INPUTS
 
 import logging
 log = logging.getLogger('werkzeug')
@@ -42,9 +42,6 @@ def timer():
         print(f"\rElapsed time: {elapsed:.2f} seconds")
         socketio.emit("timer", {"time" : elapsed})
         time.sleep(1)
-# Start the timer thread
-timer_thread = threading.Thread(target=timer)
-timer_thread.start()
 
 # -----------------------------------------------
 #  Main
@@ -54,9 +51,10 @@ def main():
 
     # Clear old outputs
     clear_output(TOPIC_OUTPUTS_DIR)
-    clear_output(RAW_TEXT)
+    # clear_output(RAW_TEXT)
     clear_output(COMPLETED_NOTES)
-
+    
+    move_file(NOTE_INPUTS_DIR, PREVIOUS_INPUTS)
 
     try: 
         clear_output(FILE_EMBEDDINGS)
@@ -65,21 +63,36 @@ def main():
 
     # Uploaded Files
     folder = NOTE_INPUTS_DIR
-    files = sorted(os.listdir(folder), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
-
-    if ".DS_Store" in files:
-        files.remove(".DS_Store")
+    raw_files = [
+        f for f in os.listdir(folder)
+        if not f.startswith('.') and os.path.isfile(os.path.join(folder, f))
+    ]
+    files = sorted(
+        raw_files,
+        key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0
+    )
     if not files:
         print("No available files in the folder.")
         while not files:
-            #print("Waiting for files.")
-            files = sorted(os.listdir(folder), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
+            print("Waiting for files.")
+            time.sleep(3)
+            files = [
+                f for f in sorted(os.listdir(folder),
+                key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
+                if not f.startswith('.') and os.path.isfile(os.path.join(folder, f))
+            ]
     else:
         print("Files found:", files)
         file_flag = False
         if len(files) == 1:
             file_flag = True
     print("")
+
+    open(RAW_TEXT, 'w', encoding="utf-8")
+
+    # Start the timer thread (starting processing)
+    timer_thread = threading.Thread(target=timer)
+    timer_thread.start()
 
     # Work with the available files
     time.sleep(3)
@@ -115,11 +128,12 @@ def main():
     timer_thread.join()
 
     # Chunk sequentially
-    chunk_count = split_text(RAW_TEXT, 500)
+    chunk_count = split_text(RAW_TEXT, 300)
     print(chunk_count)
     ordered_files = sorted(os.listdir(TOPIC_OUTPUTS_DIR), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
 
     # Creata an outline from the raw text and return a df with info
+    df = None
     if not (chunk_count < 2):
         df = create_outline(RAW_TEXT, chunk_count)
 
@@ -130,12 +144,20 @@ def main():
 
     # Create notes on files
     for file in ordered_files:
-        note_creation(f"{TOPIC_OUTPUTS_DIR}/{file}", df) # Send topics GPT to make notes on
+        try: 
+            note_creation(f"{TOPIC_OUTPUTS_DIR}/{file}", df) # Send topics GPT to make notes on
+        except:
+            note_creation(f"{TOPIC_OUTPUTS_DIR}/{file}") # Send topics GPT to make notes on
 
     # # Read the content of the notes file
     # with open(COMPLETED_NOTES, "r") as file:
     #     notes = file.read()
     #     notes = notes.replace("\n", "<br/>") # Replace new lines with line break element
+
+    print("--------------")
+    print("Notes Completed")
+    print("--------------")
+
 
 if __name__ == "__main__":
     main()
