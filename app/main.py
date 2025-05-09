@@ -12,7 +12,7 @@ from nlp.gpt_utils import order_files
 from generation.generate_notes import note_creation
 from extraction.file_utils import handle_image, handle_pdf, get_file_type, handle_video, clear_output, split_text, move_file
 from nlp.topic_modelling import topic_model
-from generation.questions import embed_corpus
+from generation.question_handler import embed_corpus
 from extraction.outline import create_outline
 
 from app import socketio, app   
@@ -49,13 +49,9 @@ def timer():
 
 def main():
 
-    # Clear old outputs 
+    # Clear old files 
     clear_output(COMPLETED_NOTES)
     move_file(NOTE_INPUTS_DIR, PREVIOUS_INPUTS) # Move old inputs
-    try: 
-        clear_output(FILE_EMBEDDINGS)
-    except:
-        pass
 
     # Uploaded Files
     folder = NOTE_INPUTS_DIR
@@ -116,7 +112,7 @@ def main():
     stop_timer.set()    # Signal the timer thread to stop (processing done)
     timer_thread.join()    # Wait for the timer thread to finish
 
-    chunk_count, chunk_list = split_text(RAW_TEXT, 300) # Chunk sequentially
+    chunk_count, chunk_list = split_text(RAW_TEXT, 100) # Chunk sequentially
 
     # Creata an outline from the raw text and return a df with info
     df = None

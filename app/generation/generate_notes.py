@@ -26,33 +26,29 @@ answer_buffer = ""
 i = 0
 
 # -----------------------------------------------
-# GENERATE THE NOTES
+# GENERATE NOTES
 # -----------------------------------------------
 
 def note_creation(content, outline_df=None):
 
-    output_buffer = ""
-
     print("Calling GPT (Creating Notes)")
 
+    output_buffer = ""
     global i
     global previous_content
 
     from app import socketio
 
     # RAG
-    current_embedding = embed_text(content)
+    current_embedding = embed_text(content) # Get the embedding of the current content
     
     # outline_df['embedding'] = outline_df['embedding'].apply(ast.literal_eval) # Convert the embedding column from a string back into a list of floats
-
     if outline_df is not None:
         
         # Compute similarity scores for each chunk
         outline_df["score"] = outline_df["embedding"].apply( # Create a new 'score' column for each chunk
             lambda file_embedding: similarity_score(file_embedding, current_embedding) # Get a similarity score for each
         )
-
-        # print(file)
 
         top_chunk = outline_df.sort_values("score", ascending=False).head(1) # sort the DataFrame by similarity score in descending order
         # print(top_chunk)
@@ -61,9 +57,10 @@ def note_creation(content, outline_df=None):
 
         current_file = os.path.join(COMPLETED_NOTES, most_similar_file_name)
 
+        # print(content) 
         print(top_chunk["score"].iloc[0], end =" ") 
         print(f"The most similar file to the current file is: {most_similar_file_name}")
-
+    
  
     # If only one file (no df)
     else:
@@ -148,7 +145,7 @@ def note_creation(content, outline_df=None):
             delta = chunk.choices[0].delta
             write_content = delta.content if delta and hasattr(delta, "content") else None
 
-            if content:
+            if write_content:
                 string_buffer += write_content
                 output_buffer += write_content
                 with open(current_file, "a", encoding="utf-8") as f:

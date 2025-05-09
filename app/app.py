@@ -8,7 +8,7 @@ import os
 import re
 import markdown
 from config import COMPLETED_NOTES, ANSWERS, COMPLETED_NOTES_FILE, NOTE_INPUTS_DIR
-from generation.questions import question_call
+from generation.question_handler import question_call
 
 app = Flask(__name__,
             static_folder="ui/static",

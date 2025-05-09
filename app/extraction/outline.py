@@ -35,7 +35,7 @@ def create_outline(file_path, section_count):
 
     Only include distinct top-level sections. Each section must represent a clearly non-overlapping concept or skill. Do not split a topic across multiple sections. Only create separate sections when topics are fundamentally different in purpose or function. Closely related subtopics — like variations of the same concept (e.g., cache types or policies) — must be grouped together into a single, comprehensive section for that concept. Do not create multiple sections for different configurations or options of the same system.
 
-    There are {section_count} content chunks. You must generate **no more than {math.floor(section_count/2)} sections**. Fewer sections are allowed if and only if merging results in highly distinct and semantically strong groupings. Exceeding {section_count} sections will break alignment with chunk-based retrieval and is not allowed.
+    There are {section_count} content chunks. You must generate **no more than {math.floor(section_count)} sections**. Fewer sections are allowed if and only if merging results in highly distinct and semantically strong groupings. Exceeding {section_count} sections will break alignment with chunk-based retrieval and is not allowed.
 
     Each section must:
     - Use a specific, keyword-rich title that would match real-world technical search queries.
