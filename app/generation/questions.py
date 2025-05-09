@@ -6,8 +6,6 @@ import markdown
 from flask_socketio import SocketIO
 import json
 import re
-from functions.gpt_functions import end_answer, end_answer
-
 import csv
 import pandas as pd
 import numpy as np
@@ -15,50 +13,11 @@ import ast
 import os
 
 from config import ANSWERS, RAW_TEXT, EMBEDDINGS
+from nlp.gpt_utils import end_answer, end_answer
+from nlp.embedding_utils import embed_corpus, get_embedding, similarity_score
 
 deepseek_client = OpenAI(api_key=os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com/v1"  ) # Use Deepseek
 openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) # Use OpenAI
-
-def get_embedding(text, model="text-embedding-3-small"):
-    return openai_client.embeddings.create(input=[text], model=model).data[0].embedding
-
-# Function to split text into ~300-word chunks
-def chunk_text_by_words(text, words_per_chunk=300):
-    words = text.split()
-    chunks = [
-        ' '.join(words[i:i + words_per_chunk])
-        for i in range(0, len(words), words_per_chunk)
-    ]
-    return chunks
-
-# Function To Embedd a Corpus
-def embed_corpus(corpus):
-    # Read and clean the corpus as one block of text
-    with open(corpus, "r", encoding="utf-8") as file:
-        full_text = file.read()
-
-    # Create word-based chunks (~300 words each)
-    chunks = chunk_text_by_words(full_text, words_per_chunk=300)
-
-    batch_size = 10
-    all_embeddings = []
-
-    # Batch the requests
-    for i in range(0, len(chunks), batch_size):
-        batch = chunks[i:i + batch_size]
-        response = openai_client.embeddings.create(
-            input=batch,
-            model="text-embedding-3-small"
-        )
-        all_embeddings.extend([item.embedding for item in response.data])
-
-    # Write to CSV
-    with open(EMBEDDINGS, "w", newline='', encoding="utf-8") as f:
-        writer = csv.writer(f)
-        writer.writerow(["text", "embedding"])
-        for text, embedding in zip(chunks, all_embeddings):
-            writer.writerow([text, str(embedding)])
-
 
 string_buffer = ""
 answer_buffer = ""
@@ -81,10 +40,6 @@ def question_call(question, selection):
     corpus_df['embedding'] = corpus_df['embedding'].apply(ast.literal_eval) # Convert the embedding column from a string back into a list of floats
 
     question_embedding = get_embedding(question) # Embedd the given question
-
-    # Function to compare two vectors similarity
-    def similarity_score(page_embedding, question_embedding):
-        return np.dot(page_embedding, question_embedding) # Return their dot product (similarity score)
 
     # Compute similarity scores for each chunk
     corpus_df["score"] = corpus_df["embedding"].apply( # Create a new 'score' column for each chunk

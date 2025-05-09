@@ -5,10 +5,10 @@ import pytesseract
 import re
 from io import BytesIO
 
-from functions.gpt_functions import image_call
+from nlp.gpt_utils import image_call
 from config import RAW_TEXT
 
-def do_ocr(image):
+def ocr(image):
 
     ocr_data = pytesseract.image_to_data(image, output_type=pytesseract.Output.DATAFRAME) # Run OCR with detailed output
     #print(ocr_data)

@@ -10,9 +10,9 @@ import pandas as pd
 import ast
 import re
 
-from functions.gpt_functions import end_answer, end_section
+from nlp.gpt_utils import end_answer, end_section
+from nlp.embedding_utils import embed_text, similarity_score
 from config import COMPLETED_NOTES_INDEX, FILE_EMBEDDINGS, COMPLETED_NOTES_FILE, COMPLETED_NOTES
-
 
 def strip_html(text):
     return re.sub(r'<[^>]*>', '', text)
@@ -24,54 +24,6 @@ previous_content = ""
 string_buffer = ""
 answer_buffer = ""
 i = 0
-
-print("-------")
-print(previous_content)
-print("-------")
-
-
-
-def get_embedding(text, model="text-embedding-3-small"):
-    return openai_client.embeddings.create(input=[text], model=model).data[0].embedding
-
-# Function To Embed a File
-def embed_file(content_path):
-    # Read the entire content of the file as a single string
-    with open(content_path, "r", encoding="utf-8") as file:
-        full_text = file.read().strip()
-
-    # Generate embedding for the full text
-    response = openai_client.embeddings.create(
-        input=[full_text],
-        model="text-embedding-3-small"
-    )
-    embedding = response.data[0].embedding
-
-    return embedding
-
-# Function To Embed text
-def embed_text(content):
-    # Generate embedding for the content
-    response = openai_client.embeddings.create(
-        input=[content],
-        model="text-embedding-3-small"
-    )
-    embedding = response.data[0].embedding
-
-    return embedding
-
-# Function To Embed Text
-def embed_text(content):
-
-    # Generate embedding for the full text
-    response = openai_client.embeddings.create(
-        input=[content],
-        model="text-embedding-3-small"
-    )
-    embedding = response.data[0].embedding
-
-    return embedding
-
 
 # -----------------------------------------------
 # GENERATE THE NOTES
@@ -94,10 +46,6 @@ def note_creation(content, outline_df=None):
     # outline_df['embedding'] = outline_df['embedding'].apply(ast.literal_eval) # Convert the embedding column from a string back into a list of floats
 
     if outline_df is not None:
-
-        # Function to compare two vectors similarity
-        def similarity_score(page_embedding, question_embedding):
-            return np.dot(page_embedding, question_embedding) # Return their dot product (similarity score)
         
         # Compute similarity scores for each chunk
         outline_df["score"] = outline_df["embedding"].apply( # Create a new 'score' column for each chunk
@@ -117,11 +65,17 @@ def note_creation(content, outline_df=None):
         print(f"The most similar file to the current file is: {most_similar_file_name}")
 
  
-
     # If only one file (no df)
     else:
         current_file = os.path.join(COMPLETED_NOTES, "notes.txt")
         most_similar_file_text = "None"
+
+    # Read the previous content of the file
+    try:
+        with open(current_file, "r", encoding="utf-8") as f:
+            previous_content = f.read()
+    except:
+        pass
 
 
     # GPT Call
@@ -164,7 +118,7 @@ def note_creation(content, outline_df=None):
 
             <strong>Heading Rule:</strong> You must insert exactly one <h1> heading at the beginning of the output to represent the main topic. There must be one and only one <h1> tag. Do not include multiple <h1> tags under any circumstances. You may optionally include one or two <h3> subheadings if absolutely necessary, but avoid them unless essential for clarity or structure. Treat the rest of the content as a single section under that heading.
 
-            The following is previously covered material (for context only—do not repeat it, youre appending to the notes generated from this, it should help you keep flow going):
+            The following is previously covered material. make sure in your new output that you stick closely to this and that this is all present. just make sure its integrated logicall with the new content
             {previous_content}
 
             Use the structure of the most similar file as a guide for how to organize this section. Do not copy its content, but follow its general flow and topic segmentation when possible. If parts of the structure don’t apply, skip them. If new topics appear in the new material, insert them logically where they fit best.
@@ -187,7 +141,7 @@ def note_creation(content, outline_df=None):
 
     global string_buffer
 
-    # open(current_file, "w", encoding="utf-8") # Clear/open the file in
+    open(current_file, "w", encoding="utf-8") # Clear/open the file in
 
     for chunk in completion:
         try:
@@ -208,13 +162,13 @@ def note_creation(content, outline_df=None):
 
     socketio.emit("update_notes", {"notes" : "<br/><br/>"})  # Emit linebreaks at the end
 
-    print("-------")
-    previous_content += content
-    print(previous_content)
-    print("-------")
+    # print("-------")
+    # output_text = strip_html(output_buffer) # Strip the HTML content from the GPT output to get the text
+    # previous_content += output_text
+    # print(previous_content)
+    # print("-------")
 
-
-    # # Get genereated notes info
+    # # Get genereated notes inf
     # output_text = strip_html(output_buffer) # Strip the HTML content from the GPT output to get the text
     # current_file_name = os.path.basename(current_file) # Get the filename from the current file
     # embedded_notes = embed_text(output_buffer) # Embed what gpt just created

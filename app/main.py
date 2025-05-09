@@ -8,12 +8,12 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 
-from functions.gpt_functions import order_files
-from functions.note_creation import note_creation
-from functions.file_handler import handle_image, handle_pdf, get_file_type, handle_video, clear_output, split_text, move_file
-from functions.topic_modelling import nlp
-from functions.question_manager import embed_corpus
-from functions.outline import create_outline
+from nlp.gpt_utils import order_files
+from generation.generate_notes import note_creation
+from extraction.file_utils import handle_image, handle_pdf, get_file_type, handle_video, clear_output, split_text, move_file
+from nlp.topic_modelling import topic_model
+from generation.questions import embed_corpus
+from extraction.outline import create_outline
 
 from app import socketio, app   
 from threading import Thread
@@ -116,9 +116,7 @@ def main():
     stop_timer.set()    # Signal the timer thread to stop (processing done)
     timer_thread.join()    # Wait for the timer thread to finish
 
-    # Chunk sequentially
-    chunk_count, chunk_list = split_text(RAW_TEXT, 300)
-    # print(chunk_list)
+    chunk_count, chunk_list = split_text(RAW_TEXT, 300) # Chunk sequentially
 
     # Creata an outline from the raw text and return a df with info
     df = None

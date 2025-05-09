@@ -6,23 +6,13 @@ import time
 import math
 
 from config import COMPLETED_NOTES
-
+from nlp.embedding_utils import get_embedding
+from extraction.file_utils import clear_output
 
 # Set your OpenAI API key
 openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) # Use OpenAI
 deepseek_client = OpenAI(api_key=os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com/v1"  ) # Use Deepseek
 
-
-# File deleter
-def clear_output(folder_path):
-    for item in os.listdir(folder_path):
-        item_path = os.path.join(folder_path, item)
-        if os.path.isfile(item_path):
-            os.remove(item_path)
-
-
-def get_embedding(text, model="text-embedding-3-small"):
-    return openai_client.embeddings.create(input=[text], model=model).data[0].embedding
 
 def create_outline(file_path, section_count):
 

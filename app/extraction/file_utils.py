@@ -15,7 +15,7 @@ from vosk import SetLogLevel
 SetLogLevel(-1)
 
 from config import NOTE_INPUTS_DIR, RAW_TEXT
-from functions.ocr import do_ocr
+from extraction.ocr import ocr
 
 if not os.path.exists(RAW_TEXT):
     with open(RAW_TEXT, "w") as f:
@@ -60,14 +60,11 @@ def split_text(filename, split_size):
 
 # File deleter
 def clear_output(folder_path):
-    try:
-        for item in os.listdir(folder_path):
-            item_path = os.path.join(folder_path, item)
-            if os.path.isfile(item_path):
-                os.remove(item_path)
-    except:
-        os.remove(folder_path)
-        
+    for item in os.listdir(folder_path):
+        item_path = os.path.join(folder_path, item)
+        if os.path.isfile(item_path):
+            os.remove(item_path)
+   
 # File mover
 def move_file(folder_path, folder_dst):
     for item in os.listdir(folder_path):
@@ -99,7 +96,7 @@ def get_file_type(file):
 def handle_image(file, file_path):
     img = Image.open(file_path) # Open the current image 
     img = img.convert("RGBA") # Convert to RGBA
-    do_ocr(img)    
+    ocr(img)    
 
 
 # Handle PDFs
@@ -114,7 +111,7 @@ def handle_pdf(file, file_path):
             if len(text) < 10:
                 pix = page.get_pixmap()         # Render page as image
                 img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)  # Convert to PIL Image
-                do_ocr(img)
+                ocr(img)
             # If extraction fine
             else:
                 # append extracted text
