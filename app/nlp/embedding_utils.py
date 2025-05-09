@@ -2,6 +2,8 @@ from openai import OpenAI
 import os
 import csv
 import numpy as np
+from config import EMBEDDINGS
+
 openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) # Use OpenAI
 
 # Get embedding
@@ -70,7 +72,7 @@ def embed_corpus(corpus):
         all_embeddings.extend([item.embedding for item in response.data])
 
     # Write to CSV
-    with open("EMBEDDINGS", "w", newline='', encoding="utf-8") as f:
+    with open(EMBEDDINGS, "w", newline='', encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(["text", "embedding"])
         for text, embedding in zip(chunks, all_embeddings):

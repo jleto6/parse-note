@@ -110,6 +110,6 @@ def create_outline(file_path, section_count):
 
     # Convert to DataFrame
     df = pd.DataFrame(data)
-    df.to_csv("debug_output.csv", index=False)
+    # df.to_csv("debug_output.csv", index=False)
 
     return df
