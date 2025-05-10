@@ -11,8 +11,13 @@ def get_embedding(text, model="text-embedding-3-small"):
     return openai_client.embeddings.create(input=[text], model=model).data[0].embedding
 
 # Function to compare two vectors similarity
+# def similarity_score(page_embedding, question_embedding):
+#     return np.dot(page_embedding, question_embedding) # Return their dot product 
+
 def similarity_score(page_embedding, question_embedding):
-    return np.dot(page_embedding, question_embedding) # Return their dot product (similarity score)
+    dot = np.dot(page_embedding, question_embedding)
+    norm_product = np.linalg.norm(page_embedding) * np.linalg.norm(question_embedding)
+    return dot / norm_product
 
 # Function To Embed a File
 def embed_file(content_path):
