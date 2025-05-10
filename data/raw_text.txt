@@ -1,215 +1,1384 @@
-Block Diagram
-1 scan
-Combinatinal vs Sequential
-1 scan
-Block Diagram
-1 scan
-Combinatinal vs Sequential
-1 scan
-
-Logic Gates
-3 scans
-Adder
-4 scans
-Logic Gates
-3 scans
-Adder
-4 scans
-
-### Transcription of Handwritten Notes
-
----
-
-**Floating Point Arithmetic**
-
-Real numbers are called "float" values in computing. Floating point arithmetic is the method computers use to handle real numbers.
-
-Floats are represented using the IEEE 754 standard, which increases accuracy by storing numbers using the principle of normalized scientific notation.
-
-IEEE 754 encodes floating-point numbers using 3 components: a sign bit, an exponent, and a mantissa. To store numbers effectively, IEEE 754 defines normalized form, meaning the first digit before the decimal is always 1 in binary (1.xxxx * 2^y).
-
-Since this leading 1 is always present, IEEE 754 does not store it explicitly (this is called the hidden bit). Instead, only the fractional part is stored, allowing the mantissa to hold more precision within the available bits.
-
-This differs from standard scientific notation where the leading digit is always explicitly written (e.g., 1.23 x 10^2 in decimal). By enforcing normalization and using a hidden bit, IEEE allows efficient storage and greater accuracy in floating-point precision.
-
-A floating-point number is always represented as: 
-- **Sign Bit (s):** Determines whether the number is positive (0) or negative (1).
-- **Exponent (e):** Determines how much to shift the binary point (stored using a biased representation).
-- **Mantissa (m):** Represents the precision (with an assumed 1).
-
-**Exponential Notation**
-
-e.g., The following are equivalent representations of 1.234
-- 1.234 * 10^0
-- 12.34 * 10^-1
-- 0.1234 * 10^1
-
-**IEEE 754 Standard**
-
-- **Single Precision:** 32 bits, consisting of...
-- **Double Precision:** 64 bits, consisting of...
-
-**Floating Point: Normalized Scientific Notation**
-
-- **Single Precision (32 bits):** 1 sign bit, 8 exponent bits, 23 mantissa bits
-- **Double Precision (64 bits):** 1 sign bit, 11 exponent bits, 52 mantissa bits
-
-Note: Floating points can represent...
-
----
-
-This transcription captures the notes' structure and key points. If you need detailed explanations or illustrations about floating point arithmetic, feel free to ask!
 **Exceptions and Interrupts**
 
-"Unexpected" events such as exceptions and interrupts require altering control flow. Exceptions occur within the CPU, e.g., undefined opcodes or overflows, while interrupts come from external I/O controllers. For example, an I/O controller might send an interrupt when a disk finishes reading data, prompting the CPU to switch context to a waiting process.
+“Unexpected” events such as exceptions and interrupts require altering control flow. Exceptions occur within the CPU, e.g., undefined opcodes or overflow, while interrupts arise from external I/O controllers. For example, an I/O controller might send an interrupt when a disk finishes reading data, prompting the CPU to switch context to a winning process.
 
 In MIPS, exceptions are handled by the System Control Coprocessor (CP0), saving the program counter in the Exception Program Counter (EPC), indicating problems in the status register.
 
 The exception handling process involves reading the cause, transferring control to the appropriate handler, and determining required actions. If resolvable, corrective measures are taken; otherwise, the program is terminated, using the EPC to correct errors.
 
-Pipeline exceptions introduce another form of control hazard. For example, overflow during the execution stage triggers premature register overwrite, impacting previous instructions and hampering control handling. The approach is similar to handling mispredicted branches: freeze instruction execution in pipelines, simulating exceptions as breaks in the pipeline flow until execution can safely suspend before handling a typical overflow.
+Pipeline exceptions introduce another form of control hazard. For example, overflow during the execution stage requires promoting register overwrite. CP0 receives instructions and transferring control to handlers. The approach is similar to handling mispredictions; in both cases, instructions executing in pipelines, simulating exceptions as past, enable the reliable removal of exceptions through subsequent processes like a typically slower access memory.
 
-Challenges arise when instructions depend on accelerator, cache, or bus hazards. Pitfalls in pipelining usually come from poorly chosen ISAs, where compilers can mismanage pipelining order due to issues like unusual memory dependencies or architectures unexpectedly change registers, adding instruction fault depth on memory.
-**Transcription of Handwritten Notes:**
+Challenges arise when instructions depend on another, causing delay hazards. Pitfalls in pipelining usually came from memory (chapter 13ish), where by executing programs in pipelining harder due to issues like unknown memory dependences as instructions unexpectedly change register , and structures that depend on memory.
+**Exceptions and Interrupts**
 
----
+"Unexpected" events such as exceptions and interrupts require altering control flow. Exceptions occur within the CPU, e.g., undefined opcodes or overflows, while interrupts arise from external I/O controllers. For example, an I/O controller might send an interrupt when a disk finishes reading data, prompting the CPU to switch context to a waiting process.
 
-**CPU Performance**
+In MIPS, exceptions are handled by the System Control Coprocessor (CP0), saving the program counter in the Exception Program Counter (EPC), indicating problems in the status register.
 
-A clock cycle is a single tick of the CPU's internal clock, during which a basic instruction can be carried out. The CPU uses this regular pulse to synchronize and control the execution of instructions.
+The exception handling process involves reading the cause, transferring control to the appropriate handler, and determining required actions. If resolvable, corrective measures are taken; otherwise, the program is terminated, using the EPC to correct errors.
 
-**Clock Period:** The time duration of one cycle  
-**Clock Frequency:** How many cycles occur per second
+Pipeline exceptions introduce another form of control hazard. For example, overflow during the execution stage requires prompting register overwrite, while it fetches instructions and transferring control to a handler. This approach is similar to handling mispredicted branch hazards. To resolve instruction overlapping in pipelines, simultaneous exceptions are possible, especially due to instructions fetching other incomplete branch hazards, thus a typical scenario.
 
-**CPU Time:** Amount of CPU clock cycles x Clock Cycle Time (Period)  
-**CPU Time:** Amount of CPU clock cycles / Clock Rate (Frequency)
-
-Execution Time is further defined by instruction count, the total number of instructions a program executes, and Cycles Per Instruction (CPI). The CPI reflects how different instructions consume varied cycles which reflects the CPU's design and is affected by the instruction mix (proportion of different types of instructions).
-
-The comparison of CPU performance involves the equation:  
-CPU Time = Instruction Count x CPI x Clock Cycle  
-This formula is important because it connects various core components of performance, offering insight into how efficiency can be optimized.
-
-Components of performance include:  
-- **Instruction Count:** The number of instructions executed by the CPU.  
-- **Clock Cycle:** Typical development is part of system specifications, it defines the duration of one cycle of clock signals within the CPU.  
-- **Cycles Per Instruction (CPI):** An average measurement reflecting the mean number of cycles taken for instructions. This depends on the hardware design, which is the frequency and type of combination of instructions being executed.
-
-CPI in more detail highlights the unique areas where each instruction type frequency and cycle cost contribute to the overall CPI.
-
----
-
-**CPI Example**
-
-[There appears to be a diagram or chart here, but it's not described in the notes.]
-
-
+Challenges arise when instructions depend on another, excluding cache hazards. Pitfalls in pipelining usually come from poorly cached ISAs, where it may stall strategies. Branch pipelining needs to be issues like excellent memory design or when architects unexpectedly change registers, and instructions held depend on memory.
 Here is the transcription of the handwritten notes:
 
 ---
 
-Writing
+**Hazards**
 
-A cache must manage how data is written. This involves deciding whether update main memory immediately or delay a write, and how to handle write miss. These choices affect consistency, performance and capacity.
+Hazards are situations that prevent the next instruction in the pipeline from executing in the next cycle. 
 
-When the CPU performs a store instruction, it writes data to memory. With a cache in place, this raises the issue of whether the write goes to cache, main memory, or both. If data is only written to the cache, main memory may have a different value, causing inconsistency.
+**Structure Hazards** arise when there is a conflict for the use of a resource. Load/Store operations require data access, causing the instruction fetch to stall for that cycle.
 
-Write Strategy:
-- Write through updates both cache and main memory simultaneously. It’s simple but slow. A write buffer is often used to reduce stalls.
-- Write back only updates the data in the cache during a write hit; main memory is not updated right away. Each block is marked with a dirty bit to indicate if it has been modified since being loaded from memory. If a block is clean, it can be replaced without writing to memory. If a block is "dirty," it must be written back to memory before being replaced.
-Direct Caching
+**Data Hazards** occur when an instruction depends on the completion of data access by a previous instruction. For example, if the instructions have $2, $0, $1 followed by $2, $6, $2, the latter must wait for the former to complete (*see diagram*).
 
-Associativity
+**Forwarding (Bypassing)** passes a completed result from one stage to another, avoiding the wait for register storage and reduces stalls.
 
-The image you provided is a blank white square. There's no diagram, chart, graph, or handwritten notes to analyze or transcribe. If you intended to provide a specific image, please try uploading it again.
+A load-use hazard occurs when an instruction depends on data being loaded by previous instructions before it is available. They can always be avoided by forwarding, for example, for $20, $11$1$ and also $12, $5, $3, the second instruction must wait for the 1st unless resolved with forwarding.
+
+**Code Scheduling** involves rearranging instructions to avoid the use of a load result in the subsequent instruction.
+
+**Stall on Branch** to mitigate control hazards, waiting until the branch outcome is determined before fetching the instruction in a program which it introduces stalls.
+
+**Branch Prediction** guesses the outcome of branch instructions which helps decide whether to fetch the next instruction or branch target early.
+
+**Predict Branch Taken** reduces control hazard on branches by assuming which is efficient when implementation pipelines are long.
+
+Branches are predicted as taken, not-taken, biased branches are predicted as not taken, neutral branches are not taken.
+
+---
+The image is a diagram depicting a computer architecture datapath, primarily showing how data flows through a processor during instruction execution. Here's a detailed analysis:
+
+### Layout Description:
+- **Elements**: The diagram consists of several modules, multiplexers (MUX), and arrows indicating data flow directions.
+- **Starting Point**: Begins with the Program Counter (PC) on the left, which provides the read address.
+- **Instruction Fetch**: The PC sends the read address to the Instruction Memory, retrieving an instruction to be executed.
+- **Instruction Decode and Register Fetch**: The instruction is sent to various blocks, including registers, a sign-extend unit, and other control units.
+- **ALU Operations**: Central to the diagram is the ALU (Arithmetic Logic Unit) which performs operations based on instruction decoding and provides result outputs.
+- **Memory Operations**: From the ALU, connections lead to Data Memory where data can be read or written.
+- **Control Signals**: Various control signals like ALUSrc, MemWrite, MemtoReg, PCSrc, and RegWrite dictate operations in the datapath.
+
+### Key Components:
+- **Instruction Memory**: Stores program instructions.
+- **Registers**: Contains data necessary for operations, including Read register 1, Read register 2, Write register, Read data 1, Read data 2, and Write data.
+- **MUX (Multiplexers)**: Control data paths and operations such as PCSrc, ALUSrc, and MemtoReg.
+- **ALU Control**: Signals are provided to determine the ALU operations.
+- **Sign-extend Unit**: Extends the immediate values to match the required bit length for operations.
+- **Shift Left 2**: Shifts bits left by two positions, often used for instruction branching.
+
+### Data Flow and Control Logic:
+- **Control Signals**: The control unit generates control signals that guide operations like reading, writing, and data path selection.
+- **Arithmetic and Logic Operations**: Conducted in the ALU, which receives its source operands from registers or immediate values.
+- **Memory Access**: After ALU produces the result, data might be written to Data Memory or sent back to registers.
+
+### Insights:
+This diagram illustrates the core pathways of a simple processor, showing how instructions are fetched, decoded, executed, with data possibly being loaded or stored. Understanding such a diagram is crucial for comprehending CPU design, function execution, and optimization strategies in computer architecture.
+PROCESSOR 
+DATAPATH
+
+Introduction
+• MIPS ISA
+• 3 Instruction Types
+• R-type, I-type, J-type
+• Datapath and Control Unit
+• Simplified
+• Pipelined
+• Simple subset
+• Memory reference: lw, sw
+• Arithmetic/logical: 
+add, addi, sub, and, or, slt
+• Control transfer: 
+beq, j
+
+Instruction Format Review
+• Three  instruction formats
+• R-type
+• I-type
+• J-type
+• Fields:
+• op: operation of the instruction
+• rs, rt, rd: source/destination register specifiers
+• shamt: shift amount
+• funct: selects variant of the operation in the “op” field
+• address/immediate: address offset or immediate value
+• target address: target address of the jump instruction 
+op
+target address
+0
+26
+31
+6 bits
+26 bits
+op
+rs
+rt
+rd
+shamt
+funct
+0
+6
+11
+16
+21
+26
+31
+6 bits
+6 bits
+5 bits
+5 bits
+5 bits
+5 bits
+op
+rs
+rt
+immediate
+0
+16
+21
+26
+31
+6 bits
+16 bits
+5 bits
+5 bits
+
+MIPS Subset
+• Add, Subtract, AND, OR, SLT
+• add rd, rs, rt
+• sub rd, rs, rt
+• and rd, rs, rt
+• or rd, rs, rt
+• slt rd, rs, rt
+• ADD Immediate
+• addi  rt, rs, imm16
+• Load, Store
+• lw rt, rs, imm16
+• sw rt, rs, imm16
+• BRANCH
+• beq rs, rt, imm16
+• JUMP:
+• j  target
+op
+rs
+rt
+rd
+shamt
+funct
+0
+6
+11
+16
+21
+26
+31
+6 bits
+6 bits
+5 bits
+5 bits
+5 bits
+5 bits
+op
+rs
+rt
+immediate
+0
+16
+21
+26
+31
+6 bits
+16 bits
+5 bits
+5 bits
+op
+target address
+0
+26
+31
+6 bits
+26 bits
+
+Instruction Execution
+• For every instruction:
+1.
+Send the program counter (PC) to the memory that contains the 
+code and fetch the instruction from that memory.
+1.
+Read one or two registers, using fields of the instruction to select 
+the registers to read. For the load word instruction, we need to 
+read only one register, but most other instructions require that we 
+read two registers.
+
+Instruction Execution
+• Fetch:
+• Get the next instruction: stored at PC
+
+Instruction Execution
+• Decode:
+• Opcode determines if the instruction is arithmetic/logical, memory 
+logical, or branch.
+
+Instruction Execution
+• Update PC:  PC target address or PC + 4
+• If the instruction is a branch, we have to calculate the target 
+address
+• If the instruction is not a branch, the new PC will be PC + 4
+
+Instruction Execution
+• Update PC:  PC target address or PC + 4
+• If the instruction is a branch, we have to calculate the target 
+address
+• If the instruction is not a branch, the new PC will be PC + 4
+
+Instruction Execution
+• Execute:
+• Depending on instruction class, we use the ALU to calculate:
+• Arithmetic result
+• Memory address for load/store
+• Branch target address
+
+Instruction Execution
+• To read and write registers, we need a register file
+• R-types read two registers and write one register
+• Memory-reference instructions read one register
+• Also access data memory
+
+Processor Overview
+Data “flows” through 
+memory and 
+functional units
+
+Processor Overview
+Can’t just join 
+wires together
+Use multiplexers
+
+Processor Overview
+Multiplexers require 
+selection signals 
+Control Signals
+
+Signals
+• Information encoded in binary
+• Low voltage = 0, High voltage = 1
+• One wire per bit
+• Multi-bit data encoded on multi-wire buses
+
+Logic Design Review
+• Combinational Circuits
+• Output depends only on current input
+• Operate on data
+• Example: ALU
+• Given the same input a combinational
+circuit will always produce the same 
+output
+
+Logic Design Review
+• Sequential Circuits
+• Have “state”
+• Output depends on current input and previous outputs
+• Example: Register File
+• Output depends on the contents
+of the registers in the file
+
+MIPS Register File
+• 32 32-bit registers
+• One write bus
+• Two read buses
+• Selection Inputs
+• RegWrite (write enable signal) 
+• Reg. Source A
+• Reg. Source B
+• Reg. Destination
+
+Write Control Signals
+Every Clock Cycle
+• We do not show a write control 
+signal when a state element is 
+written on every active clock 
+edge.
+• Program Counter
+When Necessary
+• If a state element is not 
+updated on every clock, then 
+an explicit write control signal is 
+required.
+• Register File
+
+Datapath Elements
+• Most elements have 32-bit wide inputs and outputs 
+• Buses labeled with their width
+
+Datapath Elements - Combinational
+I0
+I1
+Y
+M
+u
+x
+S
+Multiplexer
+Y = S ? I1 : I0
+A
+B
+Y
++
+A
+B
+Y
+ALU
+F
+Adder
+Y = A + B
+Arithmetic/Logic Unit
+Y = F(A, B)
+
+Datapath Elements - Sequential
+
+Fetch Elements
+• Memory Unit
+• Program Counter
+• Adder
+
+R-Type Instructions
+• Read two register operands
+• Perform arithmetic/logical operation
+• Write register result
+
+R-Type Instructions
+add $t1, $t2, $t3
+• RW = 9
+• RA = 10
+• RB = 11
+• ALUop = “add”
+
+Datapath: R-Type Instructions
+
+I-Type Instructions
+• Replace one read register, shamt, and funct with 16 bit 
+constant
+• ALU requires 32-bit inputs
+• Sign-extend the 16 bit immediate
+• Fill with 0s if the constant is positive
+• Fill with 1s if the constant is negative
+• Choose between the second read registers 
+and the sign extended constant.
+
+Datapath: I-Type Instructions
+
+Load/Store Instructions
+• lw 
+$t1, offset($t2)
+• sw 
+$t1, offset($t2)
+• Compute memory address: $t2 + offset
+• Since offset is 16 bits, it needs to be extended to 32 bits
+
+Load/Store Instructions
+• Load: Read memory and update register
+• Store: Write register value to memory
+• Elements: 
+• Register file
+• Sign extension unit
+• Data memory unit
+
+Datapath: Load Instruction
+
+Datapath: Store Instruction
+
+Branch Instructions
+beq
+$t1, $t2, offset
+• Read register operands
+• Compare operands
+• Use ALU, subtract and check Zero output
+• Calculate target address
+• Sign-extend displacement
+• Shift left 2 places (word displacement)
+• Add to PC + 4
+• Already calculated by instruction fetch
+
+Target Address Details
+• The base for the branch address calculation is the 
+address of the instruction following the branch. 
+• PC+4
+• Memory is byte addressed 
+• The offset field must be shifted left 2 bits
+
+Branch Instructions
+Just
+re-routes 
+wires
+Sign-bit wire 
+replicated
+
+Branching
+beq
+$t1, $t2, offset
+• Branch is taken
+• When $t1 - $t2 = 0, the zero signal from the ALU
+• PC = PC + 4 + 4*offset
+• Branch is not taken
+• PC = PC + 4
+
+Datapath: Branch
+
+Jump Instructions
+• PC = PC[31-28] : Offset << 2
+
+Single Datapath
+• All instructions executed in one clock cycle
+• Each datapath element can only do one function at a time
+• Any element needed more than once must be duplicated
+• Hence, we need separate instruction and data memories
+• Use multiplexers where alternate data sources are used 
+for different instructions
+
+Control Unit
+• Take in input
+• Generate signals for each state element
+• Generate selection signals for each multiplexor
+• Generate function signals for ALU
+• ALU Control
+
+ALU Control
+• MIPS subset: lw, sw, beq, add, addi, sub, and, or, slt
+• ALU has 4 control inputs
+• 16 possible functions
+ALU Control
+Function
+0000
+AND
+0001
+OR
+0010
+Add
+0110
+Subtract
+0111
+Set-on-less-than
+1100
+NOR
+
+ALU Control
+• Load/Store: add
+• Branch: subtract
+• R-type: depends on funct field
+ALU Control
+Function
+0000
+AND
+0001
+OR
+0010
+Add
+0110
+Subtract
+0111
+Set-on-less-than
+1100
+NOR
+
+ALU Control
+• Opcode determines which type of instruction
+• The ALUOp is a 2-bit signal derived from this Opcode
+• ALUOp and the funct field will determine ALU control
+Opcode
+ALUOp
+Operation
+Funct
+ALU function
+ALU Control
+Lw
+00
+Load word
+XXXXXX
+Add
+0010
+Sw
+00
+Store word
+XXXXXX
+Add
+0010
+Beq
+01
+Branch
+XXXXXX
+Subtract
+0110
+R-type
+10
+Add
+100000
+Add
+0010
+Subtract
+100010
+Subtract
+0110
+AND
+100100
+AND
+0000
+OR
+100101
+OR
+0001
+Set-on-Less-
+Than
+101010
+Set-on-Less-
+Than
+0111
+
+ALU Control
+• Multiple levels of decoding:
+• Main Control generates ALUOp
+• ALUOp and funct bits determine ALU Control
+
+ALU Control
+• ALUOp and funct bits determine ALU Control
+ALUOp1
+ALUOp2
+Funct
+Operation
+0
+0
+X
+X
+X
+X
+X
+X
+0010 (add)
+X
+1
+X
+X
+X
+X
+X
+X
+0110 (subtract)
+1
+X
+X
+X
+0
+0
+0
+0
+0010 (add)
+1
+X
+X
+X
+0
+0
+1
+0
+0110 (subtract)
+1
+X
+X
+X
+0
+1
+0
+0
+0000 (and)
+1
+X
+X
+X
+0
+1
+0
+1
+0001 (or)
+1
+X
+X
+X
+1
+0
+1
+0
+0111 (slt)
+
+The Main Control Unit
+• Control signals derived from instruction
+0
+rs
+rt
+rd
+shamt
+funct
+31:26
+5:0
+25:21
+20:16
+15:11
+10:6
+35 or 43
+rs
+rt
+address
+31:26
+25:21
+20:16
+15:0
+4
+rs
+rt
+address
+31:26
+25:21
+20:16
+15:0
+R-type
+Load/
+Store
+Branch
+opcode
+always 
+read
+read, 
+except 
+for load
+write for 
+R-type 
+and load
+sign-extend 
+and add
+
+Main Control Unit
+• Observations
+• The opcode is always contained in bits 31:26. We will refer to this 
+field as Op[5:0].
+• The two registers to be read are always specified by the rs and rt 
+fields, at positions 25:21 and 20:16. This is true for the R-type 
+instructions, branch equal, and for store. 
+• The base register for load and store instructions is always in bit 
+positions 25:21 (rs). 
+• The 16-bit offset for branch equal, load, and store is always in 
+positions 15:0. 
+• The destination register is in one of two places. 
+• For a load it is in bit positions 20:16 (rt)
+• For an R-type instruction it is in bit positions 15:11 (rd)
+• We will need to add a multiplexor to select which field of the instruction is used 
+to indicate the register number to be written.
+
+Datapath with ALU Control
+
+Control Signals – Register Destination
+• RegDst
+• Deasserted: the register destination number for the write register 
+comes from the rt field (bits 20:16)
+• Asserted: the register destination number for the write register 
+comes from the rd field (bits 15:11)
+
+Control Signals – Register Write
+• RegWrite
+• Asserted: the register destination specified by the write register 
+input is written with the value from the write data input
+
+Control Signals – ALU Source
+• ALUSrc
+• Deasserted: The second ALU operand comes from the second 
+register file output
+• Asserted: The second ALU operand is the sign-extended lower 16 
+bits of the instruction
+
+Control Signals - PCSrc
+• Program Counter Source
+• Deasserted: The PC is replaced by PC + 4
+• Asserted: The PC is replaced by a branch target address
+
+Control Signals – Memory Read
+• MemRead
+• Asserted: Data memory contents designated by the address input 
+are put on the read data output.
+
+Control Signals – Memory Write
+• MemWrite
+• Asserted: Data memory contents designated by the address input 
+are replaced by the value on the write data input.
+
+Control Signals – Memory to Register
+• MemtoReg
+• Deasserted: The value fed to the register write data input comes 
+from the ALU
+• Asserted: The value fed to the register write data input comes from 
+the data memory.
+
 Control Signals
+• All but one signal can be set based only on the opcode
+• PCSrc is the exception
+• Relies on the result of a branch
+• PCSrc should be set if the instruction is beq and the zero output of 
+the ALU is asserted
 
-Datapath with Control 
-Examples
+Datapath With Control
 
-Control Signal Overview
+Opcode to Control
+Instruction
+RegDst
+ALUSrc
+MemtoReg
+RegWrite
+R-Format
+1
+0
+0
+1
+Lw
+0
+1
+1
+1
+Sw
+X
+1
+X
+0
+Beq
+X
+0
+X
+0
+Instruction
+MemRead
+MemWrite
+Branch
+ALUOp1
+ALUOp0
+R-Format
+0
+0
+0
+1
+0
+Lw
+1
+0
+0
+0
+0
+Sw
+0
+1
+0
+0
+0
+Beq
+0
+0
+1
+0
+1
 
-**Canonical Forms**
+R-Type Instruction
 
-Canonical forms are standardized ways to express Boolean functions, making it easier to build and simplify circuits. The 2 main types are Sum of Products (SOP) and Product of Sums (POS), which describe when a circuit should output a 1 or a 0.
+Load Instruction
 
-SOP expressions are built from minterms, which represent truth table cases where the output is 1, while POS expressions are built from maxterms, which represent rows where the output is 0.
+Branch-on-Equal Instruction
 
-**Sum of Products**:
-- SOP uses minterms:
-  - Look at rows where F=1 in the truth table.
-  - Each 1 becomes an ANDed term (A'B'C).
-  - OR all AND terms together.
-  - For example, if F=1 at (A=0, B=1, C=0), the minterm is A'BC'.
+Opcode to Control
+In/Out 
+Signal
+R-Format
+Lw
+Sw
+Beq
+Inputs
+Op5
+0
+1
+1
+0
+Op4
+0
+0
+0
+0
+Op3
+0
+0
+1
+0
+Op2
+0
+0
+0
+1
+Op1
+0
+1
+1
+0
+Op0
+0
+1
+1
+0
+Outputs
+RegDst
+1
+0
+X
+X
+ALUSrc
+0
+1
+1
+0
+MemToReg
+0
+1
+X
+X
+RegWrite
+1
+1
+0
+0
+MemRead
+0
+1
+0
+0
+MemWrite
+0
+0
+1
+0
+Branch
+0
+0
+0
+1
+ALUOp1
+1
+0
+0
+0
+ALUOp0
+0
+0
+0
+1
 
-**Product of Sums**:
-- POS uses maxterms:
-  - Look at rows where F=0 in the truth table.
-  - Each 0 becomes an ORed term (A+B+C').
-  - AND all the OR terms together.
-  - For example, if F=0 at (A=1, B=0, C=1), the maxterm is A+B'C.
-**Title: Binary Conversions**
+Implementing Jumps
+• Jump uses word address
+• Update PC with concatenation of
+• Top 4 bits of old PC
+• 26-bit jump address
+• 00
+• Need an extra control signal decoded from opcode
+2
+address
+31:26
+25:0
+Jump
 
-**Text Transcription:**
+Datapath With Jumps Added
 
-* In the modern world, we use decimal, or base 10, notation to represent integers. We can represent numbers using any base b, where b is a positive integer greater than 1.
+Single-Cycle Implementation
+• Every instruction begins execution on one clock edge and 
+completes execution on the next clock edge.
+• Clock cycle time must be at least as long as the longest 
+instruction (load word).
+• Cycle time = 
+PC’s propagation time + 
+Instruction Memory Access Time +
+Register File Access Time  +
+ALU Delay (address calculation)  +
+Data Memory Access Time  +
+Register File Setup Time  +
+Clock Skew
 
-**Base 10:**
-- For example, 965, this can be translated as: 9∙10^2 + 6∙10^1 + 5∙10^0
+Single-Cycle Implementation
+• Every instruction begins execution on one clock edge and 
+completes execution on the next clock edge.
+• Clock cycle time must be at least as long as the longest 
+instruction (load word).
+• The cycle time for load is much longer than any other instruction
 
-**Base b:**
-- Let b be a positive integer greater than 1. Then if n is a positive integer, it can be expressed uniquely in the form, where k is a nonnegative integer and a_k, a_(k-1), ..., a_1, a_0 are nonnegative integers less than b.
+Single-Cycle Implementation
+• Single-Cycle implementation is not practical
+• Unable to implement more complex instructions
+• Cannot make improves that will speed up the system unless those 
+improvements are to load
+• Violates the design principle of making the common case fast
+• Some functional units must be duplicated, increasing hardware cost
 
-- This representation of n is called the base b expansion of n and can be denoted by (a_k a_(k-1) ... a_1 a_0)_b.
+Pipelining
+• Pipelining is an implementation technique in which 
+multiple instructions are overlapped in execution.  
+• Pipelining is nearly universal.
 
-**Binary Operations:**
-- Computers represent integers and do arithmetic with binary (base 2) expansions of integers. In these expansions, the digits used are 0 and 1.
+Analogy for Pipelining: Laundry
+• Nonpipelined approach:
+1.
+Place one dirty load of clothes in the washer.
+2.
+When the washer is finished, place the wet load in the dryer.
+3.
+When the dryer is finished, place the dry load on a table and fold.
+4.
+When folding is finished, put the clothes away.
+• When the clothes are put away, the next load can begin.
 
-- Example: What is the decimal expansion of the integer that has (11011)_2 as its binary expansion?
-  
-  Solution: (11011)_2
-  
-  - = 1∙2^4 + 1∙2^3 + 0∙2^2 + 1∙2^1 + 1∙2^0
-  - = 16 + 8 + 0 + 2 + 1
-  - = 27
+Analogy for Pipelining: Laundry
+• Pipelined approach:
+1.
+Place one dirty load (load A) of clothes in the washer. 
+2.
+When the washer is finished, place load A in the dryer and start a 
+new load (load B) in the washer.
+3.
+When the dryer is finished, place load A on the table to fold, 
+place load B in the dryer, and start a new load (load C) in the 
+washer.
+4.
+When folding is finished, put away load A, fold load B, place load 
+C in the dryer, start load D in the washer.
 
-**Base Conversion:**
-- To construct the base b expansion of the integer n, divide n by b to obtain a quotient and remainder: n = b∙q_0 + a_0, 0 ≤ a_0 < b.
-  
-  - The remainder, a_0, is the right-most digit in the base b expansion of n.
-  
-  - Next, divide q_0 by b to get q_0 = b∙q_1 + a_1, 0 ≤ a_1 < b.
-  
-  - Continue this process, the 2nd right-most digit in the base b expansion of n.
-  
-  - Continue by successively dividing the quotient by b, obtaining the new quotient and remainder as the remainder. The process terminates when the quotient is 0. 
+Analogy for Pipelining: Laundry
 
-The notes describe the methods and concepts behind converting numbers between different bases, specifically focusing on binary (base 2) and its use in computers. It includes an example of how to convert a binary number to decimal and the process of converting a decimal number to another base.
-The image contains typed notes on the topic of "Caches" related to computing. Here's a transcription of the text:
+Pipelining Paradox
+• One load of laundry still takes the same amount of time.
+• The amount of time it takes to do many loads of laundry is 
+shorter with pipelining.
+• Pipelining improves throughput.
 
----
+Pipelining Speedup
+• If all the stages take about the same amount of time and 
+there is enough work to do, then the speedup due to 
+pipelining is roughly equal to the number of stages in the 
+pipeline.
+• Laundry Analogy: 
+• 4 stages (washing, drying, folding, putting away)
+• 20 loads pipelined would take about 5 times as long as 1 load
+• 20 loads of sequential laundry takes 20 times as long as 1 load
 
-**Caches**
+MIPS Pipeline
+1.
+Fetch instruction from 
+memory.
+1.
+Read registers while 
+decoding the instruction. 
+1.
+Execute the operation or 
+calculate an address.
+1.
+Access an operand in data 
+memory.
+1.
+Write the result into a register.
+• Instruction Fetch
+(IF)
+• Instruction Decode
+(ID)
+• Execution
+(EX)
+• Memory Access
+(MEM)
+• Write Back
+(WB)
 
-In an ideal computing system there would be unlimited fast memory access. However such a system is not practically achievable. Instead a memory hierarchy provides the illusion of large amount of fast memory by organizing different types of storage to optimize speed and access.
+Pipeline Speedup
+• If all stages are balanced
+• i.e., all take the same time
+• Time between instructionspipelined
+=
+Time between instructionsnonpipelined
+Number of stages
+• If not balanced, speedup is less
+• Speedup due to increased throughput
+• Latency (time for each instruction) does not decrease
+• Programs execute billions of instructions – throughput is important!
 
-The principal of locality refers to the observation that programs tend to access only a small portion of their address space at any given time, which is crucial to optimizing the memory hierarchy. There are two main types of locality:
+Pipelining and ISA Design
+• MIPS ISA designed for pipelining
+• All instructions are 32-bits
+• Easier to fetch and decode
+• Few and regular instruction formats
+• Can decode and read registers in one step
+• Load/store addressing
+• Can calculate address in 3rd stage, access memory in 4th stage
+• Alignment of memory operands
+• Memory access takes only one cycle
 
-1. *Temporal locality*: Refers to the tendency of programs to access the same memory locations repeatedly within a short period. For example, instructions in loops and induction variables.
-2. *Spatial locality*: Denotes the likelihood of accessing memory locations close together in physical address. This occurs in sequently instruction access and accessing array data. 
+MIPS Pipelined Datapath
+WB
+Branch
 
-Understanding these principals helps in designing cache systems and hardware to enhance performance.
+Pipelined Execution
 
-**Memory Hierarchy Levels**
-- Cache levels include smaller, faster memory that is closer to the processor.
-- *Data moves through* these layers of memory in temporal and spatial reference. Frequently used data and instruction are copied from primary storage (like SSD or HDD) to main memory (DRAM), and then smaller, faster cache (SRAM) near the CPU.
-- Data is moved between levels in blocks, which may multiple words units. This is a key concept in managing memory transitions.
-- Caches are used to store frequently accessed data closer to the processor, minimizing access times and improving speed.
+Pipeline registers
+• Need registers between stages
+• To hold information produced in previous cycle
 
-Cache memory is the closest level of memory hierarchy to the CPU. It serves as high retrieval the most frequently or recently accessed data.
+IF for Load
 
-A hit occurs when accessed data is present in the upper memory-level, resulting in faster access times. A miss occurs if the accessed data is not in the upper memory level, requiring data retrieval from lower levels, which is slower.
+ID for Load
 
----
-Cache Cache on hit ond mss A is” quick» bt miss con chs For exanpe, if the cache miss cote is ord the data cache mas rate is 47, wilh base CPI of 2 ond a mis of (00 we cam the mss as Glows = mar 0.02 +100=2 = D-cache mss Cth 36% oF loads and 6.0¢ = Total 346 Ths in 0 CPT of 5.44 2+ wis Tn an ideal with a cache (no mises), He CPU cn al the CPT of 2. the CPL ths He CPU veld be 2.72 fe te menny Tf we CPL by halt, the CPL beams 4.44. Menory remain a of the overall CPI, shoving how the CPL aloe
+EX for Load
+
+MEM for Load
+
+WB for Load
+Wrong
+register
+number
+
+Corrected Datapath for Load
+
+Pipelined Control
+
+Pipelined Control
+•
+Instruction fetch: 
+•
+PC written on every clock cycle
+•
+Instruction memory read on every clock cycle
+•
+no optional control lines
+•
+Instruction decode/register file read
+•
+Register file read on every clock cycle
+•
+no optional control lines
+•
+Execution:
+•
+Set RegDst:
+select the Result register
+•
+Set ALUOp:
+select the ALU operation
+•
+Set ALUSrc. 
+select either Read data 2 or a sign-extended immediate for the ALU.
+•
+Memory access: 
+•
+Set Branch:
+affects PCSrc
+•
+Set MemRead
+•
+Set MemWrite. 
+•
+Write back: 
+•
+Set MemtoReg:
+decides between sending the ALU result or the memory value to the register file
+•
+Set Reg-Write:
+specifies whether the register file can be written
+
+Pipelined Control
+RegDst
+ALUSrc
+ALUOp1
+ALUOp0
+Branch
+MemRead
+MemWrite
+MemtoReg
+Regwrite
+
+Pipelined Control
+
+Hazards
+• Situations that prevent starting the next instruction in the 
+next cycle
+• Structure hazard
+• A required resource is busy
+• Data hazard
+• Need to wait for previous instruction to complete its data read/write
+• Control hazard
+• Deciding on control action depends on previous instruction
+
+Structure Hazards
+• Conflict for use of a resource
+• In MIPS pipeline with a single memory
+• Load/store requires data access
+• Instruction fetch would have to stall for that cycle
+• Would cause a pipeline “bubble”
+• Hence, pipelined datapaths require separate 
+instruction/data memories
+• Or separate instruction/data caches
+
+Data Hazards
+• An instruction depends on completion of data access by a 
+previous instruction
+• add$s0, $t0, $t1
+• sub$t2, $s0, $t3
+
+Forwarding (aka Bypassing)
+• Use result when it is computed
+• Don’t wait for it to be stored in a register
+• Requires extra connections in the datapath
+
+Forwarding
+• Forwarding: the result is passed forward from an earlier 
+instruction to a later instruction.
+
+Load-Use Data Hazard
+• Can’t always avoid stalls by forwarding
+
+Pipeline Stalls
+• A stall (bubble) is implemented with a nop
+• “No operation”
+• Force control values in ID/EX register to 0
+
+Stall/Bubble in the Pipeline
+Stall inserted 
+here
+
+Another view (no bubble)...
+Stall inserted 
+here
+
+Another view (with bubble)...
+Stall inserted 
+here
+
+Code Scheduling to Avoid Stalls
+• Reorder code to avoid use of load result in the next 
+instruction
+• C code for A = B + E; C = B + F;
+lw
+$t1, 0($t0)
+lw
+$t2, 4($t0)
+add $t3, $t1, $t2
+sw
+$t3, 12($t0)
+lw
+$t4, 8($t0)
+add $t5, $t1, $t4
+sw
+$t5, 16($t0)
+stall
+stall
+lw
+$t1, 0($t0)
+lw
+$t2, 4($t0)
+lw
+$t4, 8($t0)
+add $t3, $t1, $t2
+sw
+$t3, 12($t0)
+add $t5, $t1, $t4
+sw
+$t5, 16($t0)
+11 cycles
+13 cycles
+
+Control Hazards
+• Branch Hazards
+• Branch determines flow of control
+• Fetching next instruction depends on branch outcome
+• Pipeline can’t always fetch correct instruction
+• Still working on ID stage of branch
+
+Stall on Branch
+• Wait until branch outcome determined before fetching 
+next instruction
+
+Branch Prediction
+• Longer pipelines can’t readily determine branch outcome 
+early
+• Stall penalty becomes unacceptable
+• Predict outcome of branch
+• Only stall if prediction is wrong
+• In MIPS pipeline
+• Can predict branches not taken
+• Fetch instruction after branch, with no delay
+
+Predict Branch Not Taken
+• If branch is determined as taken in MEM:
+PC
+Flush these
+instructions
+(Set control
+values to 0)
+
+Predict Branch Not Taken
+Prediction 
+correct
+Prediction 
+incorrect
+
+Predict Branch Not Taken
+• If branches are untaken half the time, and if it costs little to 
+discard the instructions, this optimization halves the cost 
+of control hazards.
+
+Branch Prediction
+• Static branch prediction
+• Based on typical branch behavior
+• Example: loop and if-statement branches
+• Predict backward branches taken
+• Predict forward branches not taken
+
+Dynamic Branch Prediction
+• In deeper and superscalar pipelines, branch 
+penalty is more significant
+• Use dynamic prediction
+• Branch History Table
+• Indexed by recent branch instruction addresses
+• Stores outcome (taken/not taken)
+• To execute a branch
+• Check table, expect the same outcome
+• Start fetching from fall-through or target
+• If wrong, flush pipeline and flip prediction
+
+1-Bit Predictor: Shortcoming
+• Inner loop branches mispredicted twice!
+outer: …
+…
+inner: …
+…
+beq …, …, inner
+…
+beq …, …, outer
+Mispredict as taken on last iteration of 
+inner loop
+Then mispredict as not taken on first 
+iteration of inner loop next time around
+
+2-Bit Predictor
+• Only change prediction on two successive mispredictions
+
+Delayed Decision
+• Branch Instruction
+• Execute the next sequential instruction
+• Execute the instruction that resulted from the branch
+• add $4, $5, $6
+->
+beq $1, $2, 40
+• beq $1, $2, 40
+->
+add $4, $5, $6
+• <branch result>
+<branch result>
+
+Cycle Time Matters
+• Delayed branches work when branches are short
+• no processor uses a delayed branch of more than 1 cycle
+• Longer branch delays rely on hardware based branch 
+prediction
+
+Reducing Branch Delay
+• Insight:
+• many branches rely only on simple tests 
+• can be implemented with a few gates over an ALU
+• more complex branches take two instructions
+• slt followed by beq/bne
+• Move hardware to determine outcome to ID stage
+• Target address adder
+• Register comparator
+• Reduces the penalty of a branch to only one instruction if 
+the branch is taken
+
+Summary
+• Pipelining improves performance by increasing instruction 
+throughput
+• Executes multiple instructions in parallel
+• Each instruction has the same latency
+• Subject to hazards
+• Structure, data, control
+• Instruction set design affects complexity of pipeline 
+implementation
+
+Exceptions and Interrupts
+• “Unexpected” events requiring change in flow of 
+control
+• Exception
+• Arises within the CPU
+• Examples: undefined opcode, overflow, syscall
+• Interrupt
+• From an external I/O controller
+
+Handling Exceptions
+• In MIPS, exceptions managed by a System 
+Control Coprocessor (CP0)
+• Save PC of offending (or interrupted) instruction
+• In MIPS: Exception Program Counter (EPC)
+• Save indication of the problem
+• In MIPS: Status register
+• 0000 – undefined instruction
+• 0180 – arithmetic overflow
+• Jump to handler
+
+Handler Actions
+• Read cause, and transfer to relevant handler
+• Determine action required
+• If restartable
+• Take corrective action
+• use EPC to return to program
+• Otherwise
+• Terminate program
+• Report error using EPC
+
+Exceptions in a Pipeline
+• Another form of control hazard
+• Consider overflow on add in EX stage
+add $1, $2, $1
+• Prevent $1 from being overwritten
+• Complete previous instructions
+• Flush add and subsequent instructions
+• Set Cause and EPC register values
+• Transfer control to handler
+• Similar to mispredicted branch
+• Use much of the same hardware
+
+Multiple Exceptions
+• Pipelining overlaps multiple instructions
+• Could have multiple exceptions at once
+• Simple approach: deal with exception from 
+earliest instruction
+• Flush subsequent instructions
+
+Fallacies
+• Pipelining is easy
+• The basic idea is easy
+• The devil is in the details
+• e.g., detecting data hazards
+• Pipelining is independent of technology
+• So why haven’t we always done pipelining?
+• More transistors make more advanced techniques 
+feasible
+• Pipeline-related ISA design needs to take account of 
+technology trends
+
+Pitfalls
+• Poor ISA design can make pipelining harder
+• e.g., complex instruction sets (VAX, IA-32)
+• Significant overhead to make pipelining work
+• e.g., complex addressing modes
+• Register update side effects, memory indirection
+• e.g., delayed branches
+• Advanced pipelines have long delay slots
+
+Concluding Remarks
+• ISA influences design of datapath and control
+• Datapath and control influence design of ISA
+• Pipelining improves instruction throughput
+• More instructions completed per second
+• Latency for each instruction not reduced
+• Hazards: structural, data, control
+• Exceptions are handled by a outside handler and 
+control hazard logic.
 

@@ -6,7 +6,7 @@ import time
 import math
 
 from config import COMPLETED_NOTES
-from nlp.embedding_utils import get_embedding
+from nlp.embedding_utils import get_embedding, get_embeddings_batch
 from extraction.file_utils import clear_output
 
 # Set your OpenAI API key
@@ -14,9 +14,7 @@ openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) # Use OpenAI
 deepseek_client = OpenAI(api_key=os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com/v1"  ) # Use Deepseek
 
 
-def create_outline(file_path, section_count):
-
-    print(section_count)
+def create_outline(file_path):
 
     # Read input text from a file
     with open(file_path, "r", encoding="utf-8") as f:
@@ -24,35 +22,50 @@ def create_outline(file_path, section_count):
     
     # Prompt for GPT to create an outline
     outline_prompt = f"""
-    You are helping organize raw, out-of-order technical notes into a coherent teaching sequence optimized for Retrieval-Augmented Generation (RAG) systems.
+    You are transforming raw, unordered technical content into a **teaching-aligned semantic index** optimized for chunk-based retrieval in a Retrieval-Augmented Generation (RAG) system.
 
-    The original content is likely jumbled. Do **not** preserve its order.
+    This is not a summary or a human-readable outline. It is a machine-usable structure for embedding and retrieval.
 
-    Your goal is to extract and organize topics into a clearly structured outline that reflects how a learner would progress through the material:
-    - Start with foundational topics requiring no prior knowledge.
-    - Progress to intermediate concepts that build on those foundations.
-    - End with advanced ideas requiring deeper understanding.
+    Your job is to:
+    1. Extract exact, high-signal elements from the text. This includes:
+    - Technical terms or labels
+    - Variable names, identifiers, and acronyms
+    - Numeric formats and constants
+    - Equations, scientific notation, symbolic expressions
+    - Structured examples, pseudocode, or formulas
+    - Code-like syntax, command names, or config values
+    - Anything that might be searched directly or used in semantic matching
 
-    Only include distinct top-level sections. Each section must represent a clearly non-overlapping concept or skill. Do not split a topic across multiple sections. Only create separate sections when topics are fundamentally different in purpose or function. Closely related subtopics — like variations of the same concept (e.g., cache types or policies) — must be grouped together into a single, comprehensive section for that concept. Do not create multiple sections for different configurations or options of the same system.
-
-    There are {section_count} content chunks. You must generate **no more than {math.floor(section_count)} sections**. Fewer sections are allowed if and only if merging results in highly distinct and semantically strong groupings. Exceeding {section_count} sections will break alignment with chunk-based retrieval and is not allowed.
+    2. Group these elements into semantically distinct sections based on conceptual closeness.
+    3. Order those sections in the sequence a learner would need to understand them—from foundational to advanced, based on dependencies.
 
     Each section must:
-    - Use a specific, keyword-rich title that would match real-world technical search queries.
-    - Contain 2–4 bullet points with detailed, descriptive language.
-    - Repeat or reinforce key terminology from the section title and chunk contents.
-    - Be semantically focused — each section should be easy to embed and retrieve on its own.
+    - Use a **keyword-rich, descriptive title** that reflects search intent.
+    - Contain **3–7 bullet points**, each being a **direct extraction** from the raw input.
+    - Include raw expressions, equations, formats, phrases, or code as-is.
+    - Avoid paraphrasing or smoothing of language.
+    - Focus entirely on making each section dense and unique for semantic embedding.
 
-    Do **not** summarize or rephrase the raw content. Focus entirely on extracting structure and topics.
-    Only output a clean outline in this format:
+    Do not:
+    - Summarize
+    - Explain
+    - Reword technical content
+    - Split variants of the same concept across multiple sections
+    - Follow the input order or keyword clusters—only use learning progression and conceptual distinctiveness
 
-    1: [Section Title with keywords]
-    - Bullet point with relevant terminology
-    - Another bullet point with concepts or phrases that would be searched
+    Output format:
+
+    1: [Section Title with technical keywords]
+    - Raw term or variable name
+    - Full equation or expression from input
+    - Identifier or phrase used literally in the source
+    - Format string, code snippet, or symbolic reference
+    - ...
+
     2: [Next Section Title]
-    ...
+    - ...
 
-    Do not cluster by keyword or follow the original order. Optimize purely for clarity, distinctiveness, teaching progression, and RAG-friendly retrieval alignment.
+    Return only the structured index. No explanation or notes.
 
     Raw Content:
     {text_input}

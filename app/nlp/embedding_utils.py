@@ -19,6 +19,12 @@ def similarity_score(page_embedding, question_embedding):
     norm_product = np.linalg.norm(page_embedding) * np.linalg.norm(question_embedding)
     return dot / norm_product
 
+def get_embeddings_batch(texts, model="text-embedding-3-small"):
+    if isinstance(texts, str):
+        texts = [texts]  # Ensure it's a list
+    response = openai_client.embeddings.create(input=texts, model=model)
+    return [item.embedding for item in response.data]
+
 # Function To Embed a File
 def embed_file(content_path):
     # Read the entire content of the file as a single string

@@ -9,11 +9,12 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 
 from nlp.gpt_utils import order_files
-from generation.generate_notes import note_creation
+from generation.generate_notes import create_notes
 from extraction.file_utils import handle_image, handle_pdf, get_file_type, handle_video, clear_output, split_text, move_file
 from nlp.topic_modelling import topic_model
 from generation.question_handler import embed_corpus
 from extraction.outline import create_outline
+from extraction.line_embed import line_sort
 
 from app import socketio, app   
 from threading import Thread
@@ -49,9 +50,8 @@ def timer():
 
 def main():
 
-    # Clear old files 
-    clear_output(COMPLETED_NOTES)
-    move_file(NOTE_INPUTS_DIR, PREVIOUS_INPUTS) # Move old inputs
+    clear_output(COMPLETED_NOTES) # Clear old files 
+    # move_file(NOTE_INPUTS_DIR, PREVIOUS_INPUTS) # Move old inputs
 
     # Uploaded Files
     folder = NOTE_INPUTS_DIR
@@ -109,26 +109,32 @@ def main():
     # Embed the extracted RAW TEXT
     embed_corpus(RAW_TEXT)
 
+    # Creata an outline from the raw text and return a df with info
+    df = create_outline(RAW_TEXT)
+
+    section_embeddings = {
+        row["filename"]: row["embedding"]
+        for _, row in df.iterrows()
+    }
+
+    line_sort(RAW_TEXT, section_embeddings)
+
     stop_timer.set()    # Signal the timer thread to stop (processing done)
     timer_thread.join()    # Wait for the timer thread to finish
-
-    chunk_count, chunk_list = split_text(RAW_TEXT, 100) # Chunk sequentially
-
-    # Creata an outline from the raw text and return a df with info
-    df = None
-    if not (chunk_count < 2):
-        df = create_outline(RAW_TEXT, chunk_count)
 
     print("--------------")
     print("Creating Notes")
     print("--------------")
 
+    # Get the sections
+    sections = sorted(
+    [f for f in os.listdir(COMPLETED_NOTES) if not f.startswith('.')],
+    key=lambda f: int(re.match(r'\d+', f).group())
+    )
+
     # Create notes on chunks
-    for chunk in chunk_list:
-        try: 
-            note_creation(chunk, df) # Send topics GPT to make notes on
-        except:
-            note_creation(chunk) # Send topics GPT to make notes on
+    for section in sections:
+        create_notes(section, df) # Send topics GPT to make notes on
 
     print("--------------")
     print("Notes Completed")
