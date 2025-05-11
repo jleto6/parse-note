@@ -38,7 +38,7 @@ A built-in chat interface enables users to query the document:
 - GPT-4 generates an answer using both the retrieved section and distilled document to ensure completeness and specificity.
 
 
-### Setup Instructions
+## Setup Instructions
 
 1.  **Clone the repository:**
     ```bash
@@ -63,7 +63,7 @@ A built-in chat interface enables users to query the document:
 
 A Flask server will start and open in your browser. Upload your raw content—this can include text files, lecture transcripts, PDFs, or images—and the system will automatically generate a semantic outline, organize the material, and return structured documentation ready for retrieval, analysis, or integration.
 
-### Technologies Used
+## Technologies Used
 
 * **OpenAI GPT-4:** For outline generation and structured HTML note synthesis
 * **OpenAI text-embedding-3-small:** For embedding and semantic similarity scoring
