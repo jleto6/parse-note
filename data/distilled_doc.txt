@@ -1,0 +1,42 @@
+1: Positional Number Systems and Base Expansion Notation
+- Base 10
+- base b
+- \(9 \cdot 10^2 + 6 \cdot 10^1 + 5 \cdot 10^0\)
+- \( (a_k a_{k−1} \ldots a_1 a_0 )_b \)
+- \( (11011)_2 \)
+- \(1 \cdot 2^4 + 1 \cdot 2^3 + 0 \cdot 2^2 + 1 \cdot 2^1 + 1 \cdot 2^0\)
+
+2: Integer Base Conversion Procedures and Expressions
+- n = bq_0 + a_0
+- \( 0 \le a_0 < b \)
+- \( q_0 = bq_1 + a_1 \)
+- \( 0 \le a_1 < b \)
+- digits \( a_2, a_3, \ldots \) as the remainder
+- process terminates when the quotient is 0
+
+3: Truth Tables and Combinational Logic Blocks
+- truth table
+- n inputs
+- 2^n entries in the truth table
+- logic block
+- combinational hardware element
+
+4: Canonical Boolean Function Forms (SOP, POS, Minterms, Maxterms)
+- canonical forms
+- Sum of Products (SOP)
+- Product of Sums (POS)
+- minterms
+- maxterms
+- SOP uses minterms: rows where F=1 in the truth table, each 1 becomes a minterm (A'B'C), OR all the minterms together
+- POS uses maxterms: rows where F=0 in the truth table, each 0 becomes an Or-ed term (A+B+C), AND all the OR terms together
+- F=1 at (A=0, B=1, C=0), the minterm is A'B'C'
+- F=0 at (A=1, B=0, C=1), the maxterm is A'B+C'
+
+5: Karnaugh Maps for Boolean Simplification
+- Karnaugh Maps (K-Maps)
+- cell in a K-Map corresponds to a row in the truth table
+- groups of cells are used to minimize logic functions
+- group size must be powers of 2 (1, 2, 4, 8)
+- wraparound grouping
+- opposite edges of the map
+- don't-care conditions (X)

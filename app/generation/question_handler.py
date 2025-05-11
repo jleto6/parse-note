@@ -12,7 +12,7 @@ import numpy as np
 import ast
 import os
 
-from config import ANSWERS, RAW_TEXT, EMBEDDINGS
+from config import ANSWERS, RAW_TEXT, EMBEDDINGS, DISTILLED_DOC
 from nlp.gpt_utils import end_answer, end_answer
 from nlp.embedding_utils import embed_corpus, get_embedding, similarity_score
 
@@ -33,10 +33,12 @@ embed_corpus(RAW_TEXT)
 def question_call(question, selection):
     from app import socketio
 
-    # RAG
+    # Get The Distilled Doc
+    with open(DISTILLED_DOC, 'r', encoding="utf-8") as f:
+        distilled_doc = f.read()
 
-    # Load the saved CSV file as a pandas DataFrame
-    corpus_df = pd.read_csv(EMBEDDINGS)
+    # RAG Embeddings
+    corpus_df = pd.read_csv(EMBEDDINGS) # Load the saved CSV file as a pandas DataFrame
     corpus_df['embedding'] = corpus_df['embedding'].apply(ast.literal_eval) # Convert the embedding column from a string back into a list of floats
 
     question_embedding = get_embedding(question) # Embedd the given question
@@ -52,8 +54,7 @@ def question_call(question, selection):
     # GPT Call
     global previous_content
 
-    print(f"Asking question: {question}\n context used: {context}")
-
+    # print(f"Asking question: {question}\n context used: {context}")
 
     completion = openai_client.chat.completions.create(
         model="gpt-4o",
@@ -70,10 +71,13 @@ def question_call(question, selection):
             {
                 "role": "user",
                 "content": f"""
+    Here is the distilled version of the document you're answering a question on, likely use it:
+    {distilled_doc}
+
     You’ve just said:
     {previous_content}
 
-    Here is context to go off of for the question:
+    Here is some context of the question, use it if its useful:
     {context}
 
     Now, here’s the question:
@@ -83,6 +87,7 @@ def question_call(question, selection):
         ],
         stream=True
     )
+
     global string_buffer
     for chunk in completion:
         try:
@@ -100,7 +105,6 @@ def question_call(question, selection):
             print(f"\nError processing chunk: {e}")
             print(f"Chunk type: {type(chunk)}")
             print(f"Chunk content: {chunk}")
-        
     socketio.emit("answers", {"answer" : "<br/><br/>"})
 
     previous_content = re.sub(r"<.*?>", "", string_buffer)

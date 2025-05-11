@@ -12,15 +12,15 @@ from nlp.gpt_utils import order_files
 from generation.generate_notes import create_notes
 from extraction.file_utils import handle_image, handle_pdf, get_file_type, handle_video, clear_output, split_text, move_file
 from nlp.topic_modelling import topic_model
-from generation.question_handler import embed_corpus
 from extraction.outline import create_outline
 from extraction.line_embed import line_sort
+from nlp.embedding_utils import embed_sections
+
+from config import NOTE_INPUTS_DIR, RAW_TEXT, SECTIONS, COMPLETED_NOTES_FILE, PREVIOUS_INPUTS
 
 from app import socketio, app   
 from threading import Thread
 import threading
-
-from config import NOTE_INPUTS_DIR, RAW_TEXT, COMPLETED_NOTES, FILE_EMBEDDINGS, COMPLETED_NOTES_FILE, PREVIOUS_INPUTS
 
 import logging
 log = logging.getLogger('werkzeug')
@@ -50,8 +50,8 @@ def timer():
 
 def main():
 
-    clear_output(COMPLETED_NOTES) # Clear old files 
-    # move_file(NOTE_INPUTS_DIR, PREVIOUS_INPUTS) # Move old inputs
+    clear_output(SECTIONS) # Clear old files 
+    move_file(NOTE_INPUTS_DIR, PREVIOUS_INPUTS) # Move old inputs
 
     # Uploaded Files
     folder = NOTE_INPUTS_DIR
@@ -74,9 +74,6 @@ def main():
                 if not f.startswith('.') and os.path.isfile(os.path.join(folder, f))]
     else:
         print("Files found:", files)
-        file_flag = False
-        if len(files) == 1:
-            file_flag = True
     print("")
 
     open(RAW_TEXT, 'w', encoding="utf-8") # Open raw text file
@@ -106,18 +103,19 @@ def main():
             print(f"Invalid file {e}")
     time.sleep(3)
 
-    # Embed the extracted RAW TEXT
-    embed_corpus(RAW_TEXT)
-
     # Creata an outline from the raw text and return a df with info
-    df = create_outline(RAW_TEXT)
+    df= create_outline(RAW_TEXT)
 
     section_embeddings = {
         row["filename"]: row["embedding"]
         for _, row in df.iterrows()
     }
 
+    # Sort lines into their respective sections
     line_sort(RAW_TEXT, section_embeddings)
+
+    # Embed the new sorted sections
+    embed_sections(SECTIONS)
 
     stop_timer.set()    # Signal the timer thread to stop (processing done)
     timer_thread.join()    # Wait for the timer thread to finish
@@ -128,7 +126,7 @@ def main():
 
     # Get the sections
     sections = sorted(
-    [f for f in os.listdir(COMPLETED_NOTES) if not f.startswith('.')],
+    [f for f in os.listdir(SECTIONS) if not f.startswith('.')],
     key=lambda f: int(re.match(r'\d+', f).group())
     )
 

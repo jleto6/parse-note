@@ -12,7 +12,7 @@ import re
 
 from nlp.gpt_utils import end_answer, end_section
 from nlp.embedding_utils import embed_text, similarity_score
-from config import COMPLETED_NOTES_INDEX, FILE_EMBEDDINGS, COMPLETED_NOTES_FILE, COMPLETED_NOTES
+from config import COMPLETED_NOTES_FILE, SECTIONS
 
 def strip_html(text):
     return re.sub(r'<[^>]*>', '', text)
@@ -36,7 +36,7 @@ def  create_notes(current_file, df_outline):
     row = df_outline[df_outline["filename"] == current_file].iloc[0]
     outline = row["text"]
 
-    current_file = os.path.join(COMPLETED_NOTES, current_file)
+    current_file = os.path.join(SECTIONS, current_file)
 
     with open(current_file, 'r', encoding="utf-8") as f:
         text = f.read()

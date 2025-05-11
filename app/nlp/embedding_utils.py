@@ -61,7 +61,7 @@ def chunk_text_by_words(text, words_per_chunk=300):
     ]
     return chunks
 
-# Function To Embedd a Corpus
+# Function To Embedd a Corpus By Word Chunks
 def embed_corpus(corpus):
     # Read and clean the corpus as one block of text
     with open(corpus, "r", encoding="utf-8") as file:
@@ -88,3 +88,33 @@ def embed_corpus(corpus):
         writer.writerow(["text", "embedding"])
         for text, embedding in zip(chunks, all_embeddings):
             writer.writerow([text, str(embedding)])
+
+
+# Function To Embedd Sections
+def embed_sections(file_dir):
+
+    # Get all the files 
+    file_paths = [
+        os.path.join(file_dir, f)
+        for f in os.listdir(file_dir)
+        if os.path.isfile(os.path.join(file_dir, f))
+    ]
+
+    # Read each one
+    sections = [] # Hold content of each file
+    for file in file_paths:
+        # Read and clean the corpus as one block of text
+        with open(file, "r", encoding="utf-8") as f:
+            content = f.read().strip()
+            if content:
+                sections.append(content)
+
+    # Embed the sections in a batch
+    all_embeddings = get_embeddings_batch(sections) 
+
+    # Write to CSV
+    with open(EMBEDDINGS, "w", newline='', encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(["text", "embedding"])  # CSV header
+        for text, embedding in zip(sections, all_embeddings):
+            writer.writerow([text, str(embedding)])  # Write each row: original text and its embedding

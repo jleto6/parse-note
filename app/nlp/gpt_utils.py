@@ -45,14 +45,14 @@ def image_call(file_path):
     base64_image = encode_image(file_path)
 
     prompt = (
-    "Look at this image and do the following:\n"
-    "1. If the image is a diagram, chart, or graph, analyze it in detail. "
-    "Describe the layout, label each axis, summarize the data trends, and explain what insights can be drawn from it.\n"
-    "2. If the image contains handwritten notes, transcribe the text as accurately as possible. "
-    "Include any formatting, headers, or structure you can infer.\n"
-    "If you're unsure what kind of image it is, describe it first, then proceed with the appropriate action."
+        "Look at this image and do the following:\n"
+        "1. If the image is a diagram, chart, or graph, analyze it in detail. "
+        "Describe the layout, label each axis, summarize the data trends, and explain what insights can be drawn from it.\n"
+        "2. If the image contains handwritten notes, transcribe the text as accurately as possible. "
+        "Include any formatting, headers, or structure you can infer.\n"
+        "If you're unsure what kind of image it is, describe it as clearly as possible.\n"
+        "Do not include any explanations or personality. Just state the content directly."
     )
-
     # GPT Call
     completion = openai_client.chat.completions.create(
         model="gpt-4o",

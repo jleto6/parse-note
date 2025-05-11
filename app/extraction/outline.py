@@ -5,7 +5,7 @@ import pandas as pd
 import time
 import math
 
-from config import COMPLETED_NOTES
+from config import SECTIONS, DISTILLED_DOC
 from nlp.embedding_utils import get_embedding, get_embeddings_batch
 from extraction.file_utils import clear_output
 
@@ -80,16 +80,16 @@ def create_outline(file_path):
         ],
     )
 
-    # Output result
+    # Result
     outline = completion.choices[0].message.content
-    # print("\n--- Generated Outline ---\n")
-    # print(outline)
 
-    # Create an output directory
-    os.makedirs(COMPLETED_NOTES, exist_ok=True)
+    # Save the outline as the distilled doc
+    with open(DISTILLED_DOC, 'w', encoding="utf-8") as f:
+        f.write(outline)
 
-    # Split the outline by top-level sections (e.g., "1.", "2.", etc.)
-    sections = re.split(r'\n(?=\d+:\s)', outline.strip())
+    os.makedirs(SECTIONS, exist_ok=True) # Create an output directory
+
+    sections = re.split(r'\n(?=\d+:\s)', outline.strip())  # Split the outline by top-level sections (e.g., "1.", "2.", etc.)
 
     # for sec in sections:
     #     print(sec)
@@ -103,7 +103,7 @@ def create_outline(file_path):
         # Make filename safe
         filename = f"{re.sub(r'[^a-zA-Z0-9]+', '_', title)[:50]}.txt"
         
-        with open(os.path.join(COMPLETED_NOTES, filename), "w", encoding="utf-8") as f:
+        with open(os.path.join(SECTIONS, filename), "w", encoding="utf-8") as f:
             f.write(content)
 
     # Build rows: each section gets its title and its block of content

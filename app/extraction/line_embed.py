@@ -3,7 +3,7 @@ import numpy as np
 import os
 import time
 
-from config import COMPLETED_NOTES
+from config import SECTIONS
 from nlp.embedding_utils import similarity_score, get_embeddings_batch
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -40,7 +40,7 @@ def line_sort(file_path, section_embeddings):
 
     # Save each section's grouped lines to its own file
     for best_section, grouped_lines in assignments.items():
-        with open(f"{COMPLETED_NOTES}/{best_section}", "w", encoding="utf-8") as f:
+        with open(f"{SECTIONS}/{best_section}", "w", encoding="utf-8") as f:
             for line in grouped_lines:
                 f.write(line + "\n")  # Write each line on its own line in the output file
 

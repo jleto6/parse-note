@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 import os
 import re
 import markdown
-from config import COMPLETED_NOTES, ANSWERS, COMPLETED_NOTES_FILE, NOTE_INPUTS_DIR
+from config import SECTIONS, ANSWERS, COMPLETED_NOTES_FILE, NOTE_INPUTS_DIR
 from generation.question_handler import question_call
 
 app = Flask(__name__,
@@ -48,10 +48,7 @@ def get_notes():
                     print("")
                 except:
                     pass
-            # if action_type == "explanation":
-            #     selection = data.get("selection")
-            #     explanation(selection)
-
+    
             return "", 204  # Respond with "No Content" since everything happens via socket    
     
     return render_template("index.html", form=form)
@@ -61,12 +58,12 @@ def get_notes():
 def handle_connect():
 
     # Generated Notes
-    folder = COMPLETED_NOTES
+    folder = SECTIONS
     files = sorted(os.listdir(folder), key=lambda f: int(re.search(r"\d+", f).group()) if re.search(r"\d+", f) else 0)
 
     notes_buffer = ""
     for file in files: 
-        with open(f"{COMPLETED_NOTES}/{file}", "r") as f:
+        with open(f"{SECTIONS}/{file}", "r") as f:
             stored_notes = f.read()
             stored_notes = markdown.markdown(stored_notes) # Convert to HTML
             notes_buffer += stored_notes
