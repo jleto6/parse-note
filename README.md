@@ -70,3 +70,9 @@ A Flask server will start and open in your browser. Upload your raw content—th
 * **Flask + Flask-SocketIO:** For local web-based document processing and interaction
 * **Pandas, NumPy:** For data handling, transformation, and CSV/PKL serialization
 * **Prompt Engineering:** For controlling GPT output format and semantic consistency
+
+## Planned Development
+
+- Full-featured web interface with user logins, saved sessions, and workspace management  
+- PDF and Markdown export of generated documentation  
+- Human-in-the-loop feedback system for iterative refinement of generated documentation  
